@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">SGSports</string>
+    <string name="facebook_app_id">142781360285746</string>
+    <string name="facebook_application_id" translatable="false">142781360285746</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb142781360285746</string>
+
+    <string name="signup">sign up</string>
+    <string name="signin">sign in</string>
+    <string name="signinGoogle">sign in with Google</string>
+    <string name="signinFB">sign in with Facebook</string>
+
+    <string name="email">email</string>
+    <string name="username">username</string>
+    <string name="pw">password</string>
+    <string name="confirmpw">confirm password</string>
+    <string name="female">female</string>
+    <string name="male">male</string>
+    <string name="gender">gender</string>
+    <string name="age">age</string>
+</resources>
