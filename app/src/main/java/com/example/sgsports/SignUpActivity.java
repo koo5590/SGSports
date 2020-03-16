@@ -30,7 +30,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /** create new user with email, username, password **/
@@ -145,7 +144,7 @@ public class SignUpActivity extends Activity {
 
         //check if user name already exists
         database.collection("users")
-                .whereEqualTo("name", name)
+                .whereEqualTo("username", name)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -169,25 +168,14 @@ public class SignUpActivity extends Activity {
                 if(task.isSuccessful()){ //successful
                     //get current user
                     FirebaseUser user = mAuth.getCurrentUser();
-                    Toast.makeText(SignUpActivity.this, "welcome!", Toast.LENGTH_SHORT).show();
 
                     //save user data to database
-                    Map<String, Object> newUser = new HashMap<>();
-                    newUser.put("name", name);
-                    newUser.put("email", email);
-                    newUser.put("gender", gender);
-                    newUser.put("age", age);
-                    newUser.put("explanation", null);
+                    UserData newUser = new UserData(name, email, gender, age);
 
-                    database.collection("users").add(newUser).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    database.collection("users").document(user.getUid()).set(newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            Log.d("log ", "DocumentSnapshot added with ID: " + documentReference.getId());
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d("fail: ", "Error adding document", e);
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(SignUpActivity.this, "welcome!", Toast.LENGTH_SHORT).show();
                         }
                     });
 
