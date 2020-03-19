@@ -163,22 +163,12 @@ public class LoginActivity extends AppCompatActivity{
                                         @Override
                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                             if(task.isSuccessful() && task.getResult().isEmpty()){
-                                                Map<String, Object> newUser = new HashMap<>();
-                                                newUser.put("name", user.getDisplayName());
-                                                newUser.put("email", user.getEmail());
-                                                newUser.put("gender", null);
-                                                newUser.put("age", null);
-                                                newUser.put("explanation", null);
+                                                UserData newUser = new UserData(user.getDisplayName(), user.getEmail(),null, null);
 
-                                                database.collection("users").add(newUser).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                database.collection("users").document(user.getUid()).set(newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
-                                                    public void onSuccess(DocumentReference documentReference) {
-                                                        Log.d("log ", "DocumentSnapshot added with ID: " + documentReference.getId());
-                                                    }
-                                                }).addOnFailureListener(new OnFailureListener() {
-                                                    @Override
-                                                    public void onFailure(@NonNull Exception e) {
-                                                        Log.d("fail: ", "Error adding document", e);
+                                                    public void onSuccess(Void aVoid) {
+                                                        Toast.makeText(LoginActivity.this, "welcome!", Toast.LENGTH_SHORT).show();
                                                     }
                                                 });
                                             }
