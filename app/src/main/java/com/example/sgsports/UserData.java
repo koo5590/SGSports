@@ -7,14 +7,16 @@ public class UserData {
     private String gender;
     private Integer age;
     private String explanation;
+    private String mobilenum;
 
     /** constructor **/
-    public UserData(String username, String useremail, String gender, Integer age){
+    public UserData(String username, String useremail, String gender, Integer age, String mobilenum){
         this.username = username;
         this.useremail = useremail;
         this.gender = gender;
         this.age = age;
         this.explanation = null;
+        this.mobilenum = mobilenum;
     }
 
     /** getter **/
@@ -38,6 +40,8 @@ public class UserData {
         return explanation;
     }
 
+    public String getMobilenum() { return mobilenum; }
+
     /** setter **/
     public void setUsername(String username) {
         this.username = username;
@@ -58,4 +62,6 @@ public class UserData {
     public void setExplanation(String explanation) {
         this.explanation = explanation;
     }
+
+    public void setMobilenum(String mobilenum) { this.mobilenum = mobilenum; }
 }

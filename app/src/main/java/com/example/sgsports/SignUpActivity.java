@@ -40,6 +40,7 @@ public class SignUpActivity extends Activity {
     EditText usernameText;
     EditText passwordText;
     EditText confirmPWText;
+    EditText mobileNumText;
 
     /** gender selection radio button **/
     RadioButton maleR;
@@ -67,6 +68,7 @@ public class SignUpActivity extends Activity {
         usernameText = (EditText)findViewById(R.id.newUsername);
         passwordText = (EditText)findViewById(R.id.newUserPW);
         confirmPWText = (EditText)findViewById(R.id.confirmPW);
+        mobileNumText = (EditText)findViewById(R.id.mobileNum);
 
         //get RadioButton objects
         maleR = (RadioButton)findViewById(R.id.maleR);
@@ -121,14 +123,15 @@ public class SignUpActivity extends Activity {
                 String  username= usernameText.getText().toString().trim();
                 String password = passwordText.getText().toString().trim();
                 String confirmpw = confirmPWText.getText().toString().trim();
+                String mobileNum = mobileNumText.getText().toString().trim();
 
-                checkValid(userEmail, username, password, confirmpw);
+                checkValid(userEmail, username, password, confirmpw, mobileNum);
             }
         });
     }
 
     /** check if user inputs are valid **/
-    private void checkValid(final String email, final String name, final String pw, final String confirmpw){
+    private void checkValid(final String email, final String name, final String pw, final String confirmpw, final String mobileNum){
 
         //check if any input is empty
         if(email.equals("") ||  name.equals("") || pw.equals("") || confirmpw.equals("")){
@@ -151,17 +154,22 @@ public class SignUpActivity extends Activity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             if (task.getResult().isEmpty())
-                                createNewAccount(email, name, pw);
+                                createNewAccount(email, name, pw, mobileNum);
                             else
                                 Toast.makeText(getApplicationContext(), "username already exists", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
 
+         //check if mobile number is valid
+        if(mobileNum.length()!=8 || mobileNum.matches("([^0-9])")){
+            Toast.makeText(SignUpActivity.this, "Please check your mobile number again", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     /** create new user account through firebase Auth **/
-    private void createNewAccount(final String email, final String name, final String pw){
+    private void createNewAccount(final String email, final String name, final String pw, final String mobileNum){
         mAuth.createUserWithEmailAndPassword(email, pw).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -170,7 +178,7 @@ public class SignUpActivity extends Activity {
                     FirebaseUser user = mAuth.getCurrentUser();
 
                     //save user data to database
-                    UserData newUser = new UserData(name, email, gender, age);
+                    UserData newUser = new UserData(name, email, gender, age,mobileNum);
 
                     database.collection("users").document(user.getUid()).set(newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override

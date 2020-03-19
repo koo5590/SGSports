@@ -163,7 +163,7 @@ public class LoginActivity extends AppCompatActivity{
                                         @Override
                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                             if(task.isSuccessful() && task.getResult().isEmpty()){
-                                                UserData newUser = new UserData(user.getDisplayName(), user.getEmail(),null, null);
+                                                UserData newUser = new UserData(user.getDisplayName(), user.getEmail(),null, null, null);
 
                                                 database.collection("users").document(user.getUid()).set(newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override

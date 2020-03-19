@@ -17,6 +17,9 @@
     <string name="male">male</string>
     <string name="gender">gender</string>
     <string name="age">age</string>
+    <string name="mobileNum">mobile number</string>
+
+
     <string name="hello">Hello,</string>
     <string name="name">Name</string>
     <string name="view_profile">View Profile</string>
