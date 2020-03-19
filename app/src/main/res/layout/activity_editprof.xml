@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/simpleTableLayout"
     android:layout_width="match_parent"
@@ -16,31 +15,29 @@
         <!-- first element of the row-->
         <TextView
 
-            android:id="@+id/simpleTextView"
+            android:id="@+id/simpleTextView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#b0b0b0"
             android:padding="18dip"
             android:text="Name:"
             android:textColor="#000"
-            android:textSize="12dp" />
+            android:textSize="12sp" />
 
-        <TextView
+        <EditText
 
             android:id="@+id/nameProf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#FF0000"
             android:padding="18dip"
             android:text="Text 2"
             android:textColor="#000"
-            android:textSize="14dp" />
+            android:textSize="14sp" />
 
     </TableRow>
 
     <TableRow
         android:layout_marginTop="10dp"
-        android:id="@+id/firstRow"
+        android:id="@+id/secondRow"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
@@ -49,88 +46,82 @@
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#b0b0b0"
             android:padding="18dip"
-            android:text="Age"
+            android:text="Age:"
             android:textColor="#000"
-            android:textSize="12dp" />
+            android:textSize="12sp" />
 
-        <TextView
+        <EditText
 
             android:id="@+id/ageProf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#FF0000"
             android:padding="18dip"
             android:text="Text 2"
             android:textColor="#000"
-            android:textSize="14dp" />
+            android:textSize="14sp" />
 
     </TableRow>
 
     <TableRow
         android:layout_marginTop="10dp"
-        android:id="@+id/firstRow"
+        android:id="@+id/thirdRow"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
         <!-- first element of the row-->
         <TextView
 
-            android:id="@+id/simpleTextView"
+            android:id="@+id/simpleTextView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#b0b0b0"
             android:padding="18dip"
-            android:text="Gender"
+            android:text="Gender:"
             android:textColor="#000"
-            android:textSize="12dp" />
+            android:textSize="12sp" />
 
-        <TextView
+        <EditText
 
             android:id="@+id/genderProf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#FF0000"
             android:padding="18dip"
             android:text="Text 2"
             android:textColor="#000"
-            android:textSize="14dp" />
+            android:textSize="14sp" />
 
     </TableRow>
     <TableRow
         android:layout_marginTop="10dp"
-        android:id="@+id/firstRow"
+        android:id="@+id/forthRow"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
         <!-- first element of the row-->
         <TextView
 
-            android:id="@+id/simpleTextView"
+            android:id="@+id/simpleTextView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#b0b0b0"
             android:padding="18dip"
             android:text="Mobile No:"
             android:textColor="#000"
-            android:textSize="12dp" />
+            android:textSize="12sp" />
 
-        <TextView
+        <EditText
 
             android:id="@+id/mobileProf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#FF0000"
             android:padding="18dip"
             android:text="Text 2"
             android:textColor="#000"
-            android:textSize="14dp" />
+            android:textSize="14sp" />
 
     </TableRow>
     <TableRow
         android:layout_marginTop="10dp"
-        android:id="@+id/firstRow"
+        android:id="@+id/fifthRow"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
@@ -140,39 +131,37 @@
             android:id="@+id/simpleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#b0b0b0"
             android:padding="18dip"
             android:text="Email:"
             android:textColor="#000"
-            android:textSize="12dp" />
+            android:textSize="12sp" />
 
-        <TextView
+        <EditText
 
             android:id="@+id/emailProf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#FF0000"
             android:padding="18dip"
             android:text="Text 2"
             android:textColor="#000"
-            android:textSize="14dp" />
+            android:textSize="14sp" />
 
     </TableRow>
 
     <Button
         android:layout_marginTop="30dp"
         android:layout_gravity="center"
-        android:id="@+id/editB"
+        android:id="@+id/updateB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/edit_profile"/>
+        android:text="@string/update_profile"/>
 
     <Button
         android:layout_marginTop="10dp"
         android:layout_gravity="center"
-        android:id="@+id/logoutB"
+        android:id="@+id/cancelB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/log_out"/>
+        android:text="@string/com_facebook_loginview_cancel_action"/>
 
 </TableLayout>

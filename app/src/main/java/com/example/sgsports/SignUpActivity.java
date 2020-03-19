@@ -153,7 +153,7 @@ public class SignUpActivity extends Activity {
                             if (task.getResult().isEmpty())
                                 createNewAccount(email, name, pw);
                             else
-                                Toast.makeText(getApplicationContext(), "username alreayd exists", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "username already exists", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
