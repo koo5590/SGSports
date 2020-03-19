@@ -3,8 +3,12 @@ package com.example.sgsports;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -17,6 +21,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.auth.*;
+import com.google.firebase.firestore.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,16 +32,42 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleMap map;
     private FirebaseFirestore firestoreDB;
     private FirebaseAuth auth;
-
+    //new
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore mFirestore;
+    private String UserId;
+    private FirebaseAuth.AuthStateListener mAuthListener;
+    private TextView tName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mAuth = FirebaseAuth.getInstance();
+        UserId = mAuth.getCurrentUser().getUid();
+        tName = findViewById(R.id.nameMain);
+       //get username
+        mFirestore = FirebaseFirestore.getInstance();
+        mFirestore.collection("users").document(UserId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                String name  = documentSnapshot.getString("username");
+
+                tName.setText(name);
+            }
+        });
+
         //set Google Map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        findViewById(R.id.profileB).setOnClickListener(new Button.OnClickListener(){
+            public void onClick(View v){
+                Intent intent = new Intent(MainActivity.this, ViewProfileActivity.class);
+                startActivity(intent);
+            }
+        });
 
         //access Firestore instance
         //firestoreDB = FirebaseFirestore.getInstance();

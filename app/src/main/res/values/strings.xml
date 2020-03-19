@@ -17,4 +17,15 @@
     <string name="male">male</string>
     <string name="gender">gender</string>
     <string name="age">age</string>
+    <string name="hello">Hello,</string>
+    <string name="name">Name</string>
+    <string name="view_profile">View Profile</string>
+    <string name="name_name">Name: {{name}}</string>
+    <string name="age_age">Age: {{age}}</string>
+    <string name="gender_gender">Gender: {{gender}}</string>
+    <string name="mobile_no_mobile">Mobile no: {{mobile}}</string>
+    <string name="email_email">Email: {{email}}</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="log_out">Log Out</string>
+    <string name="update_profile">Update Profile</string>
 </resources>
