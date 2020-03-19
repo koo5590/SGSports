@@ -30,12 +30,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.w3c.dom.Text;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
 
 public class LoginActivity extends AppCompatActivity{
 
@@ -43,7 +37,12 @@ public class LoginActivity extends AppCompatActivity{
     private FirebaseFirestore database;
     private GoogleSignInClient mGoogleSignInClient;
 
+    private UserData newUser;
+    private String userID;
+
     private final int RC_SIGN_IN_GOOGLE = 123;
+    private final int SIGN_IN_GOOGLE_DATA = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -52,6 +51,7 @@ public class LoginActivity extends AppCompatActivity{
 
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseFirestore.getInstance();
+
 
         //Sign in button
         findViewById(R.id.signinB).setOnClickListener(new Button.OnClickListener(){
@@ -132,13 +132,36 @@ public class LoginActivity extends AppCompatActivity{
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == RC_SIGN_IN_GOOGLE){ //sign in with google
+        //sign in with google
+        if(requestCode == RC_SIGN_IN_GOOGLE){
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try{
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
             }catch(ApiException e){
 
+            }
+        }
+
+        //save more user data (age, gender, mobile num)
+        if(requestCode == SIGN_IN_GOOGLE_DATA){
+            if(resultCode==RESULT_OK){
+                //get data sent from PopupSignUpActivity
+                newUser.setUsername(data.getStringExtra("username"));
+                newUser.setAge(data.getIntExtra("age",19));
+                newUser.setGender(data.getStringExtra("gender"));
+                newUser.setMobilenum(data.getStringExtra("mobilenum"));
+
+                //save new user data in database and start MainActivity
+                database.collection("users").document(userID).set(newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(LoginActivity.this, "welcome!", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
             }
         }
     }
@@ -157,30 +180,36 @@ public class LoginActivity extends AppCompatActivity{
                             database  = FirebaseFirestore.getInstance();
                             //if new user, save user data to database
                             database.collection("users")
-                                    .whereEqualTo("name", user.getDisplayName())
+                                    .whereEqualTo("useremail", user.getEmail())
                                     .get()
                                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                         @Override
                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                            if(task.isSuccessful() && task.getResult().isEmpty()){
-                                                UserData newUser = new UserData(user.getDisplayName(), user.getEmail(),null, null, null);
+                                            if(task.isSuccessful() && task.getResult().isEmpty()){ //new user
+                                                newUser = new UserData(null, user.getEmail(),null, null, null);
+                                                userID = user.getUid();
 
-                                                database.collection("users").document(user.getUid()).set(newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                    @Override
-                                                    public void onSuccess(Void aVoid) {
-                                                        Toast.makeText(LoginActivity.this, "welcome!", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                });
+                                                //pop up activity to get user data
+                                                Intent intent = new Intent(getApplicationContext(), PopupSignUpActivity.class);
+                                                startActivityForResult(intent,SIGN_IN_GOOGLE_DATA);
+
                                             }
+
+                                            //user already exists
+                                            else{
+                                                Toast.makeText(LoginActivity.this, "welcome", Toast.LENGTH_SHORT).show();
+                                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                                //finish this activity and start MainActivity
+                                                startActivity(intent);
+                                                finish();
+                                            }
+
                                         }
                                     });
 
-
-                            Toast.makeText(LoginActivity.this, "welcome", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(intent);
-                            finish();
                         }
+
+                        //sign in process failed
                         else{
                             Toast.makeText(getApplicationContext(), "sign in failed", Toast.LENGTH_SHORT).show();
                         }

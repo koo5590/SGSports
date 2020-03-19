@@ -12,9 +12,6 @@
         <activity android:name=".MainActivity">
         </activity>
 
-        <activity android:name=".ExampleActivity">
-        </activity>
-
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,6 +21,7 @@
         </activity>
 
         <activity android:name=".SignUpActivity"></activity>
+        <activity android:name=".PopupSignUpActivity" android:theme="@android:style/Theme.Dialog"></activity>
         <activity android:name=".ViewProfileActivity"></activity>
         <activity android:name=".EditProfileActivity"></activity>
         <meta-data

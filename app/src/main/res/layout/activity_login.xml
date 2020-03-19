@@ -14,6 +14,7 @@
         android:layout_marginTop="50dp"
         android:orientation="vertical">
 
+        <!-- Enter Email -->
         <EditText
             android:id="@+id/userEmail"
             android:layout_gravity="center"
@@ -21,6 +22,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/email"/>
 
+        <!-- Enter Password -->
         <EditText
             android:id="@+id/userPW"
             android:layout_gravity="center"
@@ -29,6 +31,7 @@
             android:inputType="textPassword"
             android:hint="@string/pw"/>
 
+        <!-- Sign In Button -->
         <Button
             android:id="@+id/signinB"
             android:layout_height="wrap_content"
@@ -38,6 +41,7 @@
             android:background="@color/colorPrimary"
             android:text="@string/signin" />
 
+        <!-- Sign Up Button -->
         <Button
             android:id="@+id/signupB"
             android:layout_height="wrap_content"
@@ -46,6 +50,7 @@
             android:layout_margin="5dp"
             android:text="@string/signup" />
 
+        <!-- Sign in with Google -->
         <Button
             android:id="@+id/googleB"
             android:layout_height="wrap_content"
@@ -54,6 +59,7 @@
             android:layout_margin="5dp"
             android:text="@string/signinGoogle" />
 
+        <!-- Sign in with facebook //not implemented -->
         <Button
             android:id="@+id/facebookB"
             android:layout_height="wrap_content"
