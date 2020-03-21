@@ -68,6 +68,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(intent);
             }
         });
+        findViewById(R.id.bookappointment).setOnClickListener(new Button.OnClickListener(){
+            public void onClick(View v){
+                Intent intent = new Intent(MainActivity.this, BookAppointmentActivity.class);
+                startActivity(intent);
+            }
+        });
+        findViewById(R.id.appointmentlist).setOnClickListener(new Button.OnClickListener(){
+            public void onClick(View v){
+                Intent intent = new Intent(MainActivity.this, ViewAppointmentActivity.class);
+                startActivity(intent);
+            }
+        });
 
         //access Firestore instance
         //firestoreDB = FirebaseFirestore.getInstance();
