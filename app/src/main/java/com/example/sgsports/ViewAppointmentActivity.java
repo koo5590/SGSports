@@ -1,5 +1,6 @@
 package com.example.sgsports;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -83,13 +85,14 @@ public class ViewAppointmentActivity extends AppCompatActivity {
         listappointment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               appointmentIDpassed = appointmentIDList.get(position);
-                Intent i = new Intent(ViewAppointmentActivity.this, DeleteAppointmentActivity.class);
-                i.putExtra("appointmentID", appointmentIDpassed);
-                startActivity(i);
+
+                appointmentIDpassed = appointmentIDList.get(position);
+                Intent intent = new Intent(ViewAppointmentActivity.this, DeleteAppointmentActivity.class);
+                intent.putExtra("appointmentID", appointmentIDpassed);
+                startActivity(intent);
+
             }
         });
-
 
 
 
