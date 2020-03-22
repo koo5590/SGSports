@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 
 public class FacilitiesAdd extends AppCompatActivity {
@@ -42,15 +43,22 @@ public class FacilitiesAdd extends AppCompatActivity {
                 facility.setLatitude(Lat);
                 facility.setLongitude(Long);
 
-                db.collection("Facility").document().set(facility)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                //is this correct way of checking duplicates?
+                db.collection("Facility").whereEqualTo("name",name).get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
-                            public void onComplete(@NonNull Task<Void> task) {
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(getApplicationContext(), "Facility added", Toast.LENGTH_SHORT).show();}
-                                else{
-                                    Toast.makeText(getApplicationContext(), "Facility already exists", Toast.LENGTH_SHORT).show();
+                                    if (task.getResult().isEmpty()) {
+                                        db.collection("Facility").document().set(facility);
+                                        Toast.makeText(getApplicationContext(), "Facility added", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    else
+                                        Toast.makeText(getApplicationContext(), "Facility already exists", Toast.LENGTH_SHORT).show();
+
                                 }
+
                             }
 
                         });
@@ -58,6 +66,8 @@ public class FacilitiesAdd extends AppCompatActivity {
             }
 
         });
+
+
 
         findViewById(R.id.back).setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v){
