@@ -46,7 +46,7 @@ public class ViewProfileActivity extends AppCompatActivity {
         mFirestore.collection("users").document(UserId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        String age = documentSnapshot.get("age").toString();
+                        String age = documentSnapshot.getString("age");
                         String email  = documentSnapshot.getString("useremail");
                         String gender  = documentSnapshot.getString("gender");
                         String name  = documentSnapshot.getString("username");

@@ -31,4 +31,5 @@
     <string name="edit_profile">Edit Profile</string>
     <string name="log_out">Log Out</string>
     <string name="update_profile">Update Profile</string>
+    <string name="map_key" translatable="false">AIzaSyBPP00BVTlJjkx0GqSIhlzExy8VHLq-1gE</string>
 </resources>
