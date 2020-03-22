@@ -36,25 +36,25 @@
         android:layout_gravity="center"
         android:layout_margin="5dp"
         android:text="@string/view_profile"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
         tools:layout_editor_absoluteX="323dp"
         tools:layout_editor_absoluteY="208dp" />
 
     <Button
         android:id="@+id/searchbutton"
-        android:layout_width="164dp"
+        android:layout_width="165dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="5dp"
         android:text="Search Facilities"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
         tools:layout_editor_absoluteX="323dp"
-        tools:layout_editor_absoluteY="160dp"
-        tools:text="SEARCH FACILITIES" />
+        tools:layout_editor_absoluteY="160dp" />
 
     <Button
         android:id="@+id/facilityadd"
-        android:layout_width="wrap_content"
+        android:layout_width="165dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="Add Facilities" />
-
 </LinearLayout>

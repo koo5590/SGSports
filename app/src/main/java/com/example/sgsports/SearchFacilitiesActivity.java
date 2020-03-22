@@ -1,7 +1,6 @@
 package com.example.sgsports;
 
 import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 public class SearchFacilitiesActivity extends AppCompatActivity
