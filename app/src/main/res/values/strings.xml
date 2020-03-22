@@ -19,6 +19,8 @@
     <string name="age">age</string>
     <string name="mobileNum">mobile number</string>
 
+    <string name="userdata">user data</string>
+
 
     <string name="hello">Hello,</string>
     <string name="name">Name</string>

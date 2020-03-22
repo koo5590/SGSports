@@ -36,26 +36,26 @@ import java.util.Map;
 public class SignUpActivity extends Activity {
 
     /** user input text **/
-    EditText userEmailText;
-    EditText usernameText;
-    EditText passwordText;
-    EditText confirmPWText;
-    EditText mobileNumText;
+    private EditText userEmailText;
+    private EditText usernameText;
+    private EditText passwordText;
+    private EditText confirmPWText;
+    private EditText mobileNumText;
 
     /** gender selection radio button **/
-    RadioButton maleR;
-    RadioButton femaleR;
-    String gender;
+    private RadioButton maleR;
+    private RadioButton femaleR;
+    private String gender;
 
     /** age selection spinner **/
-    Spinner ageSpinner;
-    int age;
+    private Spinner ageSpinner;
+    private int age;
 
     /** firebase **/
     private FirebaseAuth mAuth;
     private FirebaseFirestore database;
 
-    boolean result;
+    private boolean result;
 
 
     @Override
@@ -86,6 +86,7 @@ public class SignUpActivity extends Activity {
         };
         maleR.setOnClickListener(onClickListener);
         femaleR.setOnClickListener(onClickListener);
+        //default value is Male
         maleR.setChecked(true);
 
         //set list of age (range from 1 to 100)
@@ -94,6 +95,7 @@ public class SignUpActivity extends Activity {
             ageList.add(i);
         ArrayAdapter<Integer> spinnerArrayAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, ageList);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //default value is 1
         age = 1;
 
         //set spinner

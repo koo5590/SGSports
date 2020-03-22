@@ -1,7 +1,9 @@
 package com.example.sgsports;
 
+import java.io.Serializable;
+
 /** contains info of user **/
-public class UserData {
+public class UserData implements Serializable {
     private String username;
     private String useremail;
     private String gender;
