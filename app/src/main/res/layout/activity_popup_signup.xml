@@ -1,45 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="vertical"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:background="#eeeeee">
 
+    <!-- Title -->
     <LinearLayout
-        android:layout_marginTop="150dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary">
+        <TextView
+            android:text="@string/userdata"
+            android:textSize="20sp"
+            android:textColor="#fff"
+            android:gravity="center"
+            android:padding="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <!-- user input data -->
+    <LinearLayout
         android:layout_gravity="center"
-        android:id="@+id/createFields"
+        android:id="@+id/createField_gmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:orientation="vertical">
 
-        <!-- Email -->
-        <EditText
-            android:layout_gravity="center"
-            android:id="@+id/newUserEmail"
-            android:hint="@string/email"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"/>
         <!-- User Name -->
         <EditText
             android:layout_gravity="center"
-            android:id="@+id/newUsername"
+            android:id="@+id/newUsername_gmail"
             android:hint="@string/username"
             android:layout_width="200dp"
-            android:layout_height="wrap_content"/>
-        <!-- password -->
-        <EditText
-            android:layout_gravity="center"
-            android:id="@+id/newUserPW"
-            android:hint="@string/pw"
-            android:inputType="textPassword"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"/>
-        <EditText
-            android:layout_gravity="center"
-            android:id="@+id/confirmPW"
-            android:hint="@string/confirmpw"
-            android:inputType="textPassword"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"/>
 
         <!-- Gender -->
         <TextView
@@ -47,19 +44,20 @@
             android:layout_height="wrap_content"
             android:text="@string/gender"/>
         <RadioGroup
-            android:id="@+id/genderSelection"
+            android:id="@+id/genderSelection_gmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
             android:orientation="horizontal">
 
             <RadioButton
-                android:id="@+id/maleR"
+                android:id="@+id/maleR_gmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/male"/>
 
             <RadioButton
-                android:id="@+id/femaleR"
+                android:id="@+id/femaleR_gmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/female"/>
@@ -71,14 +69,15 @@
             android:layout_height="wrap_content"
             android:text="@string/age"/>
         <Spinner
-            android:id="@+id/ageSpinner"
+            android:id="@+id/ageSpinner_gmail"
             android:layout_width="100dp"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"/>
 
         <!-- Mobile Number -->
         <EditText
             android:layout_gravity="center"
-            android:id="@+id/mobileNum"
+            android:id="@+id/mobileNum_gmail"
             android:hint="@string/mobileNum"
             android:layout_width="200dp"
             android:layout_height="wrap_content" />
@@ -86,13 +85,15 @@
     </LinearLayout>
 
 
-    <!-- Sign Up Button -->
+    <!-- close Button -->
     <Button
         android:layout_marginTop="30dp"
         android:layout_gravity="center"
-        android:id="@+id/signUpB2"
+        android:id="@+id/signUpB2_gmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/signup"/>
+        android:layout_marginBottom="10dp"
+        android:text="@string/signup"
+        android:onClick="checkUserName"/>
 
 </LinearLayout>

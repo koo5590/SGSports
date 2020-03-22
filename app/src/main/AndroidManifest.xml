@@ -12,9 +12,6 @@
         <activity android:name=".MainActivity">
         </activity>
 
-        <activity android:name=".ExampleActivity">
-        </activity>
-
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,8 +21,13 @@
         </activity>
 
         <activity android:name=".SignUpActivity"></activity>
+        <activity android:name=".PopupSignUpActivity" android:theme="@android:style/Theme.Dialog"></activity>
         <activity android:name=".ViewProfileActivity"></activity>
         <activity android:name=".EditProfileActivity"></activity>
+        <activity android:name=".BookAppointmentActivity"></activity>
+        <activity android:name=".ViewAppointmentActivity"></activity>
+        <activity android:name=".EditAppointmentActivity"></activity>
+        <activity android:name=".DeleteAppointmentActivity"></activity>
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
