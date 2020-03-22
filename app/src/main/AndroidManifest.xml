@@ -26,15 +26,12 @@
         <activity android:name=".SignUpActivity"></activity>
         <activity android:name=".ViewProfileActivity"></activity>
         <activity android:name=".EditProfileActivity"></activity>
- HEAD
         <activity android:name=".BookAppointmentActivity"></activity>
         <activity android:name=".ViewAppointmentActivity"></activity>
         <activity android:name=".EditAppointmentActivity"></activity>
         <activity android:name=".DeleteAppointmentActivity"></activity>
         <activity android:name=".FacilitiesAdd"></activity>
-
         <activity android:name=".SearchFacilitiesActivity"></activity>
-dd4a383c4f8403204dc7ebd5165bc6faeec1f1d3
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
