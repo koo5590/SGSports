@@ -45,8 +45,16 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="5dp"
+        android:text="Search Facilities"
         tools:layout_editor_absoluteX="323dp"
         tools:layout_editor_absoluteY="160dp"
         tools:text="SEARCH FACILITIES" />
+
+    <Button
+        android:id="@+id/facilityadd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Add Facilities" />
 
 </LinearLayout>

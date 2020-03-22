@@ -124,6 +124,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
+        findViewById(R.id.facilityadd).setOnClickListener(new Button.OnClickListener(){
+            public void onClick(View v){
+                Intent intent = new Intent(MainActivity.this, FacilitiesAdd.class);
+                startActivity(intent);
+            }
+        });
+
         //access Firestore instance
             //firestoreDB = FirebaseFirestore.getInstance();
             //DBexample();
@@ -236,7 +243,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
     }
-
 
 
     //initialize Map: shows location of NTU with marker
