@@ -53,7 +53,6 @@ public class FacilitiesAdd extends AppCompatActivity {
                                 }
                             }
 
-
                         });
 
             }
