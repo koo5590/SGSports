@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().setTitle("Map Location");
+
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         mapFrag = (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map);
         mapFrag.getMapAsync(this);
@@ -116,13 +117,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 startActivity(intent);
             }
         });
+        findViewById(R.id.searchbutton).setOnClickListener(new Button.OnClickListener(){
+            public void onClick(View v){
+                Intent intent = new Intent(MainActivity.this, SearchFacilitiesActivity.class);
+                startActivity(intent);
+            }
+        });
 
         //access Firestore instance
-        //firestoreDB = FirebaseFirestore.getInstance();
-        //DBexample();
+            //firestoreDB = FirebaseFirestore.getInstance();
+            //DBexample();
 
-        //access Auth instance
-        //auth = FirebaseAuth.getInstance();
+            //access Auth instance
+            //auth = FirebaseAuth.getInstance();
     }
 
 
@@ -417,4 +424,5 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             // permissions this app might request
         }
     }
+
 }
