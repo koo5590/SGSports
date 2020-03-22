@@ -108,14 +108,6 @@ public class LoginActivity extends AppCompatActivity{
             }
         });
 
-        //add facilities button
-        findViewById(R.id.addfacilities).setOnClickListener(new Button.OnClickListener(){
-            public void onClick(View v){
-                Intent intent = new Intent(LoginActivity.this, AddFacilities.class);
-                startActivity(intent);
-            }
-        });
-
 
     }
 

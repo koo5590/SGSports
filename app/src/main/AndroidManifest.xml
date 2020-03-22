@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.sgsports">
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -9,8 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
-        </activity>
+        <activity android:name=".MainActivity"></activity>
+
 
         <activity android:name=".LoginActivity">
             <intent-filter>
@@ -19,15 +22,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".SignUpActivity"></activity>
-        <activity android:name=".PopupSignUpActivity" android:theme="@android:style/Theme.Dialog"></activity>
         <activity android:name=".ViewProfileActivity"></activity>
         <activity android:name=".EditProfileActivity"></activity>
         <activity android:name=".BookAppointmentActivity"></activity>
         <activity android:name=".ViewAppointmentActivity"></activity>
         <activity android:name=".EditAppointmentActivity"></activity>
         <activity android:name=".DeleteAppointmentActivity"></activity>
+        <activity android:name=".FacilitiesAdd"></activity>
+        <activity android:name=".SearchFacilitiesActivity"></activity>
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -35,7 +39,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/API_KEY" />
-
 
     </application>
 

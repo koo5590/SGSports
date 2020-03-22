@@ -1,24 +1,18 @@
 package com.example.sgsports;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import com.google.android.gms.tasks.OnSuccessListener;
-
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.auth.*;
-import com.google.firebase.firestore.*;
-
-import java.util.Objects;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 
 public class EditProfileActivity extends AppCompatActivity {
@@ -47,7 +41,7 @@ public class EditProfileActivity extends AppCompatActivity {
         mFirestore.collection("users").document(UserId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                String age = documentSnapshot.get("age").toString();
+                String age = documentSnapshot.getString("age");
                 String email  = documentSnapshot.getString("useremail");
                 String gender  = documentSnapshot.getString("gender");
                 String name  = documentSnapshot.getString("username");
