@@ -38,13 +38,15 @@ public class FacilitiesAdd extends AppCompatActivity {
             public void onClick(View v) {
                 Double Lat = Double.parseDouble(latfac.getText().toString().trim());
                 Double Long = Double.parseDouble(longfac.getText().toString().trim());
+                String namefac = name.getText().toString().trim();
+                String newname = namefac.toLowerCase();
 
-                facility.setName(name.getText().toString().trim());
+                facility.setName(namefac);
                 facility.setLatitude(Lat);
                 facility.setLongitude(Long);
 
                 //is this correct way of checking duplicates?
-                db.collection("Facility").whereEqualTo("name",name).get()
+                db.collection("Facility").whereEqualTo("name".toLowerCase(), newname).get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
