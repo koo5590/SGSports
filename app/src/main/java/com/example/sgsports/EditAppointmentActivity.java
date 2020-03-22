@@ -66,7 +66,8 @@ public class EditAppointmentActivity extends AppCompatActivity {
         calendarUpdate.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-                dateUpdate = dayOfMonth + "/" + (month + 1) + "/" + year;
+                String mon = (month<9)?"0"+(month+1):""+(month+1);
+                dateUpdate = dayOfMonth + "/" + mon + "/" + year;
             }
         });
 
