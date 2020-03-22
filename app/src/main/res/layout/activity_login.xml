@@ -68,13 +68,6 @@
             android:text="@string/signinFB"
             android:visibility="invisible" />
 
-        <Button
-            android:id="@+id/addfacilities"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Add Facilities" />
-
     </LinearLayout>
 
 </LinearLayout>
