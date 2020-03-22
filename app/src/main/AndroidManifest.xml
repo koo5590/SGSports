@@ -25,6 +25,11 @@
         <activity android:name=".SignUpActivity"></activity>
         <activity android:name=".ViewProfileActivity"></activity>
         <activity android:name=".EditProfileActivity"></activity>
+        <activity android:name=".BookAppointmentActivity"></activity>
+        <activity android:name=".ViewAppointmentActivity"></activity>
+        <activity android:name=".EditAppointmentActivity"></activity>
+        <activity android:name=".DeleteAppointmentActivity"></activity>
+        <activity android:name=".FacilitiesAdd"></activity>
         <activity android:name=".SearchFacilitiesActivity"></activity>
 
         <meta-data
