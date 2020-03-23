@@ -80,13 +80,14 @@
             android:textColor="#000"
             android:textSize="12sp" />
 
-        <EditText
+        <TextView
 
             android:id="@+id/genderProf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="18dip"
             android:text=""
+            android:inputType="none"
             android:textColor="#000"
             android:textSize="14sp" />
 
@@ -136,13 +137,14 @@
             android:textColor="#000"
             android:textSize="12sp" />
 
-        <EditText
+        <TextView
 
             android:id="@+id/emailProf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="18dip"
             android:text=""
+            android:inputType="none"
             android:textColor="#000"
             android:textSize="14sp" />
 
