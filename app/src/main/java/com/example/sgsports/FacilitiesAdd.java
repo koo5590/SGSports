@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 
 public class FacilitiesAdd extends AppCompatActivity {
@@ -37,28 +38,38 @@ public class FacilitiesAdd extends AppCompatActivity {
             public void onClick(View v) {
                 Double Lat = Double.parseDouble(latfac.getText().toString().trim());
                 Double Long = Double.parseDouble(longfac.getText().toString().trim());
+                String namefac = name.getText().toString().trim();
+                String newname = namefac.toLowerCase();
 
-                facility.setName(name.getText().toString().trim());
+                facility.setName(namefac);
                 facility.setLatitude(Lat);
                 facility.setLongitude(Long);
 
-                db.collection("Facility").document().set(facility)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                //is this correct way of checking duplicates?
+                db.collection("Facility").whereEqualTo("name".toLowerCase(), newname).get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
-                            public void onComplete(@NonNull Task<Void> task) {
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(getApplicationContext(), "Facility added", Toast.LENGTH_SHORT).show();}
-                                else{
-                                    Toast.makeText(getApplicationContext(), "Facility already exists", Toast.LENGTH_SHORT).show();
-                                }
-                            }
+                                    if (task.getResult().isEmpty()) {
+                                        db.collection("Facility").document().set(facility);
+                                        Toast.makeText(getApplicationContext(), "Facility added", Toast.LENGTH_SHORT).show();
+                                    }
 
+                                    else
+                                        Toast.makeText(getApplicationContext(), "Facility already exists", Toast.LENGTH_SHORT).show();
+
+                                }
+
+                            }
 
                         });
 
             }
 
         });
+
+
 
         findViewById(R.id.back).setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v){
