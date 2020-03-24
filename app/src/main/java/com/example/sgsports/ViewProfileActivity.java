@@ -40,23 +40,26 @@ public class ViewProfileActivity extends AppCompatActivity {
         t1Age = (TextView)findViewById(R.id.ageProf);
         t1Gender = (TextView)findViewById(R.id.genderProf);
         t1Name = (TextView)findViewById(R.id.nameProf);
+        t1Mobile = findViewById(R.id.mobileProf);
 
         //retrieve user info
         mFirestore = FirebaseFirestore.getInstance();
         mFirestore.collection("users").document(UserId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        //String age = documentSnapshot.getString("age");
                         String age = documentSnapshot.getString("age");
                         String email  = documentSnapshot.getString("useremail");
                         String gender  = documentSnapshot.getString("gender");
                         String name  = documentSnapshot.getString("username");
-
+                        String mobile  = documentSnapshot.getString("mobilenum");
 
                         //UserData newUser = new UserData(user.getDisplayName(), user.getEmail(),null, null);
                         t1Age.setText(age);
                         t1Email.setText(email);
                         t1Gender.setText(gender);
                         t1Name.setText(name);
+                        t1Mobile.setText(mobile);
                     }
                 });
         //edit profile button
