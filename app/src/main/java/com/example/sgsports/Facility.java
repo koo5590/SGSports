@@ -8,6 +8,12 @@ public class Facility {
     private String Description;
     private String Type;
 
+    public Facility(String name, String Desc, String Type){
+        this.Name = name;
+        this.Description = Desc;
+        this.Type = Type;
+    }
+
     public String getDescription() {
         return Description;
     }
@@ -27,6 +33,7 @@ public class Facility {
     public Facility() {
     }
 
+    /*** getter ***/
     public String getName() {
         return Name;
     }
@@ -39,6 +46,8 @@ public class Facility {
         return Latitude;
     }
 
+
+    /*** setter ***/
     public void setLatitude(Double latitude) {
         Latitude = latitude;
     }
@@ -50,4 +59,5 @@ public class Facility {
     public void setLongitude(Double longitude) {
         Longitude = longitude;
     }
+
 }
