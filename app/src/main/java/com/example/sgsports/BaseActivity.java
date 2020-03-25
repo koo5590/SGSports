@@ -20,6 +20,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+
 public class BaseActivity extends AppCompatActivity {
 
     static String userName="";
@@ -42,7 +44,14 @@ public class BaseActivity extends AppCompatActivity {
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_name);
         drawer = (DrawerLayout)findViewById(R.id.drawer);
 
-        final String[] items = {"Home", "Profile", "Appointments", "Favourites", "Weekly Reports", "Logout"};
+        //create menu list
+        ArrayList<String> items = new ArrayList<>();
+        items.add("Home"); items.add("Profile"); items.add("Appointments"); items.add("Favourites"); items.add("Weekly Reports");
+        //check if the user is admin
+        if(userName.equals("admin"))
+            items.add("Add new Facility"); items.add("Manage Facilities");
+        items.add("Logout");
+
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, items);
         listView = (ListView)findViewById(R.id.drawer_menulist);
         listView.setAdapter(adapter);
