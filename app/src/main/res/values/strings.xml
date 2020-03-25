@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">SGSports</string>
     <string name="facebook_app_id">142781360285746</string>
     <string name="facebook_application_id" translatable="false">142781360285746</string>
@@ -34,5 +34,24 @@
     <string name="log_out">Log Out</string>
     <string name="update_profile">Update Profile</string>
     <string name="map_key" translatable="false">AIzaSyBPP00BVTlJjkx0GqSIhlzExy8VHLq-1gE</string>
-    <string name="Search_Facilities" />
+    <string name="Search_Facilities">SEARCH FACILITIES </string>
+
+
+    <string-array name = "facilities_type">
+        <item>Swimming Pool</item>
+        <item>Gym</item>
+    </string-array>
+
+    <string-array name = "distance">
+        <item>Far</item>
+        <item>Near</item>
+    </string-array>
+
+    <string-array name = "rating">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
 </resources>
