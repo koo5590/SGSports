@@ -284,8 +284,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
 
-
-
         mLocationRequest = new LocationRequest();
       //  mLocationRequest.setInterval(120000); // two minute interval
         //mLocationRequest.setFastestInterval(120000);
@@ -375,7 +373,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }
                 });
             }
-
 
 
 
