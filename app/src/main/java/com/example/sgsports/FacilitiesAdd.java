@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -18,6 +19,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 public class FacilitiesAdd extends AppCompatActivity {
     EditText name, latfac, longfac, facdescrip;
+    String factype =" ";
+    CheckBox swimming,field;
     Button facilitiesadd;
     FirebaseFirestore db;
     Facility facility;
@@ -34,6 +37,12 @@ public class FacilitiesAdd extends AppCompatActivity {
         facility = new Facility();
         db = FirebaseFirestore.getInstance();
 
+        swimming = findViewById(R.id.swimming);
+        field = findViewById(R.id.field);
+
+
+
+
         facilitiesadd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,11 +51,24 @@ public class FacilitiesAdd extends AppCompatActivity {
                 String description = facdescrip.getText().toString().trim();
                 String namefac = name.getText().toString().trim();
                 String newname = namefac.toLowerCase();
+                if (swimming.isChecked()) {
+
+                    String swimming = " SwimmingPool";
+
+                    factype = swimming + factype;
+                }
+
+                if (field.isChecked()) {
+                    String field = " Field";
+                    factype = field + factype;
+                }
+
 
                 facility.setName(namefac);
                 facility.setLatitude(Lat);
                 facility.setLongitude(Long);
                 facility.setDescription(description);
+                facility.setType(factype);
 
                 //is this correct way of checking duplicates?
                 db.collection("Facility").whereEqualTo("name".toLowerCase(), newname).get()

@@ -6,9 +6,18 @@ public class Facility {
     private Double Latitude;
     private Double Longitude;
     private String Description;
+    private String Type;
 
     public String getDescription() {
         return Description;
+    }
+
+    public String getType() {
+        return Type;
+    }
+
+    public void setType(String type) {
+        Type = type;
     }
 
     public void setDescription(String description) {

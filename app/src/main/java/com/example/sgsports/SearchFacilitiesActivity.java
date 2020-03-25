@@ -11,5 +11,8 @@ public class SearchFacilitiesActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searchfacilities);
 
+
+
+
     }
 }
