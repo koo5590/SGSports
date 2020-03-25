@@ -177,7 +177,7 @@ public class SignUpActivity extends Activity {
                     FirebaseUser user = mAuth.getCurrentUser();
 
                     //save user data to database
-                    UserData newUser = new UserData(name, email, gender, age,mobileNum);
+                    UserData newUser = new UserData(name, email, gender, Integer.toString(age), mobileNum);
 
                     database.collection("users").document(user.getUid()).set(newUser).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
@@ -187,6 +187,7 @@ public class SignUpActivity extends Activity {
                     });
 
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    //intent.putExtra("username", name);
                     startActivity(intent);
                     finish();
                 }

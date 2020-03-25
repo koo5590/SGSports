@@ -17,7 +17,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 
 public class FacilitiesAdd extends AppCompatActivity {
-    EditText name, latfac, longfac;
+    EditText name, latfac, longfac, facdescrip;
     Button facilitiesadd;
     FirebaseFirestore db;
     Facility facility;
@@ -29,6 +29,7 @@ public class FacilitiesAdd extends AppCompatActivity {
         name = findViewById(R.id.namefac);
         latfac = findViewById(R.id.latfac);
         longfac = findViewById(R.id.longfac);
+        facdescrip = findViewById(R.id.facdescription);
         facilitiesadd = findViewById(R.id.facilitiesadd);
         facility = new Facility();
         db = FirebaseFirestore.getInstance();
@@ -38,12 +39,14 @@ public class FacilitiesAdd extends AppCompatActivity {
             public void onClick(View v) {
                 Double Lat = Double.parseDouble(latfac.getText().toString().trim());
                 Double Long = Double.parseDouble(longfac.getText().toString().trim());
+                String description = facdescrip.getText().toString().trim();
                 String namefac = name.getText().toString().trim();
                 String newname = namefac.toLowerCase();
 
                 facility.setName(namefac);
                 facility.setLatitude(Lat);
                 facility.setLongitude(Long);
+                facility.setDescription(description);
 
                 //is this correct way of checking duplicates?
                 db.collection("Facility").whereEqualTo("name".toLowerCase(), newname).get()

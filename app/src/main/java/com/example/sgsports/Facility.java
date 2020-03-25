@@ -5,6 +5,15 @@ public class Facility {
     private String Name;
     private Double Latitude;
     private Double Longitude;
+    private String Description;
+
+    public String getDescription() {
+        return Description;
+    }
+
+    public void setDescription(String description) {
+        Description = description;
+    }
 
     public Facility() {
     }

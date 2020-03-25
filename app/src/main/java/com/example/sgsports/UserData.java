@@ -7,12 +7,12 @@ public class UserData implements Serializable {
     private String username;
     private String useremail;
     private String gender;
-    private Integer age;
+    private String age;
     private String explanation;
     private String mobilenum;
 
     /** constructor **/
-    public UserData(String username, String useremail, String gender, Integer age, String mobilenum){
+    public UserData(String username, String useremail, String gender, String age, String mobilenum){
         this.username = username;
         this.useremail = useremail;
         this.gender = gender;
@@ -34,7 +34,7 @@ public class UserData implements Serializable {
         return gender;
     }
 
-    public Integer getAge() {
+    public String getAge() {
         return age;
     }
 
@@ -57,7 +57,7 @@ public class UserData implements Serializable {
         this.gender = gender;
     }
 
-    public void setAge(Integer age) {
+    public void setAge(String age) {
         this.age = age;
     }
 
