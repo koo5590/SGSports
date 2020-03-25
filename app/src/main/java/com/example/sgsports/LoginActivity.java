@@ -144,7 +144,7 @@ public class LoginActivity extends AppCompatActivity{
             if(resultCode==RESULT_OK){
                 //get data sent from PopupSignUpActivity
                 newUser.setUsername(data.getStringExtra("username"));
-                newUser.setAge(data.getIntExtra("age",19));
+                newUser.setAge(data.getStringExtra("age"));
                 newUser.setGender(data.getStringExtra("gender"));
                 newUser.setMobilenum(data.getStringExtra("mobilenum"));
 
@@ -154,6 +154,7 @@ public class LoginActivity extends AppCompatActivity{
                     public void onSuccess(Void aVoid) {
                         Toast.makeText(LoginActivity.this, "welcome!", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        //intent.putExtra("username",newUser.getUsername());
                         startActivity(intent);
                         finish();
                     }
