@@ -144,6 +144,12 @@ public class SignUpActivity extends Activity {
             return;
         }
 
+        //check if mobile number is valid
+        if(mobileNum.length()!=8 || mobileNum.matches("([^0-9])")){
+            Toast.makeText(SignUpActivity.this, "Please check your mobile number again", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         //check if user name already exists
         database.collection("users")
                 .whereEqualTo("username", name)
@@ -159,12 +165,6 @@ public class SignUpActivity extends Activity {
                         }
                     }
                 });
-
-         //check if mobile number is valid
-        if(mobileNum.length()!=8 || mobileNum.matches("([^0-9])")){
-            Toast.makeText(SignUpActivity.this, "Please check your mobile number again", Toast.LENGTH_SHORT).show();
-        }
-
     }
 
     /** create new user account through firebase Auth **/
