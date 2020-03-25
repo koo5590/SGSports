@@ -7,6 +7,15 @@ public class Facility {
     private Double Longitude;
     private String Description;
     private String Type;
+    private String Address;
+
+    public String getAddress() {
+        return Address;
+    }
+
+    public void setAddress(String address) {
+        Address = address;
+    }
 
     public String getDescription() {
         return Description;
