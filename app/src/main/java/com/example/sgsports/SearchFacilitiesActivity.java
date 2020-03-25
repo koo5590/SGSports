@@ -5,10 +5,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,10 +17,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -51,12 +48,6 @@ public class SearchFacilitiesActivity extends AppCompatActivity {
         filteredFacilities = new ArrayList<>();
         resultFacilities = new ArrayList<>();
 
-        //examples
-        allFacilities.add(new Facility("abc", "address","swimming"));
-        allFacilities.add(new Facility("abcd", "address2","gym"));
-        allFacilities.add(new Facility("abcde", "address3","swimming gym"));
-        allFacilities.add(new Facility("abcdef", "address4","gym"));
-
         //filter is off
         filterOn = false;
 
@@ -65,7 +56,7 @@ public class SearchFacilitiesActivity extends AppCompatActivity {
 
         //get facility data from database
         mFireStore = FirebaseFirestore.getInstance();
-        //getFacilities();
+        getFacilities();
 
         //filter button
         findViewById(R.id.filterB).setOnClickListener(new Button.OnClickListener(){
@@ -125,7 +116,7 @@ public class SearchFacilitiesActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode==RC_FILTER){  //get filter options
+        if(requestCode==RC_FILTER && data!=null){  //get filter options
             //get rate and type conditions
             int rate = data.getIntExtra("rate", 0);
             ArrayList<String> types = new ArrayList<>(data.getStringArrayListExtra("type_list"));
@@ -162,7 +153,7 @@ public class SearchFacilitiesActivity extends AppCompatActivity {
             //add facility that contains user input string
             while (iterator.hasNext()) {
                 Facility facility = iterator.next();
-                if (facility.getName().contains(name))
+                if (facility.getName().toLowerCase().contains(name.toLowerCase()))
                     resultFacilities.add(facility);
             }
         }
@@ -173,6 +164,22 @@ public class SearchFacilitiesActivity extends AppCompatActivity {
     void showResult(){
         FacilityListAdapter adapter = new FacilityListAdapter(resultFacilities, getApplicationContext());
         facilityListView.setAdapter(adapter);
+
+        facilityListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //get facility data
+                Facility facility = resultFacilities.get(i);
+
+                //move to facility details page
+                Intent intent = new Intent();
+                //Intent intent = new Intent(getApplicationContext(), );
+                intent.putExtra("facility", facility);
+                startActivity(intent);
+                finish();
+
+            }
+        });
     }
 
     //filter out facilities
@@ -188,11 +195,12 @@ public class SearchFacilitiesActivity extends AppCompatActivity {
             //get a facility
             Facility facility = iterator.next();
 
-    //avg rate of facility
+            Log.d("type", facility.getType());
+
             if(10>=rate){
                 //check if the facility has certain types
                 for(int i=0; i<types.size(); i++){
-                    if(!facility.getType().contains(types.get(i)))
+                    if(!facility.getType().toLowerCase().contains(types.get(i).toLowerCase()))
                         condition = false;  //the facility does not have a certain type
                 }
                 if(condition)  //the facility satisfies all conditions
@@ -207,8 +215,8 @@ public class SearchFacilitiesActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()){
-                    for(QueryDocumentSnapshot document: task.getResult()){
-                        Facility facility = (Facility)document.getData();
+                    for(QueryDocumentSnapshot doc: task.getResult()){
+                        Facility facility = doc.toObject(Facility.class);
                         allFacilities.add(facility);
                     }
                 }

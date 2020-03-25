@@ -32,6 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:padding="10dp"
             android:layout_gravity="center"
             android:orientation="vertical">
 
@@ -49,13 +50,65 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="type"/>
-            <ListView
-                android:id="@+id/typeList"
-                android:layout_width="200dp"
+            <CheckBox
+                android:id="@+id/swimmingB"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#2222F6"
-                android:choiceMode="multipleChoice"/>
+                android:text="Swimming Complex" />
 
+            <CheckBox
+                android:id="@+id/fieldB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Field"/>
+
+            <CheckBox
+                android:id="@+id/basketballcourtB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="BasketBall Court" />
+
+            <CheckBox
+                android:id="@+id/badmintonB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Badminton" />
+
+            <CheckBox
+                android:id="@+id/gymB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gym" />
+
+            <CheckBox
+                android:id="@+id/stadiumB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Stadium" />
+
+            <CheckBox
+                android:id="@+id/tenniscourtB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tennis Court" />
+
+            <CheckBox
+                android:id="@+id/tabletennisB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Table Tennis" />
+
+            <CheckBox
+                android:id="@+id/hockeyB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hockey Court" />
+
+            <CheckBox
+                android:id="@+id/squashB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Squash Court"/>
         </LinearLayout>
 
         <Button

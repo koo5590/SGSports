@@ -1,6 +1,8 @@
 package com.example.sgsports;
 
-public class Facility {
+import java.io.Serializable;
+
+public class Facility implements Serializable {
 
     private String Name;
     private Double Latitude;
@@ -17,10 +19,11 @@ public class Facility {
         Address = address;
     }
 
-    public Facility(String name, String Desc, String Type){
+    public Facility(String name, String Desc, String Type, String Address){
         this.Name = name;
         this.Description = Desc;
         this.Type = Type;
+        this.Address = Address;
     }
 
     public String getDescription() {

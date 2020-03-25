@@ -69,7 +69,7 @@ public class FacilityListAdapter extends BaseAdapter{
         Facility item = itemList.get(position);
         //show name and address of the facility
         viewHolder.textName.setText(item.getName());
-        viewHolder.textAddr.setText(item.getDescription());
+        viewHolder.textAddr.setText(item.getAddress());
 
         return convertView;
     }

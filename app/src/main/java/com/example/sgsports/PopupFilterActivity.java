@@ -10,6 +10,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -31,6 +32,8 @@ public class PopupFilterActivity extends Activity{
     //filter data
     int rate;
     ArrayList<String> checkedType = new ArrayList<>();
+    CheckBox swimming,field,basketball,hockey,tabletennis,tennis,badminton,stadium,gym,squash;
+    ArrayList<String> types;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -64,30 +67,58 @@ public class PopupFilterActivity extends Activity{
         });
 
 
-        //checkbox for type of facilities
-        final ArrayList<String> typeItems = new ArrayList<>();
-        typeItems.add("swimming"); typeItems.add("gym"); typeItems.add("etc");
+        types = new ArrayList<>();
+        //set checkboxes
+        swimming = findViewById(R.id.swimmingB);
+        field = findViewById(R.id.fieldB);
+        basketball = findViewById(R.id.basketballcourtB);
+        hockey = findViewById(R.id.hockeyB);
+        tabletennis = findViewById(R.id.tabletennisB);
+        tennis = findViewById(R.id.tenniscourtB);
+        badminton = findViewById(R.id.badmintonB);
+        stadium = findViewById(R.id.stadiumB);
+        gym = findViewById(R.id.gymB);
+        squash = findViewById(R.id.squashB);
 
-        final ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_multiple_choice, typeItems);
-        final ListView typeList = (ListView) findViewById(R.id.typeList);
-        typeList.setAdapter(adapter);
+
 
         Button filterButton = (Button)findViewById(R.id.submitsearch);
         filterButton.setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v){
-                SparseBooleanArray checkedItems = typeList.getCheckedItemPositions();
-                int count = adapter.getCount();
+                if (swimming.isChecked())
+                    types.add(" SwimmingPool");
 
-                //get list of checked type
-                for(int i=0; i<count; i++) {
-                    if (checkedItems.get(i))
-                        checkedType.add(typeItems.get(i));
-                }
+                if (field.isChecked())
+                    types.add(" Field");
+
+                if (basketball.isChecked())
+                    types.add(" BasketballCourt");
+
+                if (hockey.isChecked())
+                    types.add(" HockeyCourt");
+
+                if (tabletennis.isChecked())
+                    types.add(" TableTennisCourt");
+
+                if (tennis.isChecked())
+                    types.add(" TennisCourt");
+
+                if (badminton.isChecked())
+                    types.add(" BadmintonCourt");
+
+                if (stadium.isChecked())
+                    types.add( " Stadium");
+
+                if (gym.isChecked())
+                    types.add(" Gym");
+
+                if (squash.isChecked())
+                    types.add(" SquashCourt");
 
                 Intent intent  = new Intent();
                 //send filter data to search activity
                 intent.putExtra("rate", rate);
-                intent.putExtra("type_list", checkedType);
+                intent.putExtra("type_list", types);
                 setResult(RESULT_OK, intent);
 
                 //finish this activity
