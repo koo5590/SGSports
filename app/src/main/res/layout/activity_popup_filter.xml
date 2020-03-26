@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:background="#eeeeee">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+
+        <!-- Title -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary">
+            <TextView
+                android:text="@string/userdata"
+                android:textSize="20sp"
+                android:textColor="#fff"
+                android:gravity="center"
+                android:padding="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <!-- user input data -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:padding="10dp"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="rating"/>
+            <Spinner
+                android:id="@+id/rating_spinner"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="type"/>
+            <CheckBox
+                android:id="@+id/swimmingB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Swimming Complex" />
+
+            <CheckBox
+                android:id="@+id/fieldB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Field"/>
+
+            <CheckBox
+                android:id="@+id/basketballcourtB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="BasketBall Court" />
+
+            <CheckBox
+                android:id="@+id/badmintonB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Badminton" />
+
+            <CheckBox
+                android:id="@+id/gymB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gym" />
+
+            <CheckBox
+                android:id="@+id/stadiumB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Stadium" />
+
+            <CheckBox
+                android:id="@+id/tenniscourtB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tennis Court" />
+
+            <CheckBox
+                android:id="@+id/tabletennisB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Table Tennis" />
+
+            <CheckBox
+                android:id="@+id/hockeyB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hockey Court" />
+
+            <CheckBox
+                android:id="@+id/squashB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Squash Court"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/submitsearch"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:backgroundTint="#9CEC86"
+            android:layout_gravity="center"
+            android:text="enter" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

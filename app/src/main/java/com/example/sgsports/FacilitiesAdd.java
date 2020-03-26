@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -17,7 +18,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 
 public class FacilitiesAdd extends AppCompatActivity {
-    EditText name, latfac, longfac, facdescrip;
+    EditText name, latfac, longfac, facdescrip,address;
+    String factype =" ";
+    CheckBox swimming,field,basketball,hockey,tabletennis,tennis,badminton,stadium,gym,squash;
     Button facilitiesadd;
     FirebaseFirestore db;
     Facility facility;
@@ -30,9 +33,23 @@ public class FacilitiesAdd extends AppCompatActivity {
         latfac = findViewById(R.id.latfac);
         longfac = findViewById(R.id.longfac);
         facdescrip = findViewById(R.id.facdescription);
+        address = findViewById(R.id.address);
         facilitiesadd = findViewById(R.id.facilitiesadd);
+
         facility = new Facility();
         db = FirebaseFirestore.getInstance();
+
+        swimming = findViewById(R.id.swimming);
+        field = findViewById(R.id.field);
+        basketball = findViewById(R.id.basketballcourt);
+        hockey = findViewById(R.id.hockey);
+        tabletennis = findViewById(R.id.tabletennis);
+        tennis = findViewById(R.id.tenniscourt);
+        badminton = findViewById(R.id.badminton);
+        stadium = findViewById(R.id.stadium);
+        gym = findViewById(R.id.gym);
+        squash = findViewById(R.id.squash);
+
 
         facilitiesadd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,11 +59,66 @@ public class FacilitiesAdd extends AppCompatActivity {
                 String description = facdescrip.getText().toString().trim();
                 String namefac = name.getText().toString().trim();
                 String newname = namefac.toLowerCase();
+                String addressfac = address.getText().toString().trim();
+                if (swimming.isChecked()) {
+
+                    String swimming = " SwimmingPool";
+
+                    factype = factype + swimming;
+                }
+
+                if (field.isChecked()) {
+                    String field = " Field";
+                    factype = factype + field;
+                }
+
+                if (basketball.isChecked()){
+                    String basketball = " BasketballCourt";
+                    factype = factype + basketball;
+                }
+
+                if (hockey.isChecked()){
+                    String hockey = " HockeyCourt";
+                    factype = factype + hockey;
+                }
+
+                if (tabletennis.isChecked()){
+                    String tabletennis = " TableTennisCourt";
+                    factype = factype + tabletennis;
+                }
+
+                if (tennis.isChecked()){
+                    String tennis = " TennisCourt";
+                    factype = factype + tennis;
+                }
+
+                if (badminton.isChecked()){
+                    String badminton = " BadmintonCourt";
+                    factype = factype + badminton;
+                }
+
+                if (stadium.isChecked()){
+                    String stadium = " Stadium";
+                    factype = factype + stadium;
+                }
+
+                if (gym.isChecked()){
+                    String gym = " Gym";
+                    factype = factype + gym;
+                }
+
+                if (squash.isChecked()){
+                    String squash = " SquashCourt";
+                    factype = factype + squash;
+                }
+                
 
                 facility.setName(namefac);
                 facility.setLatitude(Lat);
                 facility.setLongitude(Long);
                 facility.setDescription(description);
+                facility.setType(factype);
+                facility.setAddress(addressfac);
 
                 //is this correct way of checking duplicates?
                 db.collection("Facility").whereEqualTo("name".toLowerCase(), newname).get()

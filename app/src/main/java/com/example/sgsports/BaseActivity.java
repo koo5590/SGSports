@@ -22,6 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
+/*** base activity that contains slide menu on the left ***/
 public class BaseActivity extends AppCompatActivity {
 
     static String userName="";
@@ -52,6 +53,7 @@ public class BaseActivity extends AppCompatActivity {
             items.add("Add new Facility"); items.add("Manage Facilities");
         items.add("Logout");
 
+        //menu list
         ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, items);
         listView = (ListView)findViewById(R.id.drawer_menulist);
         listView.setAdapter(adapter);
@@ -60,11 +62,11 @@ public class BaseActivity extends AppCompatActivity {
             public void onItemClick(AdapterView parent, View v, int position, long id){
                 Intent intent;
                 switch(position){
-                    case 1:
+                    case 1: //Profile
                         intent = new Intent(BaseActivity.this, ViewProfileActivity.class);
                         startActivity(intent);
                         break;
-                    case 2:
+                    case 2: //Appointment
                         intent = new Intent(BaseActivity.this, BookAppointmentActivity.class);
                         startActivity(intent);
                         break;
@@ -77,6 +79,7 @@ public class BaseActivity extends AppCompatActivity {
 
     }
 
+    //Hamburger button
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();

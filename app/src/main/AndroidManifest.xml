@@ -30,6 +30,9 @@
         <activity android:name=".FacilitiesAdd"></activity>
         <activity android:name=".SearchFacilitiesActivity"></activity>
         <activity android:name=".BaseActivity"></activity>
+        <activity android:name=".MapActivity"></activity>
+        <activity android:name=".PopupFilterActivity" android:theme="@android:style/Theme.Dialog"></activity>
+        <activity android:name=".PopupSignUpActivity" android:theme="@android:style/Theme.Dialog"></activity>
 
 
         <meta-data

@@ -138,7 +138,7 @@ public class PopupSignUpActivity extends Activity {
         Intent intent  = new Intent();
         //send data (gender, age, mobilenum) to LoginActivity
         intent.putExtra("gender", gender);
-        intent.putExtra("age", age);
+        intent.putExtra("age", Integer.toString(age));
         intent.putExtra("mobilenum", mobileNum);
         intent.putExtra("username", username);
         setResult(RESULT_OK, intent);

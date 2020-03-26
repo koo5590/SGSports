@@ -1,14 +1,41 @@
 package com.example.sgsports;
 
-public class Facility {
+import java.io.Serializable;
+
+public class Facility implements Serializable {
 
     private String Name;
     private Double Latitude;
     private Double Longitude;
     private String Description;
+    private String Type;
+    private String Address;
+
+    public String getAddress() {
+        return Address;
+    }
+
+    public void setAddress(String address) {
+        Address = address;
+    }
+
+    public Facility(String name, String Desc, String Type, String Address){
+        this.Name = name;
+        this.Description = Desc;
+        this.Type = Type;
+        this.Address = Address;
+    }
 
     public String getDescription() {
         return Description;
+    }
+
+    public String getType() {
+        return Type;
+    }
+
+    public void setType(String type) {
+        Type = type;
     }
 
     public void setDescription(String description) {
@@ -18,6 +45,7 @@ public class Facility {
     public Facility() {
     }
 
+    /*** getter ***/
     public String getName() {
         return Name;
     }
@@ -30,6 +58,8 @@ public class Facility {
         return Latitude;
     }
 
+
+    /*** setter ***/
     public void setLatitude(Double latitude) {
         Latitude = latitude;
     }
@@ -41,4 +71,5 @@ public class Facility {
     public void setLongitude(Double longitude) {
         Longitude = longitude;
     }
+
 }
