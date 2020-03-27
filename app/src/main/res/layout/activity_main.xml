@@ -111,4 +111,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.99" />
 
+    <Button
+        android:id="@+id/writeReviews"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Write Review"
+        tools:layout_editor_absoluteX="43dp"
+        tools:layout_editor_absoluteY="100dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

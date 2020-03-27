@@ -33,6 +33,8 @@
         <activity android:name=".MapActivity"></activity>
         <activity android:name=".PopupFilterActivity" android:theme="@android:style/Theme.Dialog"></activity>
         <activity android:name=".PopupSignUpActivity" android:theme="@android:style/Theme.Dialog"></activity>
+        <activity android:name=".ViewReviewActivity"></activity>
+        <activity android:name=".WriteReviewActivity"></activity>
 
 
         <meta-data
