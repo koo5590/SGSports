@@ -36,14 +36,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.maps.android.data.geojson.GeoJsonLayer;
 import com.google.maps.android.data.geojson.GeoJsonPolygonStyle;
@@ -69,47 +65,19 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
     LocationRequest mLocationRequest;
     Marker mCurrLocationMarker;
     Location mLastLocation;
-
+    CollectionReference facilityref;
     //firebase database
     FirebaseFirestore mFireStore;
-    private DatabaseReference mDataBase;
     ArrayList<Facility> allFacilities;
-    //ArrayList<LatLng>latlnglist = new ArrayList<LatLng>();
-    LatLng data;
     private ChildEventListener mChildEventListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_map, contentFrameLayout);
 
-        //get facility data from database
-        allFacilities = new ArrayList<>();
-
-
+        //initialize map and current location
         initMap();
-        ChildEventListener mChildEventListener;
-
-        mFireStore = FirebaseFirestore.getInstance();
-        mDataBase = FirebaseDatabase.getInstance().getReference();
-        //getFacilities();
-        mFireStore.collection("Facility").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    Facility facility=document.toObject(Facility.class);
-                    allFacilities.add(facility);
-
-                }
-            }
-        });
-//        data = new LatLng(allFacilities.get(0).getLatitude(),allFacilities.get(0).getLongitude());
-
-        //current location
-
-
-
         //book button
         findViewById(R.id.bookapp).setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v){
@@ -119,65 +87,57 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
         });
 
 
-
-
+    }
+    private void readData(final FireStoreCallback fireStoreCallback){
+        facilityref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    for(DocumentSnapshot document:task.getResult()){
+                        Facility facility = document.toObject(Facility.class);
+                        allFacilities.add(facility);
+                    }
+                    fireStoreCallback.onCallback(allFacilities);
+                }
+            }
+        });
+    }
+    private interface FireStoreCallback{
+        void onCallback(ArrayList<Facility> List);
     }
     void initMap(){
         //set Google Map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        mapFrag = (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFrag.getMapAsync(this);
+        mapFragment.getMapAsync(this);
     }
-    void getFacilities(){
-        mFireStore.collection("Facility").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()){
-                    for(QueryDocumentSnapshot doc: task.getResult()){
-                        Facility facility = doc.toObject(Facility.class);
-                        allFacilities.add(facility);
-                    }
-                }
 
-            }
-        });
-    }
     @Override
     public void onMapReady(final GoogleMap googleMap) {
         map = googleMap;
-        googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-//        mFireStore.addSnapshotsInSyncListener(new EventListner<DocumentSnapshot>(){
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot){
-//                for(DataSnapshot s: dataSnapshot.getChildren()){
-//                    Facility facility = (Facility) s.getValue();
-//                    LatLng location = new LatLng(facility.getLatitude(),facility.getLongitude());
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
+        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        mFireStore = FirebaseFirestore.getInstance();
+        allFacilities = new ArrayList<>();
+        facilityref = mFireStore.collection("Facility");
+        readData(new FireStoreCallback() {
+            private static final String TAG = "error";
 
-        mDataBase.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot s: dataSnapshot.getChildren()){
-                    Facility facility = s.getValue(Facility.class);
-                    LatLng location = new LatLng(facility.getLatitude(),facility.getLongitude());
-                    map.addMarker(new MarkerOptions().position(location).title(facility.getDescription()));
+            public void onCallback(ArrayList<Facility> list) {
+                for(int i =0; i<allFacilities.size();i++) {
+                    MarkerOptions markerOptions = new MarkerOptions();
+                    LatLng location = new LatLng(allFacilities.get(i).getLatitude(), allFacilities.get(i).getLongitude());
+                    markerOptions.position(location);
+                    String name = allFacilities.get(i).getName();
+                    markerOptions.title(name);
+                    markerOptions.snippet(allFacilities.get(i).getDescription());
+                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+
+                    map.addMarker(markerOptions);
                 }
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
         });
+
 
         LatLng NTU = new LatLng(1.3483153, 103.680946);
         MarkerOptions markerOptions = new MarkerOptions();
@@ -187,35 +147,10 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
         map.addMarker(markerOptions);
 
 
-        //map.addMarker(new MarkerOptions().position(data).title("HI"));
-//        Iterator<Facility> iterator;
-//        iterator = allFacilities.iterator();
-//        while (iterator.hasNext()) {
-//
-//        }
-//        map.addMarker(new MarkerOptions().position(latlnglist.get(1)).title("HI"));
-//        for(int i=0; i<allFacilities.size();i++) {
-//            map.addMarker(new MarkerOptions().position(latlnglist.get(i)).title("HI"));
-//        }
-
-
-
-
-//        Iterator<Facility> iterator;
-//        allFacilities = new ArrayList<>();
-//        mFireStore = FirebaseFirestore.getInstance();
-//        getFacilities();
-//        iterator = allFacilities.iterator();
-//        while (iterator.hasNext()) {
-//            Facility facility = iterator.next();
-//            LatLng latlng = new LatLng(facility.getLatitude(),facility.getLongitude());
-//            map.addMarker(new MarkerOptions().position(latlng).title(facility.getDescription()));
-//        }
-
         try {
             GeoJsonLayer Layer = new GeoJsonLayer(map, R.raw.sports, this);
             GeoJsonPolygonStyle polygonStyle = Layer.getDefaultPolygonStyle();
-            polygonStyle.setStrokeColor(Color.RED);
+            polygonStyle.setStrokeColor(Color.GREEN);
             polygonStyle.setStrokeWidth(10);
             Layer.addLayerToMap();
         } catch (IOException e) {
@@ -262,11 +197,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
 
 
     private void getLocationPermission() {
-        /*
-         * Request location permission, so that we can get the location of the
-         * device. The result of the permission request is handled by a callback,
-         * onRequestPermissionsResult.
-         */
+
         if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -278,11 +209,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
     }
-
-
-
-
-
 
 
     @Override
@@ -299,8 +225,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
                 }            }        }
     }
 
-
-    //initialize Map: shows location of NTU with marker
 
     LocationCallback mLocationCallback = new LocationCallback() {
         @Override
@@ -319,30 +243,21 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(latLng);
                 markerOptions.title("Current Position");
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE));
                 mCurrLocationMarker = map.addMarker(markerOptions);
-
                 //move map camera
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
             }
         }};
-
-
-
-
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
-            // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-                new AlertDialog.Builder(this)
+                        new AlertDialog.Builder(this)
                         .setTitle("Location Permission Needed")
                         .setMessage("This app needs the Location permission, please accept to use location functionality")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -359,7 +274,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
 
 
             } else {
-                // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION );
@@ -393,8 +307,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
                 return;
             }
 
-            // other 'case' lines to check for other
-            // permissions this app might request
         }
     }
 
