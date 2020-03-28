@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
@@ -47,12 +46,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
-import com.google.maps.android.data.geojson.GeoJsonLayer;
-import com.google.maps.android.data.geojson.GeoJsonPolygonStyle;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
-import org.json.JSONException;
-
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,6 +76,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     LocationRequest mLocationRequest;
     Marker mCurrLocationMarker;
     Location mLastLocation;
+    ArrayList<Facility> alltFacilities;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,12 +88,13 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         //setContentView(R.layout.activity_main);
         //getSupportActionBar().setTitle("Map Location");
 
+        alltFacilities = new ArrayList<>();
+
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        mapFrag = (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFrag = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFrag.getMapAsync(this);
 //
-
 
 
         //set Google Map
@@ -102,20 +102,36 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         mapFragment.getMapAsync(this);
 
 
-
-        //access Firestore instance
-        //firestoreDB = FirebaseFirestore.getInstance();
-        //DBexample();
-
+        firestoreDB = FirebaseFirestore.getInstance();
         //access Auth instance
-        //auth = FirebaseAuth.getInstance();
-        findViewById(R.id.bookapp).setOnClickListener(new Button.OnClickListener(){
-            public void onClick(View v){
+//       auth = FirebaseAuth.getInstance();
+        findViewById(R.id.bookapp).setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
                 Intent intent = new Intent(MapActivity.this, BookAppointmentActivity.class);
                 startActivity(intent);
             }
         });
+
+
     }
+
+        void getFacilities(){
+            firestoreDB.collection("Facility").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if(task.isSuccessful()){
+                        for(QueryDocumentSnapshot doc: task.getResult()){
+                            Facility facility = doc.toObject(Facility.class);
+                            alltFacilities.add(facility);
+                        }
+                    }
+
+                }
+            });
+        }
+
+
+
 
 
     private void getLastKnownLocation(){
@@ -226,25 +242,39 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     //initialize Map: shows location of NTU with marker
     @Override
     public void onMapReady(final GoogleMap googleMap) {
+        getFacilities();
         map = googleMap;
         map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-        LatLng NTU = new LatLng(1.3483153, 103.680946);
-
+        //why is it that there is nth in alltfacilities?
+        String lat = alltFacilities.get(0).getLatitude().toString();
+        String longi = alltFacilities.get(0).getLongitude().toString();
+        Long newlat = Long.parseLong(lat);
+        Long newlongi = Long.parseLong(longi);
+        Toast.makeText(getApplicationContext(), "wow it is in "+newlongi+"yay"+newlat, Toast.LENGTH_SHORT).show();
+        LatLng name = new LatLng(newlat, newlongi);
         MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(NTU);
-        markerOptions.title("NTU");
-        markerOptions.snippet("Nanyang Technological University");
+        markerOptions.position(name);
         map.addMarker(markerOptions);
-        try {
-            GeoJsonLayer Layer = new GeoJsonLayer(map, R.raw.sports, this);
-            GeoJsonPolygonStyle polygonStyle = Layer.getDefaultPolygonStyle();
-            polygonStyle.setStrokeColor(Color.RED);
-            polygonStyle.setStrokeWidth(10);
-            Layer.addLayerToMap();
-        } catch (IOException e) {
 
-        } catch (JSONException e) {
-        }
+//        map = googleMap;
+//        map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+//        LatLng NTU = new LatLng(1.3483153, 103.680946);
+//
+//        MarkerOptions markerOptions = new MarkerOptions();
+//        markerOptions.position(NTU);
+//        markerOptions.title("NTU");
+//        markerOptions.snippet("Nanyang Technological University");
+//        map.addMarker(markerOptions);
+//        try {
+//            GeoJsonLayer Layer = new GeoJsonLayer(map, R.raw.sports, this);
+//            GeoJsonPolygonStyle polygonStyle = Layer.getDefaultPolygonStyle();
+//            polygonStyle.setStrokeColor(Color.RED);
+//            polygonStyle.setStrokeWidth(10);
+//            Layer.addLayerToMap();
+//        } catch (IOException e) {
+//
+//        } catch (JSONException e) {
+//        }
 
 
         mLocationRequest = new LocationRequest();

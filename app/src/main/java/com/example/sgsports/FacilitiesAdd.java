@@ -111,7 +111,7 @@ public class FacilitiesAdd extends AppCompatActivity {
                     String squash = " SquashCourt";
                     factype = factype + squash;
                 }
-                
+
 
                 facility.setName(namefac);
                 facility.setLatitude(Lat);
