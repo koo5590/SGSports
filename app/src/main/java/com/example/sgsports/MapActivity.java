@@ -139,18 +139,18 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
             TextView typefac = findViewById(R.id.types);
             @Override
             public boolean onMarkerClick(Marker marker) {
-//                for (Facility fac : allFacilities){
-//                    String checkname = fac.getName()
-//                    String markertitle = marker.getSnippet();
-//                    if (checkname==markertitle)
-//
-//                    namefac.setText(checkname);
-//            }
                 String markertitle = marker.getTitle();
                 String snip = marker.getSnippet();
-
-                namefac.setText(markertitle);
-                typefac.setText(snip);
+                for (Facility fac : allFacilities){
+                    String checkname = fac.getName();
+                    // check the marker with the database data
+                    if (checkname.equals(markertitle)) {
+                        namefac.setText(markertitle);
+                        typefac.setText(snip);
+                    }
+            }
+//
+//
                 return false;
             }
         });
