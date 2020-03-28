@@ -81,6 +81,13 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
                 startActivity(intent);
             }
         });
+        //write a review button
+        findViewById(R.id.writereview).setOnClickListener(new Button.OnClickListener(){
+            public void onClick(View v){
+                Intent intent = new Intent(MapActivity.this, WriteReviewActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
     }

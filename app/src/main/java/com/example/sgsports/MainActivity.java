@@ -96,15 +96,6 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        findViewById(R.id.writeReviews).setOnClickListener(new Button.OnClickListener(){
-            public void onClick(View v){
-                Intent intent = new Intent(MainActivity.this, WriteReviewActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
-
         findViewById(R.id.myreviews).setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v){
                 Intent intent = new Intent(MainActivity.this, ViewReviewActivity.class);

@@ -18,18 +18,19 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:hint="@string/hello"
+        android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.436"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.299" />
+        app:layout_constraintVertical_bias="0.178" />
 
     <TextView
         android:id="@+id/nameMain"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-
+        android:textSize="30sp"
         android:layout_gravity="center"
         android:layout_marginBottom="484dp"
         android:hint="@string/name"
@@ -42,10 +43,9 @@
 
     <Button
         android:id="@+id/searchbutton"
-        android:layout_width="200dp"
+        android:layout_width="180dp"
         android:layout_height="200dp"
         android:layout_gravity="center"
-        android:layout_margin="5dp"
         android:text="Search Facilities"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -57,29 +57,27 @@
 
     <Button
         android:id="@+id/mapbutton"
-        android:layout_width="200dp"
+        android:layout_width="180dp"
         android:layout_height="200dp"
         android:layout_gravity="center"
-        android:layout_margin="5dp"
         android:text="MAP"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.621"
+        app:layout_constraintVertical_bias="0.623"
         tools:text="MAP" />
 
     <Button
         android:id="@+id/myreviews"
-        android:layout_width="200dp"
+        android:layout_width="180dp"
         android:layout_height="200dp"
         android:layout_gravity="center"
-        android:layout_margin="5dp"
         android:text="MY REVIEWS"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
@@ -93,30 +91,22 @@
         android:text="Add Facilities"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.583"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.142" />
+        app:layout_constraintVertical_bias="0.288" />
 
     <Button
         android:id="@+id/viewapp"
-        android:layout_width="200dp"
+
+        android:layout_width="180dp"
         android:layout_height="200dp"
         android:layout_gravity="center"
         android:text="View Appointment"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.023"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.99" />
-
-    <Button
-        android:id="@+id/writeReviews"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Write Review"
-        tools:layout_editor_absoluteX="43dp"
-        tools:layout_editor_absoluteY="100dp" />
+        app:layout_constraintVertical_bias="1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
