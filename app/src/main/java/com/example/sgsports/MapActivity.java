@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -41,12 +41,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.maps.android.data.geojson.GeoJsonLayer;
-import com.google.maps.android.data.geojson.GeoJsonPolygonStyle;
 
-import org.json.JSONException;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,6 +67,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
     private ChildEventListener mChildEventListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_map, contentFrameLayout);
@@ -124,13 +120,13 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
 
             @Override
             public void onCallback(ArrayList<Facility> list) {
-                for(int i =0; i<allFacilities.size();i++) {
+                for (int i = 0; i < allFacilities.size(); i++) {
                     MarkerOptions markerOptions = new MarkerOptions();
                     LatLng location = new LatLng(allFacilities.get(i).getLatitude(), allFacilities.get(i).getLongitude());
                     markerOptions.position(location);
                     String name = allFacilities.get(i).getName();
                     markerOptions.title(name);
-                    markerOptions.snippet(allFacilities.get(i).getDescription());
+                    markerOptions.snippet(allFacilities.get(i).getType());
                     markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
 
                     map.addMarker(markerOptions);
@@ -138,25 +134,47 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
             }
         });
 
+        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            TextView namefac = findViewById(R.id.name);
+            TextView typefac = findViewById(R.id.types);
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+//                for (Facility fac : allFacilities){
+//                    String checkname = fac.getName()
+//                    String markertitle = marker.getSnippet();
+//                    if (checkname==markertitle)
+//
+//                    namefac.setText(checkname);
+//            }
+                String markertitle = marker.getTitle();
+                String snip = marker.getSnippet();
 
-        LatLng NTU = new LatLng(1.3483153, 103.680946);
-        MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(NTU);
-        markerOptions.title("NTU");
-        markerOptions.snippet("Nanyang Technological University");
-        map.addMarker(markerOptions);
+                namefac.setText(markertitle);
+                typefac.setText(snip);
+                return false;
+            }
+        });
 
 
-        try {
-            GeoJsonLayer Layer = new GeoJsonLayer(map, R.raw.sports, this);
-            GeoJsonPolygonStyle polygonStyle = Layer.getDefaultPolygonStyle();
-            polygonStyle.setStrokeColor(Color.GREEN);
-            polygonStyle.setStrokeWidth(10);
-            Layer.addLayerToMap();
-        } catch (IOException e) {
+//
+//        LatLng NTU = new LatLng(1.3483153, 103.680946);
+//        MarkerOptions markerOptions = new MarkerOptions();
+//        markerOptions.position(NTU);
+//        markerOptions.title("NTU");
+//        markerOptions.snippet("Nanyang Technological University");
+//        map.addMarker(markerOptions);
 
-        } catch (JSONException e) {
-        }
+
+//        try {
+//            GeoJsonLayer Layer = new GeoJsonLayer(map, R.raw.sports, this);
+//            GeoJsonPolygonStyle polygonStyle = Layer.getDefaultPolygonStyle();
+//            polygonStyle.setStrokeColor(Color.GREEN);
+//            polygonStyle.setStrokeWidth(10);
+//            Layer.addLayerToMap();
+//        } catch (IOException e) {
+//
+//        } catch (JSONException e) {
+//        }
 
 
         mLocationRequest = new LocationRequest();
