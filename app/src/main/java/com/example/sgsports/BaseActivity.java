@@ -70,6 +70,11 @@ public class BaseActivity extends AppCompatActivity {
                         intent = new Intent(BaseActivity.this, BookAppointmentActivity.class);
                         startActivity(intent);
                         break;
+                    case 4: //Report
+                        intent = new Intent(BaseActivity.this, ReportActivity.class);
+                        startActivity(intent);
+                        break;
+
 
                 }
                 drawer.closeDrawer(GravityCompat.START);
