@@ -50,7 +50,6 @@ public class MainActivity extends BaseActivity {
         //setContentView(R.layout.activity_main);
         //getSupportActionBar().setTitle("Map Location");
 
-
         mAuth = FirebaseAuth.getInstance();
         UserId = mAuth.getCurrentUser().getUid();
         tName = findViewById(R.id.nameMain);

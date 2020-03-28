@@ -1,14 +1,11 @@
 package com.example.sgsports;
 
 import android.Manifest;
-import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
@@ -16,7 +13,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,8 +20,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -40,37 +34,33 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.maps.android.data.geojson.GeoJsonLayer;
 import com.google.maps.android.data.geojson.GeoJsonPolygonStyle;
 
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-public class MapActivity extends BaseActivity implements OnMapReadyCallback {
+public class MapActivity extends BaseActivity implements OnMapReadyCallback{
 
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 9003;
     private static final int PERMISSIONS_REQUEST_ENABLE_GPS = 9002;
     private static final int ERROR_DIALOG_REQUEST = 9001;
     private GoogleMap map;
-    private FirebaseFirestore firestoreDB;
-    private FirebaseAuth auth;
-    //new
-    private FirebaseAuth mAuth;
-    private FirebaseFirestore mFirestore;
-    private String UserId;
-    private FirebaseAuth.AuthStateListener mAuthListener;
-    private TextView tName;
+
 
     //new
     private boolean mLocationPermissionGranted=false;
@@ -80,161 +70,148 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     Marker mCurrLocationMarker;
     Location mLastLocation;
 
+    //firebase database
+    FirebaseFirestore mFireStore;
+    private DatabaseReference mDataBase;
+    ArrayList<Facility> allFacilities;
+    //ArrayList<LatLng>latlnglist = new ArrayList<LatLng>();
+    LatLng data;
+    private ChildEventListener mChildEventListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_map, contentFrameLayout);
-        //setContentView(R.layout.activity_main);
-        //getSupportActionBar().setTitle("Map Location");
+
+        //get facility data from database
+        allFacilities = new ArrayList<>();
 
 
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        mapFrag = (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFrag.getMapAsync(this);
-//
+        initMap();
+        ChildEventListener mChildEventListener;
+
+        mFireStore = FirebaseFirestore.getInstance();
+        mDataBase = FirebaseDatabase.getInstance().getReference();
+        //getFacilities();
+        mFireStore.collection("Facility").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    Facility facility=document.toObject(Facility.class);
+                    allFacilities.add(facility);
+
+                }
+            }
+        });
+//        data = new LatLng(allFacilities.get(0).getLatitude(),allFacilities.get(0).getLongitude());
+
+        //current location
 
 
 
-        //set Google Map
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-
-
-
-        //access Firestore instance
-        //firestoreDB = FirebaseFirestore.getInstance();
-        //DBexample();
-
-        //access Auth instance
-        //auth = FirebaseAuth.getInstance();
+        //book button
         findViewById(R.id.bookapp).setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v){
                 Intent intent = new Intent(MapActivity.this, BookAppointmentActivity.class);
                 startActivity(intent);
             }
         });
+
+
+
+
     }
-
-
-    private void getLastKnownLocation(){
-        mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+    void initMap(){
+        //set Google Map
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        mapFrag = (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFrag.getMapAsync(this);
+    }
+    void getFacilities(){
+        mFireStore.collection("Facility").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<Location> task) {
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()){
-                    Location location = task.getResult();
-                    GeoPoint geoPoint = new GeoPoint(location.getLatitude(),location.getLongitude());
+                    for(QueryDocumentSnapshot doc: task.getResult()){
+                        Facility facility = doc.toObject(Facility.class);
+                        allFacilities.add(facility);
+                    }
                 }
+
             }
         });
-
-
     }
-
-    private boolean checkMapServices(){
-        if(isServicesOK()){
-            if(isMapsEnabled()){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private void buildAlertMessageNoGps() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("This application requires GPS to work properly, do you want to enable it?")
-                .setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                        Intent enableGpsIntent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        startActivityForResult(enableGpsIntent, PERMISSIONS_REQUEST_ENABLE_GPS);
-                    }
-                });
-        final AlertDialog alert = builder.create();
-        alert.show();
-    }
-
-    public boolean isMapsEnabled(){
-        final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
-
-        if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
-            buildAlertMessageNoGps();
-            return false;
-        }
-        return true;
-    }
-
-    private void getLocationPermission() {
-        /*
-         * Request location permission, so that we can get the location of the
-         * device. The result of the permission request is handled by a callback,
-         * onRequestPermissionsResult.
-         */
-        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            mLocationPermissionGranted = true;
-            getLastKnownLocation();
-        } else {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
-                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-        }
-    }
-
-    public boolean isServicesOK(){
-
-        int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(MapActivity.this);
-
-        if(available == ConnectionResult.SUCCESS){
-            //everything is fine and the user can make map requests
-            return true;
-        }
-        else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)){
-            //an error occured but we can resolve it
-            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(MapActivity.this, available, ERROR_DIALOG_REQUEST);
-            dialog.show();
-        }else{
-            Toast.makeText(this, "You can't make map requests", Toast.LENGTH_SHORT).show();
-        }
-        return false;
-    }
-
-
-
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        switch (requestCode) {
-            case PERMISSIONS_REQUEST_ENABLE_GPS: {
-                if(mLocationPermissionGranted){
-                    getLastKnownLocation();
-                }
-                else{
-                    getLocationPermission();
-                }
-            }
-        }
-
-    }
-
-
-    //initialize Map: shows location of NTU with marker
     @Override
     public void onMapReady(final GoogleMap googleMap) {
         map = googleMap;
-        map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-        LatLng NTU = new LatLng(1.3483153, 103.680946);
+        googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+//        mFireStore.addSnapshotsInSyncListener(new EventListner<DocumentSnapshot>(){
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot){
+//                for(DataSnapshot s: dataSnapshot.getChildren()){
+//                    Facility facility = (Facility) s.getValue();
+//                    LatLng location = new LatLng(facility.getLatitude(),facility.getLongitude());
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
+        mDataBase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot s: dataSnapshot.getChildren()){
+                    Facility facility = s.getValue(Facility.class);
+                    LatLng location = new LatLng(facility.getLatitude(),facility.getLongitude());
+                    map.addMarker(new MarkerOptions().position(location).title(facility.getDescription()));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        LatLng NTU = new LatLng(1.3483153, 103.680946);
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(NTU);
         markerOptions.title("NTU");
         markerOptions.snippet("Nanyang Technological University");
         map.addMarker(markerOptions);
+
+
+        //map.addMarker(new MarkerOptions().position(data).title("HI"));
+//        Iterator<Facility> iterator;
+//        iterator = allFacilities.iterator();
+//        while (iterator.hasNext()) {
+//
+//        }
+//        map.addMarker(new MarkerOptions().position(latlnglist.get(1)).title("HI"));
+//        for(int i=0; i<allFacilities.size();i++) {
+//            map.addMarker(new MarkerOptions().position(latlnglist.get(i)).title("HI"));
+//        }
+
+
+
+
+//        Iterator<Facility> iterator;
+//        allFacilities = new ArrayList<>();
+//        mFireStore = FirebaseFirestore.getInstance();
+//        getFacilities();
+//        iterator = allFacilities.iterator();
+//        while (iterator.hasNext()) {
+//            Facility facility = iterator.next();
+//            LatLng latlng = new LatLng(facility.getLatitude(),facility.getLongitude());
+//            map.addMarker(new MarkerOptions().position(latlng).title(facility.getDescription()));
+//        }
+
         try {
             GeoJsonLayer Layer = new GeoJsonLayer(map, R.raw.sports, this);
             GeoJsonPolygonStyle polygonStyle = Layer.getDefaultPolygonStyle();
@@ -268,6 +245,63 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
             map.setMyLocationEnabled(true);
         }
     }
+
+    private void getLastKnownLocation(){
+        mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+            @Override
+            public void onComplete(@NonNull Task<Location> task) {
+                if(task.isSuccessful()){
+                    Location location = task.getResult();
+                    GeoPoint geoPoint = new GeoPoint(location.getLatitude(),location.getLongitude());
+                }
+            }
+        });
+
+
+    }
+
+
+    private void getLocationPermission() {
+        /*
+         * Request location permission, so that we can get the location of the
+         * device. The result of the permission request is handled by a callback,
+         * onRequestPermissionsResult.
+         */
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            mLocationPermissionGranted = true;
+            getLastKnownLocation();
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+        }
+    }
+
+
+
+
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_ENABLE_GPS: {
+                if(mLocationPermissionGranted){
+                    getLastKnownLocation();
+                }
+                else{
+                    getLocationPermission();
+                }            }        }
+    }
+
+
+    //initialize Map: shows location of NTU with marker
+
     LocationCallback mLocationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(LocationResult locationResult) {
@@ -293,49 +327,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
             }
         }};
 
-//       LatLng NTU = new LatLng(1.3483153, 103.680946);
-//
-//        MarkerOptions markerOptions = new MarkerOptions();
-//        markerOptions.position(NTU);
-//        markerOptions.title("NTU");
-//        markerOptions.snippet("Nanyang Technological University");
-//        map.addMarker(markerOptions);
-//
-//        map.moveCamera(CameraUpdateFactory.newLatLng(NTU));
-//        map.animateCamera(CameraUpdateFactory.zoomTo(10));
-//
-//        try {
-//            GeoJsonLayer Layer = new GeoJsonLayer(map, R.raw.sports, this);
-//            GeoJsonPolygonStyle polygonStyle = Layer.getDefaultPolygonStyle();
-//            polygonStyle.setStrokeColor(Color.CYAN);
-//            polygonStyle.setStrokeWidth(2);
-//            Layer.addLayerToMap();
-//        } catch (IOException e) {
-//
-//        } catch (JSONException e) {
-//        }
 
-
-
-    //add new Document to Firestore cloud db
-    public void DBexample() {
-        Map<String, Object> user = new HashMap<>();
-        user.put("first", "Ada");
-        user.put("last", "Lovelace");
-        user.put("born", 1815);
-
-        firestoreDB.collection("users").add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference documentReference) {
-                Log.d("log ", "DocumentSnapshot added with ID: " + documentReference.getId());
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d("fail: ", "Error adding document", e);
-            }
-        });
-    }
 
 
 
