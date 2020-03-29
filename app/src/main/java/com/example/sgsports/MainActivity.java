@@ -50,7 +50,6 @@ public class MainActivity extends BaseActivity {
         //setContentView(R.layout.activity_main);
         //getSupportActionBar().setTitle("Map Location");
 
-
         mAuth = FirebaseAuth.getInstance();
         UserId = mAuth.getCurrentUser().getUid();
         tName = findViewById(R.id.nameMain);
@@ -93,6 +92,13 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.viewapp).setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v){
                 Intent intent = new Intent(MainActivity.this, ViewAppointmentActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        findViewById(R.id.myreviews).setOnClickListener(new Button.OnClickListener(){
+            public void onClick(View v){
+                Intent intent = new Intent(MainActivity.this, ViewReviewActivity.class);
                 startActivity(intent);
             }
         });

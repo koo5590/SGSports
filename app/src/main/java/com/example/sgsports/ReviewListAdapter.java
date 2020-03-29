@@ -10,19 +10,19 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /****** Adaptor for ListView in FacilitySearchActivity *********/
-public class FacilityListAdapter extends BaseAdapter{
+public class ReviewListAdapter extends BaseAdapter{
 
-    private ArrayList<Facility> itemList;
+    private ArrayList<ReviewData> itemList;
     private LayoutInflater layoutInflater;
 
     //Constructor
-    public FacilityListAdapter(ArrayList<Facility> itemList, Context context){
+    public ReviewListAdapter(ArrayList<ReviewData> itemList, Context context){
         this.itemList = itemList;
         this.layoutInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     //set itemList and notify that the data has changed
-    private void setItemList(ArrayList<Facility> itemList){
+    private void setItemList(ArrayList<ReviewData> itemList){
         this.itemList = itemList;
         this.notifyDataSetChanged();
     }
@@ -66,10 +66,10 @@ public class FacilityListAdapter extends BaseAdapter{
         }
 
         //List each item on listView
-        Facility item = itemList.get(position);
+        ReviewData item = itemList.get(position);
         //show name and address of the facility
-        viewHolder.textTitle.setText(item.getName());
-        viewHolder.textDes.setText(item.getAddress());
+        viewHolder.textTitle.setText(item.getReview());
+        viewHolder.textDes.setText(item.getUser());
 
         return convertView;
     }

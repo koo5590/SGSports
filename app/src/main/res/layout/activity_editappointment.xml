@@ -1,64 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="30dp">
+
+
+    <TextView
+        android:id="@+id/facilityNameText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/textAccent"
+        android:textSize="25sp"/>
 
     <CalendarView
         android:id="@+id/calendarUpdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="27dp"
-        android:layout_marginLeft="27dp"
-        android:layout_marginTop="30dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginBottom="20dp" />
 
-    <Spinner
-        android:id="@+id/timeUpdate"
-        android:layout_width="300dp"
+    <!-- time slots -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
-        android:layout_marginLeft="1dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginRight="1dp"
-        android:layout_marginBottom="64dp"
-        app:layout_constraintBottom_toTopOf="@+id/updateAppt"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.321"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginBottom="30dp"
+        android:layout_marginStart="15dp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textAccent"
+            android:textSize="18sp"
+            android:text="Time Slot" />
+        <Spinner
+            android:id="@+id/timeUpdate"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/updateAppt"
-        android:layout_width="wrap_content"
+    <!-- buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="132dp"
-        android:layout_marginRight="132dp"
-        android:layout_marginBottom="36dp"
-        android:text="Update Appointment"
-        app:layout_constraintBottom_toTopOf="@+id/cancelUpdate"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_marginStart="15dp"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/updateAppt"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/round_button"
+            android:textColor="#ffffff"
+            android:text="Update Appointment" />
 
-    <Button
-        android:id="@+id/cancelUpdate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
-        android:layout_marginLeft="44dp"
-        android:layout_marginBottom="46dp"
-        android:text="Cancel"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/updateAppt" />
+        <Button
+            android:id="@+id/cancelUpdate"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/round_button3"
+            android:textColor="#5A5A5A"
+            android:text="cancel" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="35dp"
-        android:layout_marginLeft="35dp"
-        android:layout_marginBottom="46dp"
-        android:text="Time Slot"
-        app:layout_constraintBottom_toTopOf="@+id/timeUpdate"
-        app:layout_constraintStart_toStartOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

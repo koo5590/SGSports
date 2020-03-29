@@ -6,15 +6,14 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.util.ArrayList;
-import java.util.Iterator;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -22,8 +21,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 /*** search facilities based on conditions set by user and name typed in by user ***/
-public class SearchFacilitiesActivity extends AppCompatActivity {
+public class SearchFacilitiesActivity extends BaseActivity {
 
     private final int RC_FILTER = 456;
     boolean filterOn;
@@ -41,7 +43,8 @@ public class SearchFacilitiesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_searchfacilities);
+        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
+        getLayoutInflater().inflate(R.layout.activity_searchfacilities, contentFrameLayout);
 
         //create array objects
         allFacilities = new ArrayList<>();
@@ -97,7 +100,6 @@ public class SearchFacilitiesActivity extends AppCompatActivity {
                 return false;
             }
         });
-
 
     }
 
@@ -165,6 +167,7 @@ public class SearchFacilitiesActivity extends AppCompatActivity {
         FacilityListAdapter adapter = new FacilityListAdapter(resultFacilities, getApplicationContext());
         facilityListView.setAdapter(adapter);
 
+        //clicking each list item
         facilityListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -172,11 +175,9 @@ public class SearchFacilitiesActivity extends AppCompatActivity {
                 Facility facility = resultFacilities.get(i);
 
                 //move to facility details page
-                Intent intent = new Intent();
-                //Intent intent = new Intent(getApplicationContext(), );
+                Intent intent = new Intent(getApplicationContext(), MapActivity.class);
                 intent.putExtra("facility", facility);
                 startActivity(intent);
-                finish();
 
             }
         });
@@ -195,7 +196,7 @@ public class SearchFacilitiesActivity extends AppCompatActivity {
             //get a facility
             Facility facility = iterator.next();
 
-            Log.d("type", facility.getType());
+            //Log.d("type", facility.getType());
 
             if(10>=rate){
                 //check if the facility has certain types
@@ -219,6 +220,9 @@ public class SearchFacilitiesActivity extends AppCompatActivity {
                         Facility facility = doc.toObject(Facility.class);
                         allFacilities.add(facility);
                     }
+
+                    resultFacilities.addAll(allFacilities);
+                    showResult();
                 }
 
             }

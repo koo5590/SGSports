@@ -9,25 +9,27 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/instruction"
-        android:layout_width="300dp"
+        android:id="@+id/listofReviews"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
         android:textColor="@color/textAccent"
-        android:textSize="24sp"
-        android:text="Click on an appointment to edit or delete it." />
+        android:textSize="22sp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:text="Reviews I have given:" />
 
+    <!-- review list shown here -->
     <ListView
-        android:id="@+id/appointmentlist"
+        android:id="@+id/reviewList"
         android:layout_width="300dp"
         android:layout_height="400dp" />
 
+    <!-- back button -->
     <Button
         android:id="@+id/back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/round_button3"
-        android:textColor="#3E3E3E"
         android:text="Back" />
 
 </LinearLayout>

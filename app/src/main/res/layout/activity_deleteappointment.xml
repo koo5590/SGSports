@@ -1,40 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="30dp">
 
-    <Button
-        android:id="@+id/backtolist"
-        android:layout_width="wrap_content"
+    <!-- facility name goes here -->
+    <TextView
+        android:id="@+id/facilityNameText"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="33dp"
-        android:text="back"
-        app:layout_constraintStart_toStartOf="@+id/deleteappointment"
-        app:layout_constraintTop_toBottomOf="@+id/deleteappointment" />
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="30dp"
+        android:textColor="@color/textAccent"
+        android:textSize="28sp"
+        android:text=""/>
 
-    <Button
-        android:id="@+id/editappointment"
-        android:layout_width="150dp"
+    <!-- edit/delete buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="460dp"
-        android:text="Edit Appointment"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/deleteappointment"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/deleteappointment" />
+        android:layout_marginBottom="20dp"
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/deleteappointment"
-        android:layout_width="150dp"
+        <Button
+            android:id="@+id/editappointment"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/round_button"
+            android:textColor="#ffffff"
+            android:text="Edit Appointment" />
+
+        <Button
+            android:id="@+id/deleteappointment"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_button3"
+            android:textColor="#5F5F5F"
+            android:text="Delete Appoinment"/>
+    </LinearLayout>
+
+    <!-- back button -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="114dp"
-        android:layout_marginRight="114dp"
-        android:text="Delete Appoinment"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editappointment" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/backtolist"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_button3"
+            android:textColor="#5F5F5F"
+            android:text="back"/>
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.FrameLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.AdapterView;
@@ -49,7 +50,7 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BookAppointmentActivity extends AppCompatActivity{
+public class BookAppointmentActivity extends BaseActivity{
     //date selection
     CalendarView calendar;
     String date;
@@ -76,7 +77,8 @@ public class BookAppointmentActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bookappointment);
+        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
+        getLayoutInflater().inflate(R.layout.activity_bookappointment, contentFrameLayout);
 
         //get firebase authentication instance
         mAuth = FirebaseAuth.getInstance();

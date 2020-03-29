@@ -29,38 +29,41 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewAppointmentActivity extends BaseActivity {
-    private ListView listappointment;
+public class ViewReviewActivity extends BaseActivity{
+    private ListView listreview;
     Button back;
 
     private FirebaseFirestore database;
     private FirebaseAuth mAuth;
-    private ArrayList<String> mArray = new ArrayList<>();
+    private ArrayList<String> reviewArray = new ArrayList<>();
     private String userID;
     private FirebaseUser user;
     ArrayList<String> appointmentIDList = new ArrayList<>();
-    String appointmentDate;
-    String appointmentTime;
-    String appointmentDetails;
-    String appointmentID;
-    String appointmentIDpassed;
+    String facilityName;
+    String facilityType;
+    String reviewDesc;
+    String rating;
+    String reviewInfo;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
-        getLayoutInflater().inflate(R.layout.activity_viewappointment, contentFrameLayout);
+        getLayoutInflater().inflate(R.layout.activity_viewreview, contentFrameLayout);
 
-        listappointment = (ListView) findViewById(R.id.appointmentlist);
-        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(ViewAppointmentActivity.this, android.R.layout.simple_list_item_1, mArray);
-        listappointment.setAdapter(arrayAdapter);
+        listreview = (ListView) findViewById(R.id.reviewList);
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(ViewReviewActivity.this, android.R.layout.simple_list_item_1, reviewArray);
+        listreview.setAdapter(arrayAdapter);
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         userID = user.getUid();
         database = FirebaseFirestore.getInstance();
 
-        database.collection("Appointment")
+        database.collection("Review")
                 .whereEqualTo("user", userID)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -68,12 +71,13 @@ public class ViewAppointmentActivity extends BaseActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                appointmentID = document.getId();
-                                appointmentIDList.add(appointmentID);
-                                appointmentDate = document.getData().get("date").toString();
-                                appointmentTime = document.getData().get("timeslot").toString();
-                                appointmentDetails = appointmentDate + ", " + appointmentTime;
-                                mArray.add(appointmentDetails);
+
+                                facilityName = document.getData().get("facilityName").toString();
+                                facilityType = document.getData().get("facilityType").toString();
+                                reviewDesc = document.getData().get("review").toString();
+                                rating = document.getData().get("rating").toString();
+                                reviewInfo = facilityName + ", " + facilityType + '\n' + "Rating: " + rating + '\n' + "Review: " + reviewDesc;
+                                reviewArray.add(reviewInfo);
                                 arrayAdapter.notifyDataSetChanged();
                             }
                         } else {
@@ -83,33 +87,14 @@ public class ViewAppointmentActivity extends BaseActivity {
                     }
 
                 });
-
-        listappointment.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                appointmentIDpassed = appointmentIDList.get(position);
-                Intent intent = new Intent(ViewAppointmentActivity.this, DeleteAppointmentActivity.class);
-                intent.putExtra("appointmentID", appointmentIDpassed);
-                startActivity(intent);
-
-            }
-        });
-
-
-
-
         back = (Button) findViewById(R.id.back);
         back.setOnClickListener(new Button.OnClickListener(){
             public void onClick (View V){
-                Intent intent = new Intent(ViewAppointmentActivity.this, MainActivity.class);
+                Intent intent = new Intent(ViewReviewActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         });
+
     }
+
 }
-
-
-
-
-
