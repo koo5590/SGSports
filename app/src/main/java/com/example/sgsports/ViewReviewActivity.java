@@ -44,7 +44,7 @@ public class ViewReviewActivity extends BaseActivity{
     String reviewDesc;
     String rating;
     String reviewInfo;
-
+    ArrayList<ReviewData> reviewList;
 
 
 
@@ -53,6 +53,8 @@ public class ViewReviewActivity extends BaseActivity{
         super.onCreate(savedInstanceState);
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_viewreview, contentFrameLayout);
+
+        reviewList = new ArrayList<>();
 
         listreview = (ListView) findViewById(R.id.reviewList);
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(ViewReviewActivity.this, android.R.layout.simple_list_item_1, reviewArray);
@@ -72,13 +74,25 @@ public class ViewReviewActivity extends BaseActivity{
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                facilityName = document.getData().get("facilityName").toString();
-                                facilityType = document.getData().get("facilityType").toString();
-                                reviewDesc = document.getData().get("review").toString();
-                                rating = document.getData().get("rating").toString();
+                                ReviewData review = document.toObject(ReviewData.class);
+                                facilityName = review.getFacilityName();
+                                facilityType = review.getFacilityType();
+                                reviewDesc = review.getReview();
+                                rating = Integer.toString(review.getRating());
                                 reviewInfo = facilityName + ", " + facilityType + '\n' + "Rating: " + rating + '\n' + "Review: " + reviewDesc;
                                 reviewArray.add(reviewInfo);
+                                reviewList.add(review);
                                 arrayAdapter.notifyDataSetChanged();
+
+                                listreview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                        ReviewData reviewItem = reviewList.get(i);
+                                        Intent intent = new Intent(getApplicationContext(), ReadActivity.class);
+                                        intent.putExtra("review", reviewItem);
+                                        startActivity(intent);
+                                    }
+                                });
                             }
                         } else {
                         }

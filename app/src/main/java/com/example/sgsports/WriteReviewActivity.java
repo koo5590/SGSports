@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.AdapterView;
@@ -33,6 +32,7 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -52,10 +52,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class WriteReviewActivity extends BaseActivity {
+public class WriteReviewActivity extends AppCompatActivity {
     private Spinner spinnerRating;
     int rating;
     List<Integer> reviewRating;
+
+    private Spinner spinnerFacilityType;
+    List<String> facilityType;
+    String[] s;
+    String facType;
+    String facTypeFinal;
+
 
     EditText reviewDesc;
     String reviewText;
@@ -69,21 +76,48 @@ public class WriteReviewActivity extends BaseActivity {
     FirebaseFirestore mDatabase;
     String currentUserID;
     String facilityName;
-    String facilityType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
-        getLayoutInflater().inflate(R.layout.activity_writereview, contentFrameLayout);
+        setContentView(R.layout.activity_writereview);
+
+        Intent intent = getIntent();
+        Facility curFac = (Facility)intent.getSerializableExtra("facility");
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase  = FirebaseFirestore.getInstance();
 
         currentUser = mAuth.getCurrentUser();
-        currentUserID = BaseActivity.userName;
-        facilityName = "Jurong Stadium";
-        facilityType = "Temporary Type";
+        currentUserID = currentUser.getUid();
+
+
+        facilityName = curFac.getName();
+        facilityType = new ArrayList<>();
+        Log.d("types: ", curFac.getType());
+        facType = curFac.getType();
+        if(facType.startsWith(" "))
+            facType = facType.substring(1);
+        s = facType.split(" ");
+        for (int i = 0; i < s.length; i++) {
+            facilityType.add(s[i]);
+        }
+
+        ArrayAdapter<String> spinnerFacType = new ArrayAdapter<String>(WriteReviewActivity.this, android.R.layout.simple_spinner_item, facilityType);
+        spinnerFacType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerFacilityType = (Spinner)findViewById(R.id.spinnerFacilityType);
+        spinnerFacilityType.setAdapter(spinnerFacType);
+        spinnerFacilityType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                facTypeFinal = facilityType.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         reviewRating = new ArrayList<Integer>();
         reviewRating.add(0);
@@ -93,10 +127,10 @@ public class WriteReviewActivity extends BaseActivity {
         reviewRating.add(4);
         reviewRating.add(5);
 
-        rating = 0;
         ArrayAdapter<Integer> spinnerArrayAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, reviewRating);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //default value is 0
+        rating = 0;
 
         //set spinner
         spinnerRating = (Spinner)findViewById(R.id.spinnerRating);
@@ -119,7 +153,7 @@ public class WriteReviewActivity extends BaseActivity {
         submitReview.setOnClickListener(new Button.OnClickListener(){
             public void onClick (View V){
                 reviewText = reviewDesc.getText().toString();
-                createNewReview(currentUserID, facilityName, facilityType, reviewText, rating);
+                createNewReview(currentUserID, facilityName, facTypeFinal, reviewText, rating);
                 Intent intent = new Intent(WriteReviewActivity.this, MainActivity.class);
                 startActivity(intent);
             }
@@ -135,9 +169,9 @@ public class WriteReviewActivity extends BaseActivity {
 
     }
     /** create new review **/
-    private void createNewReview(final String currentUserID, final String facilityName, final String facilityType, String reviewText, int rating) {
+    private void createNewReview(final String currentUserID, final String facilityName, final String facTypeFinal, String reviewText, int rating) {
         //save user data to database
-        ReviewData newReview = new ReviewData(currentUserID, facilityName, facilityType, reviewText, rating);
+        ReviewData newReview = new ReviewData(currentUserID, facilityName, facTypeFinal, reviewText, rating);
 
         mDatabase.collection("Review").document().set(newReview).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
