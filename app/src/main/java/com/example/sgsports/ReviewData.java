@@ -1,6 +1,8 @@
 package com.example.sgsports;
 
-public class ReviewData {
+import java.io.Serializable;
+
+public class ReviewData implements Serializable {
     private String user;
     private String facilityName;
     private String facilityType;
@@ -14,6 +16,8 @@ public class ReviewData {
         this.review = review;
         this.rating = rating;
     }
+
+    public ReviewData(){};
 
     public String getUser() {
         return user;

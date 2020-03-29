@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -59,6 +60,10 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
     LinearLayout infoL;
     ListView reviewList;
 
+    TextView namefac;
+    TextView typefac;
+    TextView address;
+
     ArrayList<ReviewData> reviews;
 
     //new
@@ -79,6 +84,10 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
         super.onCreate(savedInstanceState);
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_map, contentFrameLayout);
+
+        namefac = findViewById(R.id.name);
+        typefac = findViewById(R.id.typeText);
+        address = findViewById(R.id.addrText);
 
         //initialize map and current location
         initMap();
@@ -147,6 +156,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
     @Override
     public void onMapReady(final GoogleMap googleMap) {
         map = googleMap;
+
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mFireStore = FirebaseFirestore.getInstance();
         allFacilities = new ArrayList<>();
@@ -171,13 +181,9 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
         });
 
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            TextView namefac = findViewById(R.id.name);
-            TextView typefac = findViewById(R.id.typeText);
-            TextView address = findViewById(R.id.addrText);
             @Override
             public boolean onMarkerClick(Marker marker) {
                 String markertitle = marker.getTitle();
-                String snip = marker.getSnippet();
                 for (Facility fac : allFacilities){
                     String checkname = fac.getName();
                     // check the marker with the database data
@@ -192,22 +198,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
                     }
                 }
 
-                reviews = new ArrayList<>();
-                mFireStore.collection("Review").whereEqualTo("facilityName", markertitle).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()){
-                            for(QueryDocumentSnapshot doc: task.getResult()){
-                                ReviewData review = doc.toObject(ReviewData.class);
-                                reviews.add(review);
-                            }
-
-                            ReviewListAdapter adapter = new ReviewListAdapter(reviews, getApplicationContext());
-                            reviewList.setAdapter(adapter);
-                        }
-                    }
-                });
-
+                getReview(markertitle);
 //
 //
                 return false;
@@ -255,6 +246,20 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
         } else {
             mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
             map.setMyLocationEnabled(true);
+        }
+
+        //search item shown
+        Intent intent = getIntent();
+        Facility facility_clicked = (Facility) intent.getSerializableExtra("facility");
+        if(facility_clicked!=null){
+            namefac.setText(facility_clicked.getName());
+            String type = facility_clicked.getType();
+            if(type.startsWith(" "))
+                type = type.substring(1);
+            typefac.setText(type.replaceAll(" ", ", "));
+            address.setText(facility_clicked.getAddress());
+            LatLng latLng = new LatLng(facility_clicked.getLatitude(), facility_clicked.getLongitude());
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
         }
     }
 
@@ -385,6 +390,39 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
             }
 
         }
+    }
+
+    void getReview(String name){
+        reviews = new ArrayList<>();
+        mFireStore.collection("Review").whereEqualTo("facilityName", name).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    for(QueryDocumentSnapshot doc: task.getResult()){
+                        ReviewData review = doc.toObject(ReviewData.class);
+                        reviews.add(review);
+                    }
+
+                    ReviewListAdapter adapter = new ReviewListAdapter(reviews, getApplicationContext());
+                    reviewList.setAdapter(adapter);
+
+                    reviewList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                            //get review data
+                            ReviewData review = reviews.get(i);
+
+                            //review detail page
+                            Intent intent = new Intent(getApplicationContext(), ReadActivity.class);
+                            intent.putExtra("review", review);
+                            startActivity(intent);
+                            finish();
+                        }
+                    });
+                }
+            }
+        });
+
     }
 
 }

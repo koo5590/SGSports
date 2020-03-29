@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="40dp">
+
+    <TextView
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="15dp"
+        android:id="@+id/facilityName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/textAccent"
+        android:textSize="24sp"/>
+
+    <TextView
+        android:id="@+id/ratingText"
+        android:layout_marginBottom="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/textAccent"
+        android:textSize="16sp"
+        android:text="Rating: "/>
+
+    <TextView
+        android:id="@+id/reviewText"
+        android:padding="15dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/round"
+        android:layout_width="300dp"
+        android:layout_height="350dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_button3"
+        android:text="Back"/>
+
+</LinearLayout>

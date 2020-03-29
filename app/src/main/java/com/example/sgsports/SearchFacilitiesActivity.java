@@ -178,7 +178,6 @@ public class SearchFacilitiesActivity extends BaseActivity {
                 Intent intent = new Intent(getApplicationContext(), MapActivity.class);
                 intent.putExtra("facility", facility);
                 startActivity(intent);
-                finish();
 
             }
         });

@@ -44,6 +44,9 @@ public class ViewProfileActivity extends BaseActivity {
         t1Name = (TextView)findViewById(R.id.nameProf);
         t1Mobile = findViewById(R.id.mobileProf);
 
+        TextView userText = findViewById(R.id.userNameText);
+        userText.setText(userName);
+
         //retrieve user info
         mFirestore = FirebaseFirestore.getInstance();
         mFirestore.collection("users").document(UserId).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

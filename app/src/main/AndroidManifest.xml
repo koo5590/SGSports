@@ -36,6 +36,7 @@
         <activity android:name=".ViewReviewActivity"></activity>
         <activity android:name=".WriteReviewActivity"></activity>
         <activity android:name=".ReportActivity"></activity>
+        <activity android:name=".ReadActivity"></activity>
 
 
         <meta-data
