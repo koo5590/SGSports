@@ -1,160 +1,178 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/simpleTableLayout"
-    android:layout_width="match_parent"
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
-    android:stretchColumns="*"> <!-- stretch the second column of the layout-->
+    android:layout_width="match_parent"
+    android:padding="40dp"
+    android:orientation="vertical">
 
-    <!-- first row of the table layout-->
-    <TableRow
-        android:layout_marginTop="150dp"
-        android:id="@+id/firstRow"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="20dp"
+        android:textSize="22sp"
+        android:textColor="@color/textAccent"
+        android:text="Edit your Profile"/>
 
-        <!-- first element of the row-->
-        <TextView
+    <TableLayout
+        android:id="@+id/simpleTableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round"
+        android:padding="15dp"
+        android:stretchColumns="*"> <!-- stretch the second column of the layout-->
 
-            android:id="@+id/simpleTextView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="18dip"
-            android:text="Name:"
-            android:textColor="#000"
-            android:textSize="12sp" />
+        <!-- first row of the table layout-->
+        <TableRow
+            android:id="@+id/firstRow"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
 
-        <EditText
+            <!-- first element of the row-->
+            <TextView
 
-            android:id="@+id/nameProf"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="18dip"
-            android:text=""
-            android:textColor="#000"
-            android:textSize="14sp" />
+                android:id="@+id/simpleTextView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="18dip"
+                android:text="Name:"
+                android:textColor="#000"
+                android:textSize="12sp" />
 
-    </TableRow>
+            <EditText
+                android:id="@+id/nameProf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="18dip"
+                android:text=""
+                android:textColor="#000"
+                android:textSize="14sp" />
 
-    <TableRow
-        android:layout_marginTop="10dp"
-        android:id="@+id/secondRow"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        </TableRow>
 
-        <!-- first element of the row-->
-        <TextView
+        <TableRow
+            android:layout_marginTop="10dp"
+            android:id="@+id/secondRow"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="18dip"
-            android:text="Age:"
-            android:textColor="#000"
-            android:textSize="12sp" />
+            <!-- first element of the row-->
+            <TextView
 
-        <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="18dip"
+                android:text="Age:"
+                android:textColor="#000"
+                android:textSize="12sp" />
 
-            android:id="@+id/ageProf"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="18dip"
-            android:text=""
-            android:textColor="#000"
-            android:textSize="14sp" />
+            <EditText
 
-    </TableRow>
+                android:id="@+id/ageProf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="18dip"
+                android:text=""
+                android:textColor="#000"
+                android:textSize="14sp" />
 
-    <TableRow
-        android:layout_marginTop="10dp"
-        android:id="@+id/thirdRow"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        </TableRow>
 
-        <!-- first element of the row-->
-        <TextView
+        <TableRow
+            android:layout_marginTop="10dp"
+            android:id="@+id/thirdRow"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
 
-            android:id="@+id/simpleTextView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="18dip"
-            android:text="Gender:"
-            android:textColor="#000"
-            android:textSize="12sp" />
+            <!-- first element of the row-->
+            <TextView
 
-        <TextView
+                android:id="@+id/simpleTextView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="18dip"
+                android:text="Gender:"
+                android:textColor="#000"
+                android:textSize="12sp" />
 
-            android:id="@+id/genderProf"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="18dip"
-            android:text=""
-            android:inputType="none"
-            android:textColor="#000"
-            android:textSize="14sp" />
+            <TextView
 
-    </TableRow>
-    <TableRow
-        android:layout_marginTop="10dp"
-        android:id="@+id/forthRow"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+                android:id="@+id/genderProf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="18dip"
+                android:text=""
+                android:inputType="none"
+                android:textColor="#000"
+                android:textSize="14sp" />
 
-        <!-- first element of the row-->
-        <TextView
+        </TableRow>
+        <TableRow
+            android:layout_marginTop="10dp"
+            android:id="@+id/forthRow"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
 
-            android:id="@+id/simpleTextView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="18dip"
-            android:text="Mobile No:"
-            android:textColor="#000"
-            android:textSize="12sp" />
+            <!-- first element of the row-->
+            <TextView
 
-        <EditText
+                android:id="@+id/simpleTextView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="18dip"
+                android:text="Mobile No:"
+                android:textColor="#000"
+                android:textSize="12sp" />
 
-            android:id="@+id/mobileProf"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="18dip"
-            android:text=""
-            android:textColor="#000"
-            android:textSize="14sp" />
+            <EditText
 
-    </TableRow>
-    <TableRow
-        android:layout_marginTop="10dp"
-        android:id="@+id/fifthRow"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+                android:id="@+id/mobileProf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="18dip"
+                android:text=""
+                android:textColor="#000"
+                android:textSize="14sp" />
 
-        <!-- first element of the row-->
-        <TextView
+        </TableRow>
+        <TableRow
+            android:layout_marginTop="10dp"
+            android:id="@+id/fifthRow"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
 
-            android:id="@+id/simpleTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="18dip"
-            android:text="Email:"
-            android:textColor="#000"
-            android:textSize="12sp" />
+            <!-- first element of the row-->
+            <TextView
 
-        <TextView
+                android:id="@+id/simpleTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="18dip"
+                android:text="Email:"
+                android:textColor="#000"
+                android:textSize="12sp" />
 
-            android:id="@+id/emailProf"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="18dip"
-            android:text=""
-            android:inputType="none"
-            android:textColor="#000"
-            android:textSize="14sp" />
+            <TextView
 
-    </TableRow>
+                android:id="@+id/emailProf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="18dip"
+                android:text=""
+                android:inputType="none"
+                android:textColor="#000"
+                android:textSize="14sp" />
+
+        </TableRow>
+    </TableLayout>
 
     <Button
         android:layout_marginTop="30dp"
         android:layout_gravity="center"
         android:id="@+id/updateB"
-        android:layout_width="wrap_content"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:background="@drawable/round_button"
         android:textColor="#ffffff"
@@ -164,10 +182,10 @@
         android:layout_marginTop="10dp"
         android:layout_gravity="center"
         android:id="@+id/cancelB"
-        android:layout_width="wrap_content"
+        android:layout_width="140dp"
         android:layout_height="wrap_content"
         android:background="@drawable/round_button3"
         android:textColor="#2F2F2F"
         android:text="@string/com_facebook_loginview_cancel_action"/>
 
-</TableLayout>
+</LinearLayout>
