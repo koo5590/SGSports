@@ -101,14 +101,6 @@ public class LoginActivity extends AppCompatActivity{
             }
         });
 
-        //Sign in with Facebook
-        findViewById(R.id.facebookB).setOnClickListener(new Button.OnClickListener(){
-            public void onClick(View v){
-
-            }
-        });
-
-
     }
 
     /** check if user is already signed in => if user signed in, start MainActivity **/
