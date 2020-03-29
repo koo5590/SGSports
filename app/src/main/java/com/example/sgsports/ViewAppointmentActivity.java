@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
@@ -28,7 +29,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewAppointmentActivity extends AppCompatActivity {
+public class ViewAppointmentActivity extends BaseActivity {
     private ListView listappointment;
     Button back;
 
@@ -47,7 +48,8 @@ public class ViewAppointmentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_viewappointment);
+        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
+        getLayoutInflater().inflate(R.layout.activity_viewappointment, contentFrameLayout);
 
         listappointment = (ListView) findViewById(R.id.appointmentlist);
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(ViewAppointmentActivity.this, android.R.layout.simple_list_item_1, mArray);

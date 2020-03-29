@@ -8,6 +8,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,7 +21,7 @@ import com.google.firebase.firestore.*;
 import java.util.Objects;
 
 
-public class ViewProfileActivity extends AppCompatActivity {
+public class ViewProfileActivity extends BaseActivity {
 
 
     private TextView t1Name, t1Age, t1Gender, t1Mobile, t1Email;
@@ -32,7 +33,8 @@ public class ViewProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_viewprof);
+        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
+        getLayoutInflater().inflate(R.layout.activity_viewprof, contentFrameLayout);
 
         mAuth = FirebaseAuth.getInstance();
         UserId = mAuth.getCurrentUser().getUid();

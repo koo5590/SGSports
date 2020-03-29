@@ -17,6 +17,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.core.Repo;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -47,10 +48,16 @@ public class BaseActivity extends AppCompatActivity {
 
         //create menu list
         ArrayList<String> items = new ArrayList<>();
-        items.add("Home"); items.add("Profile"); items.add("Appointments"); items.add("Favourites"); items.add("Weekly Reports");
+        items.add("Home"); items.add("Profile"); items.add("Appointments");items.add("Weekly Reports");
         //check if the user is admin
-        if(userName.equals("admin"))
-            items.add("Add new Facility"); items.add("Manage Facilities");
+        if(userName.equals("admin")) {
+            items.add("Add new Facility");
+            items.add("Manage Facilities");
+        }
+        if(!userName.equals("")) {
+            userNameTextView = (TextView) findViewById(R.id.user_name);
+            userNameTextView.setText(userName);
+        }
         items.add("Logout");
 
         //menu list
@@ -62,18 +69,27 @@ public class BaseActivity extends AppCompatActivity {
             public void onItemClick(AdapterView parent, View v, int position, long id){
                 Intent intent;
                 switch(position){
+                    case 0:
+                        intent = new Intent(BaseActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                        break;
                     case 1: //Profile
                         intent = new Intent(BaseActivity.this, ViewProfileActivity.class);
                         startActivity(intent);
+                        finish();
                         break;
                     case 2: //Appointment
-                        intent = new Intent(BaseActivity.this, BookAppointmentActivity.class);
+                        intent = new Intent(BaseActivity.this, ViewAppointmentActivity.class);
                         startActivity(intent);
+                        finish();
                         break;
-                    case 4: //Report
+                    case 3: //Report
                         intent = new Intent(BaseActivity.this, ReportActivity.class);
                         startActivity(intent);
+                        finish();
                         break;
+                    case 4: //logout
 
 
                 }

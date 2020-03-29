@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:minHeight="?attr/actionBarSize"
-        android:background="?attr/colorPrimary" />
+        android:background="#4FA786" />
 
     <androidx.drawerlayout.widget.DrawerLayout
         android:layout_width="match_parent"
@@ -25,24 +25,32 @@
             android:id="@+id/content_frame"/>
 
         <LinearLayout
-            android:layout_width="200dp"
+            android:layout_width="240dp"
             android:layout_height="match_parent"
-            android:background="#CCFFC107"
+            android:background="#E6FF9800"
             android:orientation="vertical"
+            android:padding="15dp"
             android:layout_gravity="start">
 
+            <!-- user name shows here -->
             <TextView
                 android:id="@+id/user_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
                 android:gravity="center"
                 android:textSize="25sp"
                 android:textColor="#FFFFFF"
+                android:textStyle="bold"
                 android:text=""/>
 
+            <!-- list of menus -->
             <ListView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="#212121"
+                android:padding="10dp"
                 android:id="@+id/drawer_menulist" />
 
         </LinearLayout>

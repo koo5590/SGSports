@@ -12,6 +12,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +43,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -52,6 +56,10 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
     private static final int ERROR_DIALOG_REQUEST = 9001;
     private GoogleMap map;
 
+    LinearLayout infoL;
+    ListView reviewList;
+
+    ArrayList<ReviewData> reviews;
 
     //new
     private boolean mLocationPermissionGranted=false;
@@ -89,8 +97,29 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
             }
         });
 
+        infoL = (LinearLayout)findViewById(R.id.infoLayout);
+        reviewList = (ListView)findViewById(R.id.reviewList);
+
+        //information button
+        findViewById(R.id.infoB).setOnClickListener(new Button.OnClickListener(){
+            public void onClick(View v){
+                infoL.setVisibility(View.VISIBLE);
+                reviewList.setVisibility(View.GONE);
+            }
+        });
+
+        //review list button
+        findViewById(R.id.reviewB).setOnClickListener(new Button.OnClickListener(){
+            public void onClick(View v){
+                infoL.setVisibility(View.GONE);
+                reviewList.setVisibility(View.VISIBLE);
+            }
+        });
+
 
     }
+
+
     private void readData(final FireStoreCallback fireStoreCallback){
         facilityref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -143,7 +172,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
 
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             TextView namefac = findViewById(R.id.name);
-            TextView typefac = findViewById(R.id.types);
+            TextView typefac = findViewById(R.id.typeText);
+            TextView address = findViewById(R.id.addrText);
             @Override
             public boolean onMarkerClick(Marker marker) {
                 String markertitle = marker.getTitle();
@@ -153,9 +183,31 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
                     // check the marker with the database data
                     if (checkname.equals(markertitle)) {
                         namefac.setText(markertitle);
-                        typefac.setText(snip);
+                        String type = fac.getType();
+                        if(type.startsWith(" "))
+                            type = type.substring(1);
+                        typefac.setText(type.replaceAll(" ", ", "));
+                        address.setText(fac.getAddress());
+                        break;
                     }
-            }
+                }
+
+                reviews = new ArrayList<>();
+                mFireStore.collection("Review").whereEqualTo("facilityName", markertitle).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            for(QueryDocumentSnapshot doc: task.getResult()){
+                                ReviewData review = doc.toObject(ReviewData.class);
+                                reviews.add(review);
+                            }
+
+                            ReviewListAdapter adapter = new ReviewListAdapter(reviews, getApplicationContext());
+                            reviewList.setAdapter(adapter);
+                        }
+                    }
+                });
+
 //
 //
                 return false;

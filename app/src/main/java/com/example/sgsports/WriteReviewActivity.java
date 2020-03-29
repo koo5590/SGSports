@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.AdapterView;
@@ -51,7 +52,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class WriteReviewActivity extends AppCompatActivity {
+public class WriteReviewActivity extends BaseActivity {
     private Spinner spinnerRating;
     int rating;
     List<Integer> reviewRating;
@@ -73,14 +74,15 @@ public class WriteReviewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_writereview);
+        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
+        getLayoutInflater().inflate(R.layout.activity_writereview, contentFrameLayout);
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase  = FirebaseFirestore.getInstance();
 
         currentUser = mAuth.getCurrentUser();
-        currentUserID = currentUser.getUid();
-        facilityName = "Temporary Name";
+        currentUserID = BaseActivity.userName;
+        facilityName = "Jurong Stadium";
         facilityType = "Temporary Type";
 
         reviewRating = new ArrayList<Integer>();
@@ -91,10 +93,10 @@ public class WriteReviewActivity extends AppCompatActivity {
         reviewRating.add(4);
         reviewRating.add(5);
 
+        rating = 0;
         ArrayAdapter<Integer> spinnerArrayAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, reviewRating);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         //default value is 0
-        rating = 0;
 
         //set spinner
         spinnerRating = (Spinner)findViewById(R.id.spinnerRating);

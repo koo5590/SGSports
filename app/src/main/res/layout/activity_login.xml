@@ -6,12 +6,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="160dp"
+        android:textColor="@color/textAccent"
+        android:textSize="28sp"
+        android:textAlignment="center"
+        android:text="SGSPORTS"/>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="555dp"
-        android:layout_gravity="bottom"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:orientation="vertical">
 
         <!-- Enter Email -->
@@ -34,39 +41,32 @@
         <!-- Sign In Button -->
         <Button
             android:id="@+id/signinB"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="30dp"
-            android:background="@color/colorPrimary"
+            android:background="@drawable/round_button"
             android:text="@string/signin" />
 
         <!-- Sign Up Button -->
         <Button
             android:id="@+id/signupB"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="5dp"
+            android:background="@drawable/round_button3"
             android:text="@string/signup" />
 
         <!-- Sign in with Google -->
         <Button
             android:id="@+id/googleB"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="5dp"
+            android:background="@drawable/round_button3"
             android:text="@string/signinGoogle" />
-
-        <!-- Sign in with facebook //not implemented -->
-        <Button
-            android:id="@+id/facebookB"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/signinFB"
-            android:visibility="invisible" />
 
     </LinearLayout>
 

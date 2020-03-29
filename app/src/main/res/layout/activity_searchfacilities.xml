@@ -8,42 +8,60 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_gravity="center"
-    android:padding="15dp"
-    android:background="#EFDADA">
+    android:padding="25dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="25dp"
         android:orientation="horizontal">
-        <EditText
-            android:id="@+id/searchText"
-            android:layout_width="180dp"
-            android:layout_height="50dp"
-            android:ems="10"
-            android:hint="Name of Facility"
-            android:inputType="textPersonName" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:orientation="horizontal">
+            <EditText
+                android:id="@+id/searchText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:ems="10"
+                android:hint="Name of Facility"
+                android:inputType="textPersonName" />
+        </LinearLayout>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/searchB"
-            android:text="search"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/filterB"
-            android:text="filter"/>
+        <!-- buttons -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:orientation="horizontal">
+            <!-- search button -->
+            <Button
+                android:id="@+id/searchB"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/round_button"
+                android:textColor="#ffffff"
+                android:text="search"/>
+            <!-- filter button -->
+            <Button
+                android:id="@+id/filterB"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:background="@drawable/round_button"
+                android:textColor="#ffffff"
+                android:text="filter"/>
+        </LinearLayout>
     </LinearLayout>
 
+    <!-- where the search results are shown -->
     <ListView
         android:id="@+id/facilityList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
-        android:paddingLeft="5dp"
         android:dividerHeight="2dp"/>
 
 </LinearLayout>

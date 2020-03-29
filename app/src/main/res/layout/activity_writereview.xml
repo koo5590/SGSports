@@ -1,69 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="30dp"
+    android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/reviewDesc"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_gravity="center"
-        android:layout_marginStart="53dp"
-        android:layout_marginEnd="53dp"
-        android:layout_marginBottom="153dp"
-        android:hint="Review:"
-        app:layout_constraintBottom_toTopOf="@+id/cancelReview"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rating" />
-
-    <Spinner
-        android:id="@+id/spinnerRating"
-        android:layout_width="300dp"
+    <!-- rating -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="106dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="49dp"
-        app:layout_constraintBottom_toTopOf="@+id/reviewDesc"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginBottom="20dp"
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/submitReview"
-        android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:textColor="@color/textAccent"
+            android:textSize="22sp"
+            android:text="Please give a rating: " />
+
+        <Spinner
+            android:id="@+id/spinnerRating"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <!-- review text -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="172dp"
-        android:text="Submit"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginBottom="30dp"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/rating"
-        android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/review"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:textColor="@color/textAccent"
+            android:textSize="22sp"
+            android:text="Please give a review: " />
+
+        <EditText
+            android:id="@+id/reviewDesc"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_gravity="center"
+            android:padding="15dp"
+            android:background="@drawable/round"
+            android:hint="Review:" />
+    </LinearLayout>
+
+
+    <!-- buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="57dp"
-        android:layout_marginBottom="103dp"
-        android:text="Please give a rating."
-        app:layout_constraintBottom_toTopOf="@+id/reviewDesc"
-        app:layout_constraintStart_toStartOf="@+id/spinnerRating"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/cancelReview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="88dp"
-        android:text="Cancel"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/submitReview"
-        app:layout_constraintTop_toBottomOf="@+id/reviewDesc" />
+        <Button
+            android:id="@+id/submitReview"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/round_button"
+            android:textColor="#ffffff"
+            android:text="Submit" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/cancelReview"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/round_button3"
+            android:textColor="#5A5A5A"
+            android:text="Cancel"/>
+
+    </LinearLayout>
+
+</LinearLayout>

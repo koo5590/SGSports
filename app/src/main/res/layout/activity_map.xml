@@ -1,113 +1,191 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <Button
-        android:id="@+id/writereview"
-        android:layout_width="175dp"
-        android:layout_height="35dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="11dp"
-        android:text="Write a Review"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bookapp"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+    <!-- map layout -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="327dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        tools:context="com.example.mapwithmarker.MapsMarkerActivity"
-        tools:ignore="MissingConstraints" />
-
-    <Button
-        android:id="@+id/bookapp"
-        android:layout_width="175dp"
-        android:layout_height="35dp"
-        android:layout_gravity="center"
-        android:text="Book Appointment"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/map"
-        app:layout_constraintVertical_bias="0.008" />
-
-    <TextView
-        android:id="@+id/name"
-        android:layout_width="208dp"
-        android:layout_height="70dp"
-        android:layout_marginTop="3dp"
-        android:hint="name"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.078"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/map"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="REVIEWS"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.272"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/types"
-        app:layout_constraintVertical_bias="0.077" />
+        android:orientation="horizontal">
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            tools:context="com.example.mapwithmarker.MapsMarkerActivity" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/Facilitytypedesc"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Type of Facility"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.05"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name"
-        app:layout_constraintVertical_bias="0.096" />
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
+        <!-- name of the facility -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/textAccent"
+                android:hint="Click icon"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <!-- write review & book appointment buttons -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:orientation="vertical">
+            <!-- write review -->
+            <Button
+                android:id="@+id/writereview"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:padding="4dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/round_button2"
+                android:textColor="#F1F1F1"
+                android:text="Write a Review" />
+
+            <!-- book appointment -->
+            <Button
+                android:id="@+id/bookapp"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:padding="4dp"
+                android:layout_gravity="center"
+                android:textColor="#F1F1F1"
+                android:background="@drawable/round_button2"
+                android:text="Book Appointment" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- info of the facility -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="INFO"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/types"
-        app:layout_constraintVertical_bias="0.077" />
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:padding="10dp"
+        android:background="@drawable/round"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/types"
-        android:layout_width="389dp"
-        android:layout_height="19dp"
-        android:hint="Types"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.727"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Facilitytypedesc"
-        app:layout_constraintVertical_bias="0.062" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <!-- info button -->
+            <Button
+                android:id="@+id/infoB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:background="@drawable/round_button"
+                android:layout_marginRight="5dp"
+                android:text="INFO" />
+
+            <!-- review button -->
+            <Button
+                android:id="@+id/reviewB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_button"
+                android:textColor="#FFFFFF"
+                android:text="REVIEWS" />
+        </LinearLayout>
+
+        <!-- line -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:orientation="vertical"
+            android:background="#B1BCBE">
+        </LinearLayout>
+
+        <!-- information layout -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/infoLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <!-- address -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:textColor="@color/textAccent"
+                        android:text="Adress: ">
+                    </TextView>
+                    <TextView
+                        android:id="@+id/addrText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:text="">
+                    </TextView>
+
+                    <!-- type of facilities -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/textAccent"
+                        android:text="Type of facilities: ">
+                    </TextView>
+                    <TextView
+                        android:id="@+id/typeText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:text="">
+                    </TextView>
+
+                </LinearLayout>
+
+                <!-- review layout -->
+                <ListView
+                    android:id="@+id/reviewList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:padding="10dp"
+                    android:dividerHeight="2dp">
+                </ListView>
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+
+</LinearLayout>

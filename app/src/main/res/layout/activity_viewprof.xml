@@ -2,179 +2,205 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-<TableLayout
-    android:id="@+id/simpleTableLayout"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:stretchColumns="*"> <!-- stretch the second column of the layout-->
-
-    <!-- first row of the table layout-->
-    <TableRow
-        android:layout_marginTop="150dp"
-        android:id="@+id/firstRow"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-
-        <!-- first element of the row-->
-        <TextView
-
-            android:id="@+id/simpleTextView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="18dip"
-            android:text="Name:"
-            android:textColor="#000"
-            android:textSize="12sp" />
-
-        <TextView
-
-            android:id="@+id/nameProf"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="18dip"
-            android:text=""
-            android:textColor="#000"
-            android:textSize="14sp" />
-
-    </TableRow>
-
-    <TableRow
-        android:layout_marginTop="10dp"
-        android:id="@+id/secondRow"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-
-        <!-- first element of the row-->
-        <TextView
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="18dip"
-            android:text="Age:"
-            android:textColor="#000"
-            android:textSize="12sp" />
-
-        <TextView
-
-            android:id="@+id/ageProf"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="18dip"
-            android:text=""
-            android:textColor="#000"
-            android:textSize="14sp" />
-
-    </TableRow>
-
-    <TableRow
-        android:layout_marginTop="10dp"
-        android:id="@+id/thirdRow"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-
-        <!-- first element of the row-->
-        <TextView
-
-            android:id="@+id/simpleTextView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="18dip"
-            android:text="Gender:"
-            android:textColor="#000"
-            android:textSize="12sp" />
-
-        <TextView
-
-            android:id="@+id/genderProf"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="18dip"
-            android:text=""
-            android:textColor="#000"
-            android:textSize="14sp" />
-
-    </TableRow>
-    <TableRow
-        android:layout_marginTop="10dp"
-        android:id="@+id/forthRow"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-
-        <!-- first element of the row-->
-        <TextView
-
-            android:id="@+id/simpleTextView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="18dip"
-            android:text="Mobile No:"
-            android:textColor="#000"
-            android:textSize="12sp" />
-
-        <TextView
-
-            android:id="@+id/mobileProf"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="18dip"
-            android:text=""
-            android:textColor="#000"
-            android:textSize="14sp" />
-
-    </TableRow>
-    <TableRow
-        android:layout_marginTop="10dp"
-        android:id="@+id/fifthRow"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-
-        <!-- first element of the row-->
-        <TextView
-
-            android:id="@+id/simpleTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="18dip"
-            android:text="Email:"
-            android:textColor="#000"
-            android:textSize="12sp" />
-
-        <TextView
-
-            android:id="@+id/emailProf"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="18dip"
-            android:text=""
-            android:textColor="#000"
-            android:textSize="14sp" />
-
-    </TableRow>
-
-    <Button
-        android:layout_marginTop="30dp"
-        android:layout_gravity="center"
-        android:id="@+id/editB"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/edit_profile"/>
+        android:padding="30dp"
+        android:orientation="vertical">
 
-    <Button
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center"
-        android:id="@+id/cancelB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/com_facebook_loginview_cancel_action"/>
+        <!-- user name appears here -->
+        <TextView
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textAccent"
+            android:textSize="26sp"
+            android:text=""/>
 
-    <Button
-        android:layout_marginTop="10dp"
-        android:layout_gravity="center"
-        android:id="@+id/logoutB"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/log_out"/>
+        <TableLayout
+            android:id="@+id/simpleTableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/round"
+            android:stretchColumns="*"> <!-- stretch the second column of the layout-->
 
-</TableLayout>
+            <!-- first row of the table layout-->
+            <TableRow
+                android:id="@+id/firstRow"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <!-- first element of the row-->
+                <TextView
+
+                    android:id="@+id/simpleTextView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="18dip"
+                    android:text="Name:"
+                    android:textColor="#000"
+                    android:textSize="12sp" />
+
+                <TextView
+
+                    android:id="@+id/nameProf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="18dip"
+                    android:text=""
+                    android:textColor="#000"
+                    android:textSize="14sp" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_marginTop="10dp"
+                android:id="@+id/secondRow"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <!-- first element of the row-->
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="18dip"
+                    android:text="Age:"
+                    android:textColor="#000"
+                    android:textSize="12sp" />
+
+                <TextView
+
+                    android:id="@+id/ageProf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="18dip"
+                    android:text=""
+                    android:textColor="#000"
+                    android:textSize="14sp" />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_marginTop="10dp"
+                android:id="@+id/thirdRow"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <!-- first element of the row-->
+                <TextView
+
+                    android:id="@+id/simpleTextView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="18dip"
+                    android:text="Gender:"
+                    android:textColor="#000"
+                    android:textSize="12sp" />
+
+                <TextView
+
+                    android:id="@+id/genderProf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="18dip"
+                    android:text=""
+                    android:textColor="#000"
+                    android:textSize="14sp" />
+
+            </TableRow>
+            <TableRow
+                android:layout_marginTop="10dp"
+                android:id="@+id/forthRow"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <!-- first element of the row-->
+                <TextView
+
+                    android:id="@+id/simpleTextView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="18dip"
+                    android:text="Mobile No:"
+                    android:textColor="#000"
+                    android:textSize="12sp" />
+
+                <TextView
+
+                    android:id="@+id/mobileProf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="18dip"
+                    android:text=""
+                    android:textColor="#000"
+                    android:textSize="14sp" />
+
+            </TableRow>
+            <TableRow
+                android:layout_marginTop="10dp"
+                android:id="@+id/fifthRow"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <!-- first element of the row-->
+                <TextView
+
+                    android:id="@+id/simpleTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="18dip"
+                    android:text="Email:"
+                    android:textColor="#000"
+                    android:textSize="12sp" />
+
+                <TextView
+
+                    android:id="@+id/emailProf"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="18dip"
+                    android:text=""
+                    android:textColor="#000"
+                    android:textSize="14sp" />
+
+            </TableRow>
+        </TableLayout>
+
+        <!-- Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/editB"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/round_button"
+                android:textColor="#ffffff"
+                android:text="@string/edit_profile"/>
+
+            <Button
+                android:id="@+id/cancelB"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/round_button3"
+                android:textColor="#383838"
+                android:text="@string/com_facebook_loginview_cancel_action"/>
+
+            <Button
+                android:id="@+id/logoutB"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_button3"
+                android:textColor="#383838"
+                android:text="@string/log_out"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
 </ScrollView>

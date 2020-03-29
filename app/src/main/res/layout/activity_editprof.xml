@@ -156,6 +156,8 @@
         android:id="@+id/updateB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/round_button"
+        android:textColor="#ffffff"
         android:text="@string/update_profile"/>
 
     <Button
@@ -164,6 +166,8 @@
         android:id="@+id/cancelB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/round_button3"
+        android:textColor="#2F2F2F"
         android:text="@string/com_facebook_loginview_cancel_action"/>
 
 </TableLayout>

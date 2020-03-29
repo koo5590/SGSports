@@ -7,6 +7,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
+import android.widget.FrameLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -27,7 +28,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class EditAppointmentActivity extends AppCompatActivity {
+public class EditAppointmentActivity extends BaseActivity {
     String apptID;
 
     //date selection
@@ -52,7 +53,10 @@ public class EditAppointmentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_editappointment);
+        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
+        getLayoutInflater().inflate(R.layout.activity_editappointment, contentFrameLayout);
+
+
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             apptID = extras.getString("apptID");
