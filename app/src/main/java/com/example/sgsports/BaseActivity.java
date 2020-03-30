@@ -33,8 +33,11 @@ public class BaseActivity extends AppCompatActivity {
     ListView listView;
     DrawerLayout drawer;
     TextView userNameTextView;
+    ArrayList<String> items;
 
     FirebaseAuth mAuth;
+
+    ArrayAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -52,21 +55,20 @@ public class BaseActivity extends AppCompatActivity {
         drawer = (DrawerLayout)findViewById(R.id.drawer);
 
         //create menu list
-        ArrayList<String> items = new ArrayList<>();
+        items = new ArrayList<>();
         items.add("Home"); items.add("Profile"); items.add("Appointments");items.add("Weekly Reports");
-        //check if the user is admin
-        if(userName.equals("admin")) {
-            items.add("Add new Facility");
-            items.add("Manage Facilities");
-        }
-        if(!userName.equals("")) {
-            userNameTextView = (TextView) findViewById(R.id.user_name);
-            userNameTextView.setText(userName);
-        }
+
+        userNameTextView = (TextView) findViewById(R.id.user_name);
+        userNameTextView.setText(userName);
         items.add("Logout");
 
+        //check if the user is admin
+        if(userName.equals("admin")) {
+            items.add("Add New Facility");
+        }
+
         //menu list
-        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, items);
+        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, items);
         listView = (ListView)findViewById(R.id.drawer_menulist);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new ListView.OnItemClickListener(){
@@ -95,13 +97,17 @@ public class BaseActivity extends AppCompatActivity {
                         finish();
                         break;
                     case 4: //logout
-                        //log out
-                        mAuth.getInstance().signOut();
-                        //display success message
-                        Toast.makeText(BaseActivity.this, "Signed out successfully", Toast.LENGTH_SHORT).show();
-                        //go back to login page
-                        intent = new Intent(BaseActivity.this, LoginActivity.class);
+                            mAuth.getInstance().signOut();
+                            //display success message
+                            Toast.makeText(BaseActivity.this, "Signed out successfully", Toast.LENGTH_SHORT).show();
+                            //go back to login page
+                            intent = new Intent(BaseActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                        break;
+                    case 5://add new facility
+                        intent = new Intent(BaseActivity.this, FacilitiesAdd.class);
                         startActivity(intent);
+                        finish();
 
                 }
                 drawer.closeDrawer(GravityCompat.START);

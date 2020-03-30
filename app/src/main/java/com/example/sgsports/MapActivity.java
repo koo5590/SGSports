@@ -209,6 +209,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
                 }
 
                 getReview(markertitle);
+                infoL.setVisibility(View.VISIBLE);
+                reviewList.setVisibility(View.GONE);
 //
 //
                 return false;

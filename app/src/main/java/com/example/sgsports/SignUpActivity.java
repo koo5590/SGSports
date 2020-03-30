@@ -3,6 +3,7 @@ package com.example.sgsports;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -156,6 +157,10 @@ public class SignUpActivity extends Activity {
                                 createNewAccount(email, name, pw, mobileNum);
                             else
                                 Toast.makeText(getApplicationContext(), "username already exists", Toast.LENGTH_SHORT).show();
+                            Log.d("test", "pass");
+                        }
+                        else{
+                            Log.d("test", "fail");
                         }
                     }
                 });
