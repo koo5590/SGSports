@@ -39,6 +39,8 @@ public class ViewAppointmentActivity extends BaseActivity {
     private String userID;
     private FirebaseUser user;
     ArrayList<String> appointmentIDList = new ArrayList<>();
+    String appointmentFacilityName;
+    String appointmentFacilityType;
     String appointmentDate;
     String appointmentTime;
     String appointmentDetails;
@@ -70,9 +72,11 @@ public class ViewAppointmentActivity extends BaseActivity {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 appointmentID = document.getId();
                                 appointmentIDList.add(appointmentID);
+                                appointmentFacilityName = document.getData().get("facilityName").toString();
+                                appointmentFacilityType = document.getData().get("facilityType").toString();
                                 appointmentDate = document.getData().get("date").toString();
                                 appointmentTime = document.getData().get("timeslot").toString();
-                                appointmentDetails = appointmentDate + ", " + appointmentTime;
+                                appointmentDetails = appointmentFacilityName + '\n' + appointmentFacilityType + '\n' + appointmentDate + ", " + appointmentTime;
                                 mArray.add(appointmentDetails);
                                 arrayAdapter.notifyDataSetChanged();
                             }

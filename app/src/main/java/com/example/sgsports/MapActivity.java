@@ -98,6 +98,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
             public void onClick(View v){
                 if(curFac!=null) {
                     Intent intent = new Intent(MapActivity.this, BookAppointmentActivity.class);
+                    intent.putExtra("facility", curFac);
                     startActivity(intent);
                 }
             }

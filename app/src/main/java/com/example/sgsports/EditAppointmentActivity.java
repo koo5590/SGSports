@@ -19,7 +19,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DateFormat;
@@ -30,6 +33,9 @@ import java.util.List;
 
 public class EditAppointmentActivity extends BaseActivity {
     String apptID;
+
+    String tempName;
+    String tempType;
 
     //date selection
     CalendarView calendarUpdate;
@@ -61,6 +67,30 @@ public class EditAppointmentActivity extends BaseActivity {
         if (extras != null) {
             apptID = extras.getString("apptID");
         }
+
+        //get firebase authentication instance
+        mAuth = FirebaseAuth.getInstance();
+        //get firestore db instance
+        mDatabase  = FirebaseFirestore.getInstance();
+
+        DocumentReference docRef = mDatabase.collection("Appointment").document(apptID);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        tempName = document.getData().get("facilityName").toString();
+                        tempType = document.getData().get("facilityType").toString();
+                    } else {
+
+                    }
+                } else {
+
+                }
+            }
+        });
+
 
         // record selected date
         SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
@@ -113,10 +143,6 @@ public class EditAppointmentActivity extends BaseActivity {
             }
         });
 
-        //get firebase authentication instance
-        mAuth = FirebaseAuth.getInstance();
-        //get firestore db instance
-        mDatabase  = FirebaseFirestore.getInstance();
 
         //book button
         update = (Button) findViewById(R.id.updateAppt);
@@ -124,7 +150,7 @@ public class EditAppointmentActivity extends BaseActivity {
             public void onClick(View v){
                 currentUser = mAuth.getCurrentUser();
                 currentUserID = currentUser.getUid();
-                checkValid(currentUserID, dateUpdate, timeSlotUpdate);
+                checkValid(currentUserID, tempName, tempType, dateUpdate, timeSlotUpdate);
             }
         });
         cancelUpdate = (Button) findViewById(R.id.cancelUpdate);
@@ -138,20 +164,20 @@ public class EditAppointmentActivity extends BaseActivity {
     }
 
     /** check if user inputs are valid **/
-    private void checkValid(final String currentUserID, final String dateUpdate, final String timeSlotUpdate){
+    private void checkValid(final String currentUserID, final String tempName, final String tempType, final String dateUpdate, final String timeSlotUpdate){
 
         //check if time frame is available for booking
 
-        mDatabase.collection("Appointment").whereEqualTo("date",dateUpdate).whereEqualTo("timeslot",timeSlotUpdate).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        mDatabase.collection("Appointment").whereEqualTo("date",dateUpdate).whereEqualTo("timeslot",timeSlotUpdate).whereEqualTo("facilityName", tempName).whereEqualTo("facilityType",tempType).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     if (task.getResult().isEmpty()) {
-                        updateAppointment(currentUserID, dateUpdate, timeSlotUpdate);
+                        updateAppointment(currentUserID, tempName, tempType, dateUpdate, timeSlotUpdate);
                         Intent intent = new Intent(EditAppointmentActivity.this, ViewAppointmentActivity.class);
                         startActivity(intent);
                     } else {
-                        Toast.makeText(getApplicationContext(), "Someone has already booked at this timing", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Someone has already booked at this timing. Please select a different timing.", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -160,9 +186,9 @@ public class EditAppointmentActivity extends BaseActivity {
     };
 
     /** update appointment **/
-    private void updateAppointment(final String currentUserID, final String dateUpdate, final String timeSlotUpdate) {
+    private void updateAppointment(final String currentUserID, final String tempName, final String tempType, final String dateUpdate, final String timeSlotUpdate) {
         //save user data to database
-        AppointmentData newAppointment = new AppointmentData(currentUserID, dateUpdate, timeSlotUpdate);
+        AppointmentData newAppointment = new AppointmentData(currentUserID, tempName, tempType, dateUpdate, timeSlotUpdate);
 
         mDatabase.collection("Appointment").document(apptID).set(newAppointment).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
