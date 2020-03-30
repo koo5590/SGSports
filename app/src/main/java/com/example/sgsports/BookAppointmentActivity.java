@@ -55,6 +55,7 @@ public class BookAppointmentActivity extends BaseActivity{
     CalendarView calendar;
     String date;
     Calendar calendarDate;
+    String day;
 
     // timeslot selection spinner
     Spinner timeStart;

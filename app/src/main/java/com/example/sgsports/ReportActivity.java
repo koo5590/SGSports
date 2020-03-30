@@ -216,12 +216,12 @@ public class ReportActivity extends BaseActivity {
                                     //get most active activity
 
                                     //get most active days
-                                    if (factype.equals("Swim")&& appt_date.before(end_date) && appt_date.after(start_date))
+                                    if (factype.equals("SwimmingPool")&& appt_date.before(end_date) && appt_date.after(start_date))
                                     {
                                         swim++;
                                         swimhours++;
                                     }
-                                    if (factype.equals("Basketball")&& appt_date.before(end_date) && appt_date.after(start_date))
+                                    if (factype.equals("BasketballCourt")&& appt_date.before(end_date) && appt_date.after(start_date))
                                     {
                                         basketball++;
                                         basketballhours++;
