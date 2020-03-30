@@ -67,6 +67,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
     ArrayList<ReviewData> reviews;
 
     Facility curFac;
+    Facility facility_clicked;
 
     //new
     private boolean mLocationPermissionGranted=false;
@@ -259,7 +260,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
 
         //search item shown
         Intent intent = getIntent();
-        Facility facility_clicked = (Facility) intent.getSerializableExtra("facility");
+        facility_clicked = (Facility) intent.getSerializableExtra("facility");
         if(facility_clicked!=null){
             namefac.setText(facility_clicked.getName());
             String type = facility_clicked.getType();
@@ -270,6 +271,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
             LatLng latLng = new LatLng(facility_clicked.getLatitude(), facility_clicked.getLongitude());
             curFac = facility_clicked;
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
+
+            getReview(facility_clicked.getName());
         }
     }
 
@@ -316,7 +319,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
                     getLocationPermission();
                 }            }        }
     }
-
 
     LocationCallback mLocationCallback = new LocationCallback() {
         @Override
@@ -426,7 +428,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
                             Intent intent = new Intent(getApplicationContext(), ReadActivity.class);
                             intent.putExtra("review", review);
                             startActivity(intent);
-                            finish();
                         }
                     });
                 }

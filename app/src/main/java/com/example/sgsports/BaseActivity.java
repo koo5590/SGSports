@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -33,10 +34,14 @@ public class BaseActivity extends AppCompatActivity {
     DrawerLayout drawer;
     TextView userNameTextView;
 
+    FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
+
+        mAuth = FirebaseAuth.getInstance();
 
         //tool bar
         toolbar = (Toolbar)findViewById(R.id.toolbar);
@@ -90,7 +95,13 @@ public class BaseActivity extends AppCompatActivity {
                         finish();
                         break;
                     case 4: //logout
-
+                        //log out
+                        mAuth.getInstance().signOut();
+                        //display success message
+                        Toast.makeText(BaseActivity.this, "Signed out successfully", Toast.LENGTH_SHORT).show();
+                        //go back to login page
+                        intent = new Intent(BaseActivity.this, LoginActivity.class);
+                        startActivity(intent);
 
                 }
                 drawer.closeDrawer(GravityCompat.START);
