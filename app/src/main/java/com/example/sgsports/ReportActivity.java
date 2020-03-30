@@ -51,10 +51,10 @@ public class ReportActivity extends BaseActivity {
     String weekZero, weekOne, weekTwo, weekThree, weekFour,weekFive,weekSix;
     String weekSelected, weekBefore, weekAfter;
     TextView TvWeekSelected , tvTotalHours, tvMoreThan, tvMostActiveDay,tvMostActivityHours;
-    Integer totalhours = 0 ,lastweekhours = 0 , morethanhours = 0, swimhours = 0, basketballhours = 0, gymhours = 0;
+    Integer totalhours = 0 ,lastweekhours = 0 , morethanhours = 0, swimhours = 0, basketballhours = 0, gymhours = 0, runhours = 0, tennishours = 0;
     Integer monhrs = 0, tueshrs = 0, wedhrs = 0, thurshrs = 0, frihrs = 0;
     Integer mon = 0, tues = 0, wed = 0, thurs = 0, fri = 0;
-    Integer swim = 0, basketball = 0, hockey, squash, tabletennis, badminton, stadium, gym = 0;
+    Integer swim = 0, basketball = 0, field = 0, squash, tennis = 0, badminton, stadium, gym = 0;
     String timeslot;
     String factype;
     String date;
@@ -174,7 +174,8 @@ public class ReportActivity extends BaseActivity {
         swimhours = 0;
         basketballhours = 0;
         gymhours = 0;
-        swim = 0; gym = 0; basketball = 0;
+        runhours = 0;
+        swim = 0; gym = 0; basketball = 0; field = 0;
         mon = 0; tues = 0; wed = 0; thurs = 0; fri = 0;
         monhrs = 0; tueshrs = 0; wedhrs = 0; thurshrs = 0; frihrs = 0;
 
@@ -229,6 +230,11 @@ public class ReportActivity extends BaseActivity {
                                     {
                                         gym++;
                                         gymhours++;
+                                    }
+                                    if (factype.equals("Field")&& appt_date.before(end_date) && appt_date.after(start_date))
+                                    {
+                                        field++;
+                                        runhours++;
                                     }
 
 
@@ -314,6 +320,7 @@ public class ReportActivity extends BaseActivity {
                                     sports.put("Gym", new Integer(gym));
                                     sports.put("Swim", new Integer(swim));
                                     sports.put("Basketball", new Integer(basketball));
+                                    sports.put("Field", new Integer(runhours));
 
                                     int max2 = Collections.max(sports.values());
                                     String key2 = null;
@@ -334,13 +341,17 @@ public class ReportActivity extends BaseActivity {
                                         tvMostActivityHours.setText(swimhours.toString() + " hours");
                                         i.setImageResource(R.drawable.swimming);
                                     }
+                                    else if (key2.equals("Field")) {
+                                        tvMostActivityHours.setText(runhours.toString() + " hours");
+                                        i.setImageResource(R.drawable.running);
+                                    }
                                     else {
                                         tvMostActivityHours.setText(basketballhours.toString() + " hours");
                                         i.setImageResource(R.drawable.bball);
 
 
                                     }
-                                    //plot graph
+                                    //plot graph for days
 
                                     if (appt_date.before(end_date) && appt_date.after(start_date)) {
                                         GraphView barchart = (GraphView) findViewById(R.id.graphDays);
@@ -382,8 +393,51 @@ public class ReportActivity extends BaseActivity {
 
                                     }
 
+                                    //plot graph for sports
+
+                                    if (appt_date.before(end_date) && appt_date.after(start_date)) {
+                                        GraphView sportchart = (GraphView) findViewById(R.id.graphSports);
+                                        BarGraphSeries<DataPoint> sportchat = new BarGraphSeries<DataPoint>(new DataPoint[]{
+                                                new DataPoint(1, basketballhours),
+                                                new DataPoint(2, swimhours),
+                                                new DataPoint(3, gymhours),
+                                                new DataPoint(4, runhours),
+                                                new DataPoint(5, 0)
 
 
+                                        });
+
+                                        sportchat.setSpacing(40); // 50% spacing between bars
+                                        sportchat.setAnimated(true);
+                                        sportchart.removeAllSeries();
+                                        sportchart.addSeries(sportchat);
+                                        StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(sportchart);
+                                        staticLabelsFormatter.setHorizontalLabels(new String[]{"bball", "swim", "gym", "run", "tennis"});
+                                        sportchart.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+
+                                        // set the viewport wider than the data, to have a nice view
+                                        sportchart.getViewport().setMinX(1d);
+                                        sportchart.getViewport().setMaxX(5d);
+                                        //sportchart.getViewport().setScalable(true);  // activate horizontal zooming and scrolling
+                                        //sportchart.getViewport().setScrollable(true);  // activate horizontal scrolling
+                                        //sportchart.getViewport().setScalableY(true);
+                                        sportchart.getViewport().setXAxisBoundsManual(true);
+                                        // styling
+                                        sportchat.setValueDependentColor(new ValueDependentColor<DataPoint>() {
+                                            @Override
+                                            public int get(DataPoint data) {
+                                                return Color.rgb((int) data.getX() * 255 / 4, (int) Math.abs(data.getY() * 255 / 6), 100);
+                                            }
+                                        });
+
+
+                                        // draw values on top
+                                        sportchat.setDrawValuesOnTop(true);
+                                        sportchat.setValuesOnTopColor(Color.BLUE);
+                                        //series.setValuesOnTopSize(50);
+
+
+                                    }
 
 
 
