@@ -93,12 +93,12 @@ public class BaseActivity extends AppCompatActivity {
                         finish();
                         break;
                     case 4: //logout
-                            mAuth.getInstance().signOut();
-                            //display success message
-                            Toast.makeText(BaseActivity.this, "Signed out successfully", Toast.LENGTH_SHORT).show();
-                            //go back to login page
-                            intent = new Intent(BaseActivity.this, LoginActivity.class);
-                            startActivity(intent);
+                        mAuth.getInstance().signOut();
+                        //display success message
+                        Toast.makeText(BaseActivity.this, "Signed out successfully", Toast.LENGTH_SHORT).show();
+                        //go back to login page
+                        intent = new Intent(BaseActivity.this, LoginActivity.class);
+                        startActivity(intent);
                         break;
                     case 5://add new facility
                         intent = new Intent(BaseActivity.this, FacilitiesAdd.class);
@@ -109,7 +109,6 @@ public class BaseActivity extends AppCompatActivity {
                         intent = new Intent(BaseActivity.this, FacilitiesDelete.class);
                         startActivity(intent);
                         finish();
-
                 }
                 drawer.closeDrawer(GravityCompat.START);
             }

@@ -36,6 +36,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -309,6 +310,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                 type = type.substring(1);
             typefac.setText(type.replaceAll(" ", ", "));
             address.setText(facility_clicked.getAddress());
+
             LatLng latLng = new LatLng(facility_clicked.getLatitude(), facility_clicked.getLongitude());
             curFac = facility_clicked;
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
