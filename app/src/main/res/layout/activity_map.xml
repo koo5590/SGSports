@@ -82,7 +82,7 @@
     <!-- info of the facility -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
@@ -125,67 +125,62 @@
         </LinearLayout>
 
         <!-- information layout -->
-        <ScrollView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
             <LinearLayout
+                android:id="@+id/infoLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="10dp">
 
-                <LinearLayout
-                    android:id="@+id/infoLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="10dp">
-
-                    <!-- address -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:textColor="@color/textAccent"
-                        android:text="Adress: ">
-                    </TextView>
-                    <TextView
-                        android:id="@+id/addrText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:text="">
-                    </TextView>
-
-                    <!-- type of facilities -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/textAccent"
-                        android:text="Type of facilities: ">
-                    </TextView>
-                    <TextView
-                        android:id="@+id/typeText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:text="">
-                    </TextView>
-
-                </LinearLayout>
-
-                <!-- review layout -->
-                <ListView
-                    android:id="@+id/reviewList"
-                    android:layout_width="match_parent"
+                <!-- address -->
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:padding="10dp"
-                    android:dividerHeight="2dp">
-                </ListView>
+                    android:layout_marginBottom="5dp"
+                    android:textColor="@color/textAccent"
+                    android:text="Adress: ">
+                </TextView>
+                <TextView
+                    android:id="@+id/addrText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:text="">
+                </TextView>
+
+                <!-- type of facilities -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textAccent"
+                    android:text="Type of facilities: ">
+                </TextView>
+                <TextView
+                    android:id="@+id/typeText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:text="">
+                </TextView>
 
             </LinearLayout>
-        </ScrollView>
-    </LinearLayout>
 
+            <!-- review layout -->
+            <ListView
+                android:id="@+id/reviewList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:padding="10dp"
+                android:dividerHeight="2dp">
+            </ListView>
+
+        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>

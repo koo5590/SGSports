@@ -42,6 +42,26 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
 
+    <!-- facility type -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:layout_marginStart="15dp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/textFacilityType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textAccent"
+            android:textSize="18sp"
+            android:text="Type of facility" />
+        <Spinner
+            android:id="@+id/facilityTypeSpinner"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
     <!-- buttons -->
     <LinearLayout
         android:layout_width="match_parent"

@@ -55,10 +55,20 @@ public class BookAppointmentActivity extends BaseActivity{
     CalendarView calendar;
     String date;
     Calendar calendarDate;
+    String day;
 
     // timeslot selection spinner
     Spinner timeStart;
     String timeSlot;
+
+    // facility type selection spinner
+    Spinner facilityTypeSpinner;
+    String facilityName;
+    List<String> facilityType;
+    String[] s;
+    String facType;
+    String facTypeFinal;
+
 
     // book appointment selection
     Button book;
@@ -79,6 +89,38 @@ public class BookAppointmentActivity extends BaseActivity{
         super.onCreate(savedInstanceState);
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_bookappointment, contentFrameLayout);
+
+        Intent intent = getIntent();
+        Facility curFac = (Facility)intent.getSerializableExtra("facility");
+
+        facilityName = curFac.getName();
+        facilityType = new ArrayList<>();
+        Log.d("types: ", curFac.getType());
+        facType = curFac.getType();
+        if(facType.startsWith(" "))
+            facType = facType.substring(1);
+        s = facType.split(" ");
+        for (int i = 0; i < s.length; i++) {
+            facilityType.add(s[i]);
+        }
+
+        ArrayAdapter<String> spinnerFacilityChoice = new ArrayAdapter<String>(BookAppointmentActivity.this, android.R.layout.simple_spinner_item, facilityType);
+        spinnerFacilityChoice.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        facilityTypeSpinner = (Spinner)findViewById(R.id.facilityTypeSpinner);
+        facilityTypeSpinner.setAdapter(spinnerFacilityChoice);
+        facilityTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                facTypeFinal = facilityType.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
 
         //get firebase authentication instance
         mAuth = FirebaseAuth.getInstance();
@@ -135,11 +177,12 @@ public class BookAppointmentActivity extends BaseActivity{
             public void onClick(View v){
                 currentUser = mAuth.getCurrentUser();
                 currentUserID = currentUser.getUid();
+                checkValid(currentUserID, facilityName, facTypeFinal, date, timeSlot);
                 //create new appointment
-                createNewAppointment(currentUserID, date, timeSlot);
+                //createNewAppointment(currentUserID, facilityName, facTypeFinal, date, timeSlot);
                 //go back to main activity
-                Intent intent = new Intent(BookAppointmentActivity.this, MainActivity.class);
-                startActivity(intent);
+                //Intent intent = new Intent(BookAppointmentActivity.this, MainActivity.class);
+                //startActivity(intent);
             }
         });
         cancel = (Button) findViewById(R.id.cancel);
@@ -160,7 +203,7 @@ public class BookAppointmentActivity extends BaseActivity{
         //check if any time slot has already reserved
         for(int i=0; i<optionTime.size(); i++){
             final String time = optionTime.get(i);
-            mDatabase.collection("Appointment").whereEqualTo("date",date).whereEqualTo("timeslot",time).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            mDatabase.collection("Appointment").whereEqualTo("date",date).whereEqualTo("timeslot",time).whereEqualTo("facilityName", facilityName).whereEqualTo("facilityType",facTypeFinal).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if (task.isSuccessful()) {
@@ -222,20 +265,20 @@ public class BookAppointmentActivity extends BaseActivity{
     }
 
     /** check if user inputs are valid **/
-    private void checkValid(final String currentUserID, final String date, final String timeSlot){
+    private void checkValid(final String currentUserID, final String facilityName, final String facTypeFinal, final String date, final String timeSlot){
 
         //check if time frame is available for booking
 
-        mDatabase.collection("Appointment").whereEqualTo("date",date).whereEqualTo("timeslot",timeSlot).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        mDatabase.collection("Appointment").whereEqualTo("date",date).whereEqualTo("timeslot",timeSlot).whereEqualTo("facilityName", facilityName).whereEqualTo("facilityType",facTypeFinal).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    if (task.getResult().isEmpty()) {
-                        createNewAppointment(currentUserID, date, timeSlot);
+                   if (task.getResult().isEmpty()) {
+                        createNewAppointment(currentUserID, facilityName, facTypeFinal, date, timeSlot);
                         Intent intent = new Intent(BookAppointmentActivity.this, MainActivity.class);
                         startActivity(intent);
                     } else {
-                        Toast.makeText(getApplicationContext(), "Someone has already booked at this timing", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Someone has already booked at this timing. Please select a different timing.", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -244,9 +287,9 @@ public class BookAppointmentActivity extends BaseActivity{
     };
 
     /** create new appointment **/
-    private void createNewAppointment(final String currentUserID, final String date, final String timeSlot) {
+    private void createNewAppointment(final String currentUserID, final String facilityName, final String facTypeFinal, final String date, final String timeSlot) {
         //save user data to database
-        AppointmentData newAppointment = new AppointmentData(currentUserID, date, timeSlot);
+        AppointmentData newAppointment = new AppointmentData(currentUserID, facilityName, facTypeFinal, date, timeSlot);
 
         mDatabase.collection("Appointment").document().set(newAppointment).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override

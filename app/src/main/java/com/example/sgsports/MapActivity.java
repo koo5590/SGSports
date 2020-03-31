@@ -66,6 +66,9 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
 
     ArrayList<ReviewData> reviews;
 
+    Facility curFac;
+    Facility facility_clicked;
+
     //new
     private boolean mLocationPermissionGranted=false;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -94,15 +97,21 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
         //book button
         findViewById(R.id.bookapp).setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v){
-                Intent intent = new Intent(MapActivity.this, BookAppointmentActivity.class);
-                startActivity(intent);
+                if(curFac!=null) {
+                    Intent intent = new Intent(MapActivity.this, BookAppointmentActivity.class);
+                    intent.putExtra("facility", curFac);
+                    startActivity(intent);
+                }
             }
         });
         //write a review button
         findViewById(R.id.writereview).setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v){
-                Intent intent = new Intent(MapActivity.this, WriteReviewActivity.class);
-                startActivity(intent);
+                if(curFac!=null) {
+                    Intent intent = new Intent(MapActivity.this, WriteReviewActivity.class);
+                    intent.putExtra("facility", curFac);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -194,11 +203,14 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
                             type = type.substring(1);
                         typefac.setText(type.replaceAll(" ", ", "));
                         address.setText(fac.getAddress());
+                        curFac = fac;
                         break;
                     }
                 }
 
                 getReview(markertitle);
+                infoL.setVisibility(View.VISIBLE);
+                reviewList.setVisibility(View.GONE);
 //
 //
                 return false;
@@ -250,7 +262,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
 
         //search item shown
         Intent intent = getIntent();
-        Facility facility_clicked = (Facility) intent.getSerializableExtra("facility");
+        facility_clicked = (Facility) intent.getSerializableExtra("facility");
         if(facility_clicked!=null){
             namefac.setText(facility_clicked.getName());
             String type = facility_clicked.getType();
@@ -259,7 +271,10 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
             typefac.setText(type.replaceAll(" ", ", "));
             address.setText(facility_clicked.getAddress());
             LatLng latLng = new LatLng(facility_clicked.getLatitude(), facility_clicked.getLongitude());
+            curFac = facility_clicked;
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
+
+            getReview(facility_clicked.getName());
         }
     }
 
@@ -306,7 +321,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
                     getLocationPermission();
                 }            }        }
     }
-
 
     LocationCallback mLocationCallback = new LocationCallback() {
         @Override
@@ -416,7 +430,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
                             Intent intent = new Intent(getApplicationContext(), ReadActivity.class);
                             intent.putExtra("review", review);
                             startActivity(intent);
-                            finish();
                         }
                     });
                 }
