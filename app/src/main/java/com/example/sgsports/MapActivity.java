@@ -116,9 +116,9 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     ArrayList<Facility> allFacilities;
 
     private ChildEventListener mChildEventListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_map, contentFrameLayout);
@@ -130,14 +130,15 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         address = findViewById(R.id.addrText);
         directionInstr = findViewById(R.id.locinfo);
         directionInstr.setVisibility(View.GONE);
-        directions      = new ArrayList<>();
+        directions = new ArrayList<>();
 
         //initialize map and current location
         initMap();
+
         //book button
-        findViewById(R.id.bookapp).setOnClickListener(new Button.OnClickListener(){
-            public void onClick(View v){
-                if(curFac!=null) {
+        findViewById(R.id.bookapp).setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+                if (curFac != null) {
                     Intent intent = new Intent(MapActivity.this, BookAppointmentActivity.class);
                     intent.putExtra("facility", curFac);
                     startActivity(intent);
@@ -145,9 +146,9 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
             }
         });
         //write a review button
-        findViewById(R.id.writereview).setOnClickListener(new Button.OnClickListener(){
-            public void onClick(View v){
-                if(curFac!=null) {
+        findViewById(R.id.writereview).setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+                if (curFac != null) {
                     Intent intent = new Intent(MapActivity.this, WriteReviewActivity.class);
                     intent.putExtra("facility", curFac);
                     startActivity(intent);
@@ -155,35 +156,33 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
             }
         });
 
-        infoL = (LinearLayout)findViewById(R.id.infoLayout);
-        reviewList = (ListView)findViewById(R.id.reviewList);
+        infoL = (LinearLayout) findViewById(R.id.infoLayout);
+        reviewList = (ListView) findViewById(R.id.reviewList);
 
         //information button
-        findViewById(R.id.infoB).setOnClickListener(new Button.OnClickListener(){
-            public void onClick(View v){
+        findViewById(R.id.infoB).setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
                 infoL.setVisibility(View.VISIBLE);
                 reviewList.setVisibility(View.GONE);
             }
         });
 
         //review list button
-        findViewById(R.id.reviewB).setOnClickListener(new Button.OnClickListener(){
-            public void onClick(View v){
+        findViewById(R.id.reviewB).setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
                 infoL.setVisibility(View.GONE);
                 reviewList.setVisibility(View.VISIBLE);
             }
         });
-
-
     }
 
 
-    private void readData(final FireStoreCallback fireStoreCallback){
+    private void readData(final FireStoreCallback fireStoreCallback) {
         facilityref.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()){
-                    for(DocumentSnapshot document:task.getResult()){
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot document : task.getResult()) {
                         Facility facility = document.toObject(Facility.class);
                         allFacilities.add(facility);
                     }
@@ -192,10 +191,12 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
             }
         });
     }
-    private interface FireStoreCallback{
+
+    private interface FireStoreCallback {
         void onCallback(ArrayList<Facility> List);
     }
-    void initMap(){
+
+    void initMap() {
         //set Google Map
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -242,13 +243,13 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
 
                 String markertitle = marker.getTitle();
-                for (Facility fac : allFacilities){
+                for (Facility fac : allFacilities) {
                     String checkname = fac.getName();
                     // check the marker with the database data
                     if (checkname.equals(markertitle)) {
                         namefac.setText(markertitle);
                         String type = fac.getType();
-                        if(type.startsWith(" "))
+                        if (type.startsWith(" "))
                             type = type.substring(1);
                         typefac.setText(type.replaceAll(" ", ", "));
                         address.setText(fac.getAddress());
@@ -260,8 +261,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                 getReview(markertitle);
                 infoL.setVisibility(View.VISIBLE);
                 reviewList.setVisibility(View.GONE);
-//
-//
                 return false;
             }
         });
@@ -274,7 +273,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                 mPolyline.remove();
             }
         });
-
 
 
         mLocationRequest = new LocationRequest();
@@ -301,10 +299,10 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         //search item shown
         Intent intent = getIntent();
         facility_clicked = (Facility) intent.getSerializableExtra("facility");
-        if(facility_clicked!=null){
+        if (facility_clicked != null) {
             namefac.setText(facility_clicked.getName());
             String type = facility_clicked.getType();
-            if(type.startsWith(" "))
+            if (type.startsWith(" "))
                 type = type.substring(1);
             typefac.setText(type.replaceAll(" ", ", "));
             address.setText(facility_clicked.getAddress());
@@ -353,15 +351,13 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
         switch (requestCode) {
             case PERMISSIONS_REQUEST_ENABLE_GPS: {
-                if(mLocationPermissionGranted){
+                if (mLocationPermissionGranted) {
                     getLastKnownLocation();
-                }
-                else{
+                } else {
                     getLocationPermission();
                 }
             }
         }
-
     }
 
     LocationCallback mLocationCallback = new LocationCallback() {
@@ -388,22 +384,24 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(curPosition, 13));
 
                 /** Each time location updates we have to redraw the direction route */
-                if (isOnDirectionRoute){
+                if (isOnDirectionRoute) {
                     Log.d("location update", "location updated so redrawing route!");
                     mPolyline.remove();
                     drawRoute(curPosition, curDest, "walking");
                 }
             }
-        }};
+        }
+    };
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+
     private void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
-                        new AlertDialog.Builder(this)
+                new AlertDialog.Builder(this)
                         .setTitle("Location Permission Needed")
                         .setMessage("This app needs the Location permission, please accept to use location functionality")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -412,19 +410,18 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                                 //Prompt the user once explanation has been shown
                                 ActivityCompat.requestPermissions(MapActivity.this,
                                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                                        MY_PERMISSIONS_REQUEST_LOCATION );
+                                        MY_PERMISSIONS_REQUEST_LOCATION);
                             }
                         })
                         .create()
                         .show();
-
-
             } else {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        MY_PERMISSIONS_REQUEST_LOCATION );
+                        MY_PERMISSIONS_REQUEST_LOCATION);
             }
-        } }
+        }
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
@@ -443,9 +440,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                         mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
                         map.setMyLocationEnabled(true);
                     }
-
                 } else {
-
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                     Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
@@ -456,13 +451,13 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         }
     }
 
-    void getReview(String name){
+    void getReview(String name) {
         reviews = new ArrayList<>();
         mFireStore.collection("Review").whereEqualTo("facilityName", name).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()){
-                    for(QueryDocumentSnapshot doc: task.getResult()){
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot doc : task.getResult()) {
                         ReviewData review = doc.toObject(ReviewData.class);
                         reviews.add(review);
                     }
@@ -485,18 +480,16 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                 }
             }
         });
-
     }
 
     /**
      * Method to draw a route between two points using googles
      * direction api.
-     *
+     * <p>
      * First the request URL is built and sent.
-     *
+     * <p>
      * The JSON response is parsed, and converted into a list
      * of points which ar
-     *
      */
     private void drawRoute(LatLng orig, LatLng dest, String moveType) {
         // Download, parse and display the google directions task.
@@ -505,21 +498,21 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
     /**
      * A method to build a request URL to google direction api.
-     *
+     * <p>
      * Move types include: driving/walking/bicycling/transit
-     * */
+     */
     private String getDirectionsUrl(LatLng orig, LatLng dest, String modeType) {
         if (!modeType.equals("driving") && !modeType.equals("walking") &&
-                !modeType.equals("bicycling") && !modeType.equals("transit")){
+                !modeType.equals("bicycling") && !modeType.equals("transit")) {
             Log.d("Direction API URL", "Invalid moving type: '" + modeType + "'");
             modeType = "driving"; //default is driving
         }
         Log.d("Direction API URL", "Moving type: '" + modeType + "'");
 
-        String urlOrig  = "origin="      + orig.latitude + "," + orig.longitude;
-        String urlDest  = "destination=" + dest.latitude + "," + dest.longitude;
-        String urlMode  = "mode="        + modeType;
-        String urlKey   = "key="         + getString(R.string.DIRECTION_API_KEY);
+        String urlOrig = "origin=" + orig.latitude + "," + orig.longitude;
+        String urlDest = "destination=" + dest.latitude + "," + dest.longitude;
+        String urlMode = "mode=" + modeType;
+        String urlKey = "key=" + getString(R.string.DIRECTION_API_KEY);
         String parameters = urlOrig + "&" + urlDest + "&" + urlMode + "&" + urlKey;
 
         // Complete request URL
@@ -527,25 +520,21 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     }
 
     /**
-     * A method to download json data from url
+     * A method to download data from url
      */
     private static String downloadUrl(String strUrl) throws IOException {
         String data = "";
-        InputStream iStream = null;
+        InputStream inpStream = null;
         HttpURLConnection urlConnection = null;
         try {
             URL url = new URL(strUrl);
 
             // Creating an http connection to communicate with url
             urlConnection = (HttpURLConnection) url.openConnection();
-
-            // Connecting to url
             urlConnection.connect();
+            inpStream = urlConnection.getInputStream();
 
-            // Reading data from url
-            iStream = urlConnection.getInputStream();
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
+            BufferedReader br = new BufferedReader(new InputStreamReader(inpStream));
             StringBuffer sb = new StringBuffer();
 
             String line = "";
@@ -558,7 +547,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         } catch (Exception e) {
             Log.d("Exception on download", e.toString());
         } finally {
-            iStream.close();
+            inpStream.close();
             urlConnection.disconnect();
         }
         return data;
@@ -622,7 +611,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
             ArrayList<LatLng> points = null;
             PolylineOptions lineOptions = null;
 
-            if (result == null){
+            if (result == null) {
                 Log.e("Directions draw", "I have nothing to draw!");
                 return;
             }
@@ -640,9 +629,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
                     double lat = Double.parseDouble(point.get("lat"));
                     double lng = Double.parseDouble(point.get("lng"));
-                    LatLng position = new LatLng(lat, lng);
-
-                    points.add(position);
+                    points.add(new LatLng(lat, lng));
                 }
 
                 // Adding all the points in the route to LineOptions
@@ -670,9 +657,9 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
      */
     private List<List<HashMap<String, String>>> parse(JSONObject jObject) {
         List<List<HashMap<String, String>>> routes = new ArrayList<>();
-        JSONArray jRoutes   = null;
-        JSONArray jLegs     = null;
-        JSONArray jSteps    = null;
+        JSONArray jRoutes = null;
+        JSONArray jLegs = null;
+        JSONArray jSteps = null;
         directions.clear();
 
         try {
@@ -692,8 +679,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                         String polyline = "";
                         polyline = (String) ((JSONObject) ((JSONObject) jSteps.get(k)).get("polyline")).get("points");
                         List<LatLng> list = decodePoly(polyline);
-                        directions.add(((JSONObject)jSteps.get(k)).get("html_instructions").toString());
-                        Log.d("DIRECTION API", ((JSONObject)jSteps.get(k)).get("html_instructions").toString());
+                        directions.add(((JSONObject) jSteps.get(k)).get("html_instructions").toString());
+                        Log.d("DIRECTION API", ((JSONObject) jSteps.get(k)).get("html_instructions").toString());
                         /** Traversing all points */
                         for (int l = 0; l < list.size(); l++) {
                             HashMap<String, String> hm = new HashMap<String, String>();
@@ -702,10 +689,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                             path.add(hm);
                         }
                     }
-                    if (directions.size() > 0){
-                        //directionInstr.setVisibility(View.VISIBLE);
-                        //directionInstr.setVisibility();
-                        // Ugly
+                    if (directions.size() > 0) {
                         directionInstr.setText(Html.fromHtml(directions.get(0)));
                     }
                     routes.add(path);

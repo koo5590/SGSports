@@ -8,38 +8,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!-- map layout -->
-   <!-- <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <fragment
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            tools:context="com.example.mapwithmarker.MapsMarkerActivity" />
-
-        &lt;!&ndash;<LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="#A0FFFFFF" >
-            <TextView
-                android:id="@+id/textView8"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TextView" />
-
-        </LinearLayout>&ndash;&gt;
-
-    </LinearLayout>-->
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-
 
         <fragment
             android:id="@+id/map"
@@ -56,11 +28,10 @@
 
             <TextView
                 android:id="@+id/locinfo"
-                android:layout_width="274dp"
-                android:layout_height="match_parent"
-                android:text="Turn left or something" />
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:autoSizeTextType="uniform" />
         </LinearLayout>
-
 
     </RelativeLayout>
 
