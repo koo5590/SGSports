@@ -2,6 +2,7 @@ package com.example.sgsports;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -165,6 +166,25 @@ public class LoginActivity extends AppCompatActivity{
                         if (task.isSuccessful()) { //sign in successful
                             final FirebaseUser user = mAuth.getCurrentUser();
 
+                            boolean isNew = task.getResult().getAdditionalUserInfo().isNewUser();
+                            if(isNew){ //user is new
+                                newUser = new UserData(null, user.getEmail(),null, null, null);
+                                userID = user.getUid();
+
+                                //pop up activity to get user data
+                                Intent intent = new Intent(getApplicationContext(), PopupSignUpActivity.class);
+                                startActivityForResult(intent,SIGN_IN_GOOGLE_DATA);
+                            }
+                            else{
+                                Toast.makeText(LoginActivity.this, "welcome", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                //finish this activity and start MainActivity
+                                startActivity(intent);
+                                finish();
+                            }
+
+
+                            /*
                             //get database instance
                             database  = FirebaseFirestore.getInstance();
                             //if new user, save user data to database
@@ -178,6 +198,8 @@ public class LoginActivity extends AppCompatActivity{
                                                 newUser = new UserData(null, user.getEmail(),null, null, null);
                                                 userID = user.getUid();
 
+                                                Log.d("google", "success");
+
                                                 //pop up activity to get user data
                                                 Intent intent = new Intent(getApplicationContext(), PopupSignUpActivity.class);
                                                 startActivityForResult(intent,SIGN_IN_GOOGLE_DATA);
@@ -185,7 +207,7 @@ public class LoginActivity extends AppCompatActivity{
                                             }
 
                                             //user already exists
-                                            else{
+                                            else if(!task.getResult().isEmpty()){
                                                 Toast.makeText(LoginActivity.this, "welcome", Toast.LENGTH_SHORT).show();
                                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                                 //finish this activity and start MainActivity
@@ -194,8 +216,7 @@ public class LoginActivity extends AppCompatActivity{
                                             }
 
                                         }
-                                    });
-
+                                    });*/
                         }
 
                         //sign in process failed
