@@ -65,7 +65,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MapActivity extends BaseActivity implements OnMapReadyCallback {
+public class MapSearchActivity extends BaseActivity implements OnMapReadyCallback {
 
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 9003;
     private static final int PERMISSIONS_REQUEST_ENABLE_GPS = 9002;
@@ -129,7 +129,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         findViewById(R.id.bookapp).setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v){
                 if(curFac!=null) {
-                    Intent intent = new Intent(MapActivity.this, BookAppointmentActivity.class);
+                    Intent intent = new Intent(MapSearchActivity.this, BookAppointmentActivity.class);
                     intent.putExtra("facility", curFac);
                     startActivity(intent);
                 }
@@ -139,7 +139,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         findViewById(R.id.writereview).setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v){
                 if(curFac!=null) {
-                    Intent intent = new Intent(MapActivity.this, WriteReviewActivity.class);
+                    Intent intent = new Intent(MapSearchActivity.this, WriteReviewActivity.class);
                     intent.putExtra("facility", curFac);
                     startActivity(intent);
                 }
@@ -273,7 +273,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         //mLocationRequest.setFastestInterval(120000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
@@ -326,13 +326,13 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
          * onRequestPermissionsResult.
          */
         if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
+                Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             mLocationPermissionGranted = true;
             getLastKnownLocation();
         } else {
             ActivityCompat.requestPermissions(this,
-                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
     }
@@ -376,7 +376,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                 mCurrLocationMarker = map.addMarker(markerOptions);
 
                 //move map camera
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(curPosition, 13));
+                //map.moveCamera(CameraUpdateFactory.newLatLngZoom(curPosition, 13));
 
                 /** Each time location updates we have to redraw the direction route */
                 if (isOnDirectionRoute){
@@ -401,7 +401,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 //Prompt the user once explanation has been shown
-                                ActivityCompat.requestPermissions(MapActivity.this,
+                                ActivityCompat.requestPermissions(MapSearchActivity.this,
                                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                                         MY_PERMISSIONS_REQUEST_LOCATION );
                             }
