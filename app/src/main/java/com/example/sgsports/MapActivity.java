@@ -119,8 +119,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         namefac = findViewById(R.id.name);
         typefac = findViewById(R.id.typeText);
         address = findViewById(R.id.addrText);
-        directionInstr = findViewById(R.id.locinfo);
-        directionInstr.setVisibility(View.GONE);
         directions      = new ArrayList<>();
 
         //initialize map and current location
@@ -148,12 +146,14 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
         infoL = (LinearLayout)findViewById(R.id.infoLayout);
         reviewList = (ListView)findViewById(R.id.reviewList);
+        directionInstr = findViewById(R.id.locinfo);
 
         //information button
         findViewById(R.id.infoB).setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v){
                 infoL.setVisibility(View.VISIBLE);
                 reviewList.setVisibility(View.GONE);
+                directionInstr.setVisibility(View.GONE);
             }
         });
 
@@ -162,6 +162,16 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
             public void onClick(View v){
                 infoL.setVisibility(View.GONE);
                 reviewList.setVisibility(View.VISIBLE);
+                directionInstr.setVisibility(View.GONE);
+            }
+        });
+
+        //directions button
+        findViewById(R.id.directionsB).setOnClickListener(new Button.OnClickListener(){
+            public void onClick(View v){
+                infoL.setVisibility(View.GONE);
+                reviewList.setVisibility(View.GONE);
+                directionInstr.setVisibility(View.VISIBLE);
             }
         });
 

@@ -54,16 +54,6 @@
             android:orientation="vertical"
             android:background="#07000000" >
 
-            <TextView
-                android:id="@+id/locinfo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:padding="3dp"
-                android:background="@drawable/round"
-                android:textSize="10sp"
-                android:textColor="@color/colorPrimary"
-                android:text="Turn left or something" />
         </LinearLayout>
 
 
@@ -160,8 +150,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_button"
+                android:layout_marginRight="5dp"
                 android:textColor="#FFFFFF"
                 android:text="REVIEWS" />
+
+            <!-- Directions button -->
+            <Button
+                android:id="@+id/directionsB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_button"
+                android:textColor="#FFFFFF"
+                android:text="DIRECTIONS"/>
+
         </LinearLayout>
 
         <!-- line -->
@@ -227,6 +228,15 @@
                 android:padding="10dp"
                 android:dividerHeight="2dp">
             </ListView>
+
+            <!-- directions layout -->
+            <TextView
+                android:id="@+id/locinfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:visibility="gone"
+                android:text="Turn left or something" />
 
         </LinearLayout>
     </LinearLayout>
