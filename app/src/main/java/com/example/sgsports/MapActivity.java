@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.text.Html;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -102,7 +103,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     Location mLastLocation;
 
     //Directions variables
-    private LatLng curPosition;
+    private static LatLng curPosition;
     private LatLng curDest;
     private Polyline mPolyline;
     private boolean isOnDirectionRoute = false;
@@ -129,7 +130,10 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         typefac = findViewById(R.id.typeText);
         address = findViewById(R.id.addrText);
         directionInstr = findViewById(R.id.locinfo);
-        directionInstr.setVisibility(View.GONE);
+        directionInstr.setMovementMethod(ScrollingMovementMethod.getInstance());
+        directionInstr.setText("test");
+        //directionInstr.setVisibility(View.VISIBLE);
+        //directionInstr.setVisibility(View.GONE);
         directions = new ArrayList<>();
 
         //initialize map and current location
@@ -238,7 +242,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
             public boolean onMarkerClick(Marker marker) {
                 // curPosition should be initialized before we arrive here.
                 isOnDirectionRoute = true;
-                drawRoute(curPosition, marker.getPosition(), "walking");
+                drawRoute(curPosition, marker.getPosition(), "transit");
                 curDest = marker.getPosition();
 
 
@@ -310,6 +314,9 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
             curFac = facility_clicked;
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
 
+           // drawRoute(curPosition, latLng, "transit");
+            isOnDirectionRoute = true;
+            curDest = latLng;
             getReview(facility_clicked.getName());
         }
     }
@@ -386,8 +393,9 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                 /** Each time location updates we have to redraw the direction route */
                 if (isOnDirectionRoute) {
                     Log.d("location update", "location updated so redrawing route!");
-                    mPolyline.remove();
-                    drawRoute(curPosition, curDest, "walking");
+                    if (mPolyline != null)
+                        mPolyline.remove();
+                    drawRoute(curPosition, curDest, "transit");
                 }
             }
         }
@@ -689,9 +697,11 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                             path.add(hm);
                         }
                     }
-                    if (directions.size() > 0) {
-                        directionInstr.setText(Html.fromHtml(directions.get(0)));
+                    StringBuilder sb = new StringBuilder();
+                    for (String s : directions){
+                        sb.append(s).append("<p>");
                     }
+                    directionInstr.setText(Html.fromHtml(sb.toString()));
                     routes.add(path);
                 }
             }
