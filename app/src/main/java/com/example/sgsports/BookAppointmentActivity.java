@@ -71,8 +71,8 @@ public class BookAppointmentActivity extends BaseActivity{
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_bookappointment, contentFrameLayout);
 
-        Intent intent = getIntent();
-        Facility curFac = (Facility)intent.getSerializableExtra("facility");
+        final Intent intent = getIntent();
+        final Facility curFac = (Facility)intent.getSerializableExtra("facility");
 
         facilityName = curFac.getName();
         facilityType = new ArrayList<>();
@@ -158,7 +158,7 @@ public class BookAppointmentActivity extends BaseActivity{
             public void onClick(View v){
                 currentUser = mAuth.getCurrentUser();
                 currentUserID = currentUser.getUid();
-                checkValid(currentUserID, facilityName, facTypeFinal, date, timeSlot);
+                checkValid(currentUserID, facilityName, facTypeFinal, date, timeSlot, curFac);
                 //create new appointment
                 //createNewAppointment(currentUserID, facilityName, facTypeFinal, date, timeSlot);
                 //go back to main activity
@@ -169,8 +169,10 @@ public class BookAppointmentActivity extends BaseActivity{
         cancel = (Button) findViewById(R.id.cancel);
         cancel.setOnClickListener(new Button.OnClickListener(){
             public void onClick (View V){
-                Intent intent = new Intent(BookAppointmentActivity.this, MapActivity.class);
-                startActivity(intent);
+
+                Intent intent2 = new Intent(getApplicationContext(), MapSearchActivity.class);
+                intent2.putExtra("facility", curFac);
+                startActivity(intent2);
             }
         });
 
@@ -246,7 +248,7 @@ public class BookAppointmentActivity extends BaseActivity{
     }
 
     /** check if user inputs are valid **/
-    private void checkValid(final String currentUserID, final String facilityName, final String facTypeFinal, final String date, final String timeSlot){
+    private void checkValid(final String currentUserID, final String facilityName, final String facTypeFinal, final String date, final String timeSlot, final Facility curFac){
 
         //check if time frame is available for booking
 
@@ -256,8 +258,9 @@ public class BookAppointmentActivity extends BaseActivity{
                 if (task.isSuccessful()) {
                    if (task.getResult().isEmpty()) {
                         createNewAppointment(currentUserID, facilityName, facTypeFinal, date, timeSlot);
-                        Intent intent = new Intent(BookAppointmentActivity.this, MainActivity.class);
-                        startActivity(intent);
+                       Intent intent2 = new Intent(getApplicationContext(), MapSearchActivity.class);
+                       intent2.putExtra("facility", curFac);
+                       startActivity(intent2);
                     } else {
                         Toast.makeText(getApplicationContext(), "Someone has already booked at this timing. Please select a different timing.", Toast.LENGTH_SHORT).show();
                     }

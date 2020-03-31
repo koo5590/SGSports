@@ -53,7 +53,7 @@ public class WriteReviewActivity extends BaseActivity {
         getLayoutInflater().inflate(R.layout.activity_writereview, contentFrameLayout);
 
         Intent intent = getIntent();
-        Facility curFac = (Facility)intent.getSerializableExtra("facility");
+        final Facility curFac = (Facility)intent.getSerializableExtra("facility");
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase  = FirebaseFirestore.getInstance();
@@ -123,16 +123,18 @@ public class WriteReviewActivity extends BaseActivity {
             public void onClick (View V){
                 reviewText = reviewDesc.getText().toString();
                 createNewReview(currentUserID, facilityName, facTypeFinal, reviewText, rating);
-                Intent intent = new Intent(WriteReviewActivity.this, MainActivity.class);
-                startActivity(intent);
+                Intent intent2 = new Intent(getApplicationContext(), MapSearchActivity.class);
+                intent2.putExtra("facility", curFac);
+                startActivity(intent2);
             }
         });
 
         cancelReview = (Button) findViewById(R.id.cancelReview);
         cancelReview.setOnClickListener(new Button.OnClickListener(){
             public void onClick (View V){
-                Intent intent = new Intent(WriteReviewActivity.this, MapActivity.class);
-                startActivity(intent);
+                Intent intent2 = new Intent(getApplicationContext(), MapSearchActivity.class);
+                intent2.putExtra("facility", curFac);
+                startActivity(intent2);
             }
         });
 
