@@ -6,13 +6,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.text.Html;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -20,7 +18,6 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,8 +26,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -41,14 +36,13 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -57,8 +51,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.maps.android.data.geojson.GeoJsonLayer;
-import com.google.maps.android.data.geojson.GeoJsonPolygonStyle;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -73,7 +65,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
@@ -103,7 +94,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     Location mLastLocation;
 
     //Directions variables
-    private static LatLng curPosition;
+    private LatLng curPosition;
     private LatLng curDest;
     private Polyline mPolyline;
     private boolean isOnDirectionRoute = false;
@@ -156,12 +147,14 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
         infoL = (LinearLayout)findViewById(R.id.infoLayout);
         reviewList = (ListView)findViewById(R.id.reviewList);
+        directionInstr = findViewById(R.id.locinfo);
 
         //information button
         findViewById(R.id.infoB).setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v){
                 infoL.setVisibility(View.VISIBLE);
                 reviewList.setVisibility(View.GONE);
+                directionInstr.setVisibility(View.GONE);
             }
         });
 
@@ -170,6 +163,16 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
             public void onClick(View v){
                 infoL.setVisibility(View.GONE);
                 reviewList.setVisibility(View.VISIBLE);
+                directionInstr.setVisibility(View.GONE);
+            }
+        });
+
+        //directions button
+        findViewById(R.id.directionsB).setOnClickListener(new Button.OnClickListener(){
+            public void onClick(View v){
+                infoL.setVisibility(View.GONE);
+                reviewList.setVisibility(View.GONE);
+                directionInstr.setVisibility(View.VISIBLE);
             }
         });
 
@@ -269,8 +272,10 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
             @Override
             public void onMapClick(LatLng point) {
                 isOnDirectionRoute = false;
-                directionInstr.setVisibility(View.GONE);
-                mPolyline.remove();
+                if (directionInstr != null && mPolyline != null){
+                    directionInstr.setVisibility(View.GONE);
+                    mPolyline.remove();
+                }
             }
         });
 
@@ -307,13 +312,13 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                 type = type.substring(1);
             typefac.setText(type.replaceAll(" ", ", "));
             address.setText(facility_clicked.getAddress());
+
             LatLng latLng = new LatLng(facility_clicked.getLatitude(), facility_clicked.getLongitude());
             curFac = facility_clicked;
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
-
-           // drawRoute(curPosition, latLng, "transit");
-            isOnDirectionRoute = true;
             curDest = latLng;
+            isOnDirectionRoute = true;
+
             getReview(facility_clicked.getName());
         }
     }
@@ -394,7 +399,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                     Log.d("location update", "location updated so redrawing route!");
                     if (mPolyline != null)
                         mPolyline.remove();
-                    drawRoute(curPosition, curDest, "transit");
+                    drawRoute(curPosition, curDest, "walking");
                 }
             }
         }};
@@ -406,7 +411,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
-                        new AlertDialog.Builder(this)
+                new AlertDialog.Builder(this)
                         .setTitle("Location Permission Needed")
                         .setMessage("This app needs the Location permission, please accept to use location functionality")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -534,17 +539,21 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
      */
     private static String downloadUrl(String strUrl) throws IOException {
         String data = "";
-        InputStream inpStream = null;
+        InputStream iStream = null;
         HttpURLConnection urlConnection = null;
         try {
             URL url = new URL(strUrl);
 
             // Creating an http connection to communicate with url
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.connect();
-            inpStream = urlConnection.getInputStream();
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(inpStream));
+            // Connecting to url
+            urlConnection.connect();
+
+            // Reading data from url
+            iStream = urlConnection.getInputStream();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
             StringBuffer sb = new StringBuffer();
 
             String line = "";
@@ -557,7 +566,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         } catch (Exception e) {
             Log.d("Exception on download", e.toString());
         } finally {
-            inpStream.close();
+            iStream.close();
             urlConnection.disconnect();
         }
         return data;
@@ -639,7 +648,9 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
                     double lat = Double.parseDouble(point.get("lat"));
                     double lng = Double.parseDouble(point.get("lng"));
-                    points.add(new LatLng(lat, lng));
+                    LatLng position = new LatLng(lat, lng);
+
+                    points.add(position);
                 }
 
                 // Adding all the points in the route to LineOptions
@@ -699,11 +710,13 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                             path.add(hm);
                         }
                     }
-                    StringBuilder sb = new StringBuilder();
-                    for (String s : directions){
-                        sb.append(s).append("<p>");
+                    if (directions.size() > 0){
+                        StringBuilder sb = new StringBuilder();
+                        for (String s : directions) {
+                            sb.append(s).append("<p>");
+                        }
+                        directionInstr.setText(Html.fromHtml(sb.toString()));
                     }
-                    directionInstr.setText(Html.fromHtml(sb.toString()));
                     routes.add(path);
                 }
             }

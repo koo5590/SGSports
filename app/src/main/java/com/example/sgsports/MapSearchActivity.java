@@ -174,8 +174,6 @@ public class MapSearchActivity extends BaseActivity implements OnMapReadyCallbac
                 directionInstr.setVisibility(View.VISIBLE);
             }
         });
-
-
     }
 
 
@@ -271,8 +269,10 @@ public class MapSearchActivity extends BaseActivity implements OnMapReadyCallbac
             @Override
             public void onMapClick(LatLng point) {
                 isOnDirectionRoute = false;
-                directionInstr.setVisibility(View.GONE);
-                mPolyline.remove();
+                if (directionInstr != null && mPolyline != null){
+                    directionInstr.setVisibility(View.GONE);
+                    mPolyline.remove();
+                }
             }
         });
 
@@ -312,6 +312,9 @@ public class MapSearchActivity extends BaseActivity implements OnMapReadyCallbac
             LatLng latLng = new LatLng(facility_clicked.getLatitude(), facility_clicked.getLongitude());
             curFac = facility_clicked;
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
+
+            curDest = latLng;
+            isOnDirectionRoute=true;
 
             getReview(facility_clicked.getName());
         }
@@ -391,7 +394,8 @@ public class MapSearchActivity extends BaseActivity implements OnMapReadyCallbac
                 /** Each time location updates we have to redraw the direction route */
                 if (isOnDirectionRoute){
                     Log.d("location update", "location updated so redrawing route!");
-                    mPolyline.remove();
+                    if (mPolyline != null)
+                        mPolyline.remove();
                     drawRoute(curPosition, curDest, "walking");
                 }
             }
@@ -704,10 +708,11 @@ public class MapSearchActivity extends BaseActivity implements OnMapReadyCallbac
                         }
                     }
                     if (directions.size() > 0){
-                        //directionInstr.setVisibility(View.VISIBLE);
-                        //directionInstr.setVisibility();
-                        // Ugly
-                        directionInstr.setText(Html.fromHtml(directions.get(0)));
+                        StringBuilder sb = new StringBuilder();
+                        for (String s : directions) {
+                            sb.append(s).append("<p>");
+                        }
+                        directionInstr.setText(Html.fromHtml(sb.toString()));
                     }
                     routes.add(path);
                 }
