@@ -31,6 +31,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.ValueDependentColor;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.BarGraphSeries;
@@ -414,6 +415,9 @@ public class ReportActivity extends BaseActivity {
                                         StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(sportchart);
                                         staticLabelsFormatter.setHorizontalLabels(new String[]{"bball", "swim", "gym", "run", "tennis"});
                                         sportchart.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+                                        GridLabelRenderer renderer = sportchart.getGridLabelRenderer();
+                                        renderer.setHorizontalLabelsAngle(135);
+
 
                                         // set the viewport wider than the data, to have a nice view
                                         sportchart.getViewport().setMinX(1d);
