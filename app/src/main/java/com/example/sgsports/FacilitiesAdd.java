@@ -10,7 +10,6 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -19,12 +18,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 
 public class FacilitiesAdd extends BaseActivity {
-    EditText name, latfac, longfac, facdescrip,address;
-    String factype =" ";
-    CheckBox swimming,field,basketball,hockey,tabletennis,tennis,badminton,stadium,gym,squash;
+    EditText name, latfac, longfac, facdescrip, address;
+    String factype = " ";
+    CheckBox swimming, field, basketball, hockey, tabletennis, tennis, badminton, stadium, gym, squash;
     Button facilitiesadd;
     FirebaseFirestore db;
     Facility facility;
+    String regex = "^\\d*\\.\\d+|\\d+\\.\\d*$";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +57,8 @@ public class FacilitiesAdd extends BaseActivity {
         facilitiesadd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Double Lat = Double.parseDouble(latfac.getText().toString().trim());
-                Double Long = Double.parseDouble(longfac.getText().toString().trim());
+                String Latitude = latfac.getText().toString().trim();
+                String Longitude = longfac.getText().toString().trim();
                 String description = facdescrip.getText().toString().trim();
                 String namefac = name.getText().toString().trim();
                 String newname = namefac.toLowerCase();
@@ -75,82 +75,86 @@ public class FacilitiesAdd extends BaseActivity {
                     factype = factype + field;
                 }
 
-                if (basketball.isChecked()){
+                if (basketball.isChecked()) {
                     String basketball = " BasketballCourt";
                     factype = factype + basketball;
                 }
 
-                if (hockey.isChecked()){
+                if (hockey.isChecked()) {
                     String hockey = " HockeyCourt";
                     factype = factype + hockey;
                 }
 
-                if (tabletennis.isChecked()){
+                if (tabletennis.isChecked()) {
                     String tabletennis = " TableTennisCourt";
                     factype = factype + tabletennis;
                 }
 
-                if (tennis.isChecked()){
+                if (tennis.isChecked()) {
                     String tennis = " TennisCourt";
                     factype = factype + tennis;
                 }
 
-                if (badminton.isChecked()){
+                if (badminton.isChecked()) {
                     String badminton = " BadmintonCourt";
                     factype = factype + badminton;
                 }
 
-                if (stadium.isChecked()){
+                if (stadium.isChecked()) {
                     String stadium = " Stadium";
                     factype = factype + stadium;
                 }
 
-                if (gym.isChecked()){
+                if (gym.isChecked()) {
                     String gym = " Gym";
                     factype = factype + gym;
                 }
 
-                if (squash.isChecked()){
+                if (squash.isChecked()) {
                     String squash = " SquashCourt";
                     factype = factype + squash;
                 }
 
+                if (!namefac.equals("") && !Latitude.equals("") && !Longitude.equals("") && !description.equals("") && !addressfac.equals("") && Longitude.matches(regex) && Latitude.matches(regex)) {
 
-                facility.setName(namefac);
-                facility.setLatitude(Lat);
-                facility.setLongitude(Long);
-                facility.setDescription(description);
-                facility.setType(factype);
-                facility.setAddress(addressfac);
 
-                //is this correct way of checking duplicates?
-                db.collection("Facility").whereEqualTo("name".toLowerCase(), newname).get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    if (task.getResult().isEmpty()) {
-                                        db.collection("Facility").document().set(facility);
-                                        Toast.makeText(getApplicationContext(), "Facility added", Toast.LENGTH_SHORT).show();
+                    Double Long = Double.parseDouble(Longitude);
+                    Double Lat = Double.parseDouble(Latitude);
+                    facility.setLatitude(Lat);
+                    facility.setLongitude(Long);
+
+                    facility.setName(namefac);
+                    facility.setDescription(description);
+                    facility.setType(factype);
+                    facility.setAddress(addressfac);
+
+                    db.collection("Facility").whereEqualTo("name".toLowerCase(), newname).get()
+                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        if (task.getResult().isEmpty()) {
+                                            db.collection("Facility").document().set(facility);
+                                            Toast.makeText(getApplicationContext(), "Facility added", Toast.LENGTH_SHORT).show();
+                                        } else
+                                            Toast.makeText(getApplicationContext(), "Facility already exists", Toast.LENGTH_SHORT).show();
+
                                     }
-
-                                    else
-                                        Toast.makeText(getApplicationContext(), "Facility already exists", Toast.LENGTH_SHORT).show();
 
                                 }
 
-                            }
+                            });
+                } else
+                    Toast.makeText(getApplicationContext(), "try again", Toast.LENGTH_SHORT).show();
 
-                        });
 
             }
 
         });
 
 
-
-        findViewById(R.id.back).setOnClickListener(new Button.OnClickListener(){
-            public void onClick(View v){
+        findViewById(R.id.back).setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
                 Intent intent = new Intent(FacilitiesAdd.this, MainActivity.class);
                 startActivity(intent);
             }
