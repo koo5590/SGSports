@@ -2,7 +2,6 @@ package com.example.sgsports;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,11 +15,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.core.Repo;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -65,6 +60,7 @@ public class BaseActivity extends AppCompatActivity {
         //check if the user is admin
         if(userName.equals("admin")) {
             items.add("Add New Facility");
+            items.add("Delete Facility");
         }
 
         //menu list
@@ -106,6 +102,11 @@ public class BaseActivity extends AppCompatActivity {
                         break;
                     case 5://add new facility
                         intent = new Intent(BaseActivity.this, FacilitiesAdd.class);
+                        startActivity(intent);
+                        finish();
+                        break;
+                    case 6://delete facility
+                        intent = new Intent(BaseActivity.this, FacilitiesDelete.class);
                         startActivity(intent);
                         finish();
 

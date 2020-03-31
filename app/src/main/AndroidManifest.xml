@@ -39,6 +39,7 @@
         <activity android:name=".WriteReviewActivity"></activity>
         <activity android:name=".ReportActivity"></activity>
         <activity android:name=".ReadActivity"></activity>
+        <activity android:name=".FacilitiesDelete"></activity>
 
 
         <meta-data
