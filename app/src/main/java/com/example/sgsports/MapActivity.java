@@ -4,10 +4,14 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
+import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -24,6 +28,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -37,7 +43,11 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -46,11 +56,25 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.maps.android.data.geojson.GeoJsonLayer;
+import com.google.maps.android.data.geojson.GeoJsonPolygonStyle;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class MapActivity extends BaseActivity implements OnMapReadyCallback{
+public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 9003;
     private static final int PERMISSIONS_REQUEST_ENABLE_GPS = 9002;
@@ -70,16 +94,27 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
     Facility facility_clicked;
 
     //new
-    private boolean mLocationPermissionGranted=false;
+    private boolean mLocationPermissionGranted = false;
     private FusedLocationProviderClient mFusedLocationClient;
     SupportMapFragment mapFrag;
     LocationRequest mLocationRequest;
     Marker mCurrLocationMarker;
     Location mLastLocation;
+
+    //Directions variables
+    private LatLng curPosition;
+    private LatLng curDest;
+    private Polyline mPolyline;
+    private boolean isOnDirectionRoute = false;
+    private ArrayList<String> directions;
+    ArrayList<LatLng> mMarkerPoints;
+    TextView directionInstr;
+
     CollectionReference facilityref;
     //firebase database
     FirebaseFirestore mFireStore;
     ArrayList<Facility> allFacilities;
+
     private ChildEventListener mChildEventListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,10 +122,15 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
         super.onCreate(savedInstanceState);
         FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_map, contentFrameLayout);
+        mMarkerPoints = new ArrayList<>();
+
 
         namefac = findViewById(R.id.name);
         typefac = findViewById(R.id.typeText);
         address = findViewById(R.id.addrText);
+        directionInstr = findViewById(R.id.locinfo);
+        directionInstr.setVisibility(View.GONE);
+        directions      = new ArrayList<>();
 
         //initialize map and current location
         initMap();
@@ -165,11 +205,14 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
     @Override
     public void onMapReady(final GoogleMap googleMap) {
         map = googleMap;
+        // Dont clutter map screen
+        map.getUiSettings().setMapToolbarEnabled(false);
 
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mFireStore = FirebaseFirestore.getInstance();
         allFacilities = new ArrayList<>();
         facilityref = mFireStore.collection("Facility");
+
         readData(new FireStoreCallback() {
             private static final String TAG = "error";
 
@@ -192,6 +235,12 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+                // curPosition should be initialized before we arrive here.
+                isOnDirectionRoute = true;
+                drawRoute(curPosition, marker.getPosition(), "walking");
+                curDest = marker.getPosition();
+
+
                 String markertitle = marker.getTitle();
                 for (Facility fac : allFacilities){
                     String checkname = fac.getName();
@@ -217,26 +266,15 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
             }
         });
 
+        map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng point) {
+                isOnDirectionRoute = false;
+                directionInstr.setVisibility(View.GONE);
+                mPolyline.remove();
+            }
+        });
 
-//
-//        LatLng NTU = new LatLng(1.3483153, 103.680946);
-//        MarkerOptions markerOptions = new MarkerOptions();
-//        markerOptions.position(NTU);
-//        markerOptions.title("NTU");
-//        markerOptions.snippet("Nanyang Technological University");
-//        map.addMarker(markerOptions);
-
-
-//        try {
-//            GeoJsonLayer Layer = new GeoJsonLayer(map, R.raw.sports, this);
-//            GeoJsonPolygonStyle polygonStyle = Layer.getDefaultPolygonStyle();
-//            polygonStyle.setStrokeColor(Color.GREEN);
-//            polygonStyle.setStrokeWidth(10);
-//            Layer.addLayerToMap();
-//        } catch (IOException e) {
-//
-//        } catch (JSONException e) {
-//        }
 
 
         mLocationRequest = new LocationRequest();
@@ -278,23 +316,24 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
         }
     }
 
-    private void getLastKnownLocation(){
+    private void getLastKnownLocation() {
         mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
             @Override
             public void onComplete(@NonNull Task<Location> task) {
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
                     Location location = task.getResult();
-                    GeoPoint geoPoint = new GeoPoint(location.getLatitude(),location.getLongitude());
+                    GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
                 }
             }
         });
-
-
     }
 
-
     private void getLocationPermission() {
-
+        /*
+         * Request location permission, so that we can get the location of the
+         * device. The result of the permission request is handled by a callback,
+         * onRequestPermissionsResult.
+         */
         if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -319,7 +358,10 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
                 }
                 else{
                     getLocationPermission();
-                }            }        }
+                }
+            }
+        }
+
     }
 
     LocationCallback mLocationCallback = new LocationCallback() {
@@ -335,14 +377,22 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
                     mCurrLocationMarker.remove();
                 }
                 //Place current location marker
-                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                curPosition = new LatLng(location.getLatitude(), location.getLongitude());
                 MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.position(latLng);
+                markerOptions.position(curPosition);
                 markerOptions.title("Current Position");
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE));
                 mCurrLocationMarker = map.addMarker(markerOptions);
+
                 //move map camera
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(curPosition, 13));
+
+                /** Each time location updates we have to redraw the direction route */
+                if (isOnDirectionRoute){
+                    Log.d("location update", "location updated so redrawing route!");
+                    mPolyline.remove();
+                    drawRoute(curPosition, curDest, "walking");
+                }
             }
         }};
 
@@ -436,6 +486,275 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback{
             }
         });
 
+    }
+
+    /**
+     * Method to draw a route between two points using googles
+     * direction api.
+     *
+     * First the request URL is built and sent.
+     *
+     * The JSON response is parsed, and converted into a list
+     * of points which ar
+     *
+     */
+    private void drawRoute(LatLng orig, LatLng dest, String moveType) {
+        // Download, parse and display the google directions task.
+        new DownloadTask().execute(getDirectionsUrl(orig, dest, moveType));
+    }
+
+    /**
+     * A method to build a request URL to google direction api.
+     *
+     * Move types include: driving/walking/bicycling/transit
+     * */
+    private String getDirectionsUrl(LatLng orig, LatLng dest, String modeType) {
+        if (!modeType.equals("driving") && !modeType.equals("walking") &&
+                !modeType.equals("bicycling") && !modeType.equals("transit")){
+            Log.d("Direction API URL", "Invalid moving type: '" + modeType + "'");
+            modeType = "driving"; //default is driving
+        }
+        Log.d("Direction API URL", "Moving type: '" + modeType + "'");
+
+        String urlOrig  = "origin="      + orig.latitude + "," + orig.longitude;
+        String urlDest  = "destination=" + dest.latitude + "," + dest.longitude;
+        String urlMode  = "mode="        + modeType;
+        String urlKey   = "key="         + getString(R.string.DIRECTION_API_KEY);
+        String parameters = urlOrig + "&" + urlDest + "&" + urlMode + "&" + urlKey;
+
+        // Complete request URL
+        return "https://maps.googleapis.com/maps/api/directions/json?" + parameters;
+    }
+
+    /**
+     * A method to download json data from url
+     */
+    private static String downloadUrl(String strUrl) throws IOException {
+        String data = "";
+        InputStream iStream = null;
+        HttpURLConnection urlConnection = null;
+        try {
+            URL url = new URL(strUrl);
+
+            // Creating an http connection to communicate with url
+            urlConnection = (HttpURLConnection) url.openConnection();
+
+            // Connecting to url
+            urlConnection.connect();
+
+            // Reading data from url
+            iStream = urlConnection.getInputStream();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
+            StringBuffer sb = new StringBuffer();
+
+            String line = "";
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+
+            data = sb.toString();
+            br.close();
+        } catch (Exception e) {
+            Log.d("Exception on download", e.toString());
+        } finally {
+            iStream.close();
+            urlConnection.disconnect();
+        }
+        return data;
+    }
+
+    /**
+     * A class to download JSON-data from Google Directions URL
+     * in non-UI thread asynchronous, which is done to not slow
+     * down and keep main UI thread running smooth.
+     */
+    private class DownloadTask extends AsyncTask<String, Void, String> {
+        // Downloading data in non-ui thread
+        @Override
+        protected String doInBackground(String... url) {
+            String jsonData = "";
+            try {
+                // Fetching the data from web service
+                jsonData = downloadUrl(url[0]);
+                Log.d("DownloadTask", "DownloadTask : " + jsonData);
+            } catch (Exception e) {
+                Log.d("Background Task", e.toString());
+            }
+            return jsonData;
+        }
+
+        // Executes in UI thread, after the execution of doInBackground()
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+
+            ParserTask parserTask = new ParserTask();
+
+            // Invokes the thread for parsing the JSON data
+            parserTask.execute(result);
+        }
+    }
+
+    /**
+     * A class to parse the Google Directions in JSON format
+     */
+    private class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String, String>>>> {
+
+        // Parsing the data in non-ui thread
+        @Override
+        protected List<List<HashMap<String, String>>> doInBackground(String... jsonData) {
+            JSONObject jObject;
+            List<List<HashMap<String, String>>> routes = null;
+
+            try {
+                jObject = new JSONObject(jsonData[0]);
+                routes = parse(jObject);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return routes;
+        }
+
+        // Executes in UI thread, after the parsing process
+        @Override
+        protected void onPostExecute(List<List<HashMap<String, String>>> result) {
+            ArrayList<LatLng> points = null;
+            PolylineOptions lineOptions = null;
+
+            if (result == null){
+                Log.e("Directions draw", "I have nothing to draw!");
+                return;
+            }
+            // Traversing through all the routes
+            for (int i = 0; i < result.size(); i++) {
+                points = new ArrayList<LatLng>();
+                lineOptions = new PolylineOptions();
+
+                // Fetching i-th route
+                List<HashMap<String, String>> path = result.get(i);
+
+                // Fetching all the points in i-th route
+                for (int j = 0; j < path.size(); j++) {
+                    HashMap<String, String> point = path.get(j);
+
+                    double lat = Double.parseDouble(point.get("lat"));
+                    double lng = Double.parseDouble(point.get("lng"));
+                    LatLng position = new LatLng(lat, lng);
+
+                    points.add(position);
+                }
+
+                // Adding all the points in the route to LineOptions
+                lineOptions.addAll(points);
+                lineOptions.width(10);
+                lineOptions.color(Color.BLUE);
+            }
+
+            // Drawing polyline in the Google Map for the i-th route
+            if (lineOptions != null) {
+                directionInstr.setVisibility(View.VISIBLE);
+
+                if (mPolyline != null) {
+                    mPolyline.remove();
+                }
+                mPolyline = map.addPolyline(lineOptions);
+            } else
+                Toast.makeText(getApplicationContext(), "No route is found", Toast.LENGTH_LONG).show();
+        }
+    }
+
+
+    /**
+     * JSON parser for directions
+     */
+    private List<List<HashMap<String, String>>> parse(JSONObject jObject) {
+        List<List<HashMap<String, String>>> routes = new ArrayList<>();
+        JSONArray jRoutes   = null;
+        JSONArray jLegs     = null;
+        JSONArray jSteps    = null;
+        directions.clear();
+
+        try {
+            jRoutes = jObject.getJSONArray("routes");
+
+            /** Traversing all routes */
+            for (int i = 0; i < jRoutes.length(); i++) {
+                jLegs = ((JSONObject) jRoutes.get(i)).getJSONArray("legs");
+                List path = new ArrayList<HashMap<String, String>>();
+
+                /** Traversing all legs */
+                for (int j = 0; j < jLegs.length(); j++) {
+                    jSteps = ((JSONObject) jLegs.get(j)).getJSONArray("steps");
+
+                    /** Traversing all steps */
+                    for (int k = 0; k < jSteps.length(); k++) {
+                        String polyline = "";
+                        polyline = (String) ((JSONObject) ((JSONObject) jSteps.get(k)).get("polyline")).get("points");
+                        List<LatLng> list = decodePoly(polyline);
+                        directions.add(((JSONObject)jSteps.get(k)).get("html_instructions").toString());
+                        Log.d("DIRECTION API", ((JSONObject)jSteps.get(k)).get("html_instructions").toString());
+                        /** Traversing all points */
+                        for (int l = 0; l < list.size(); l++) {
+                            HashMap<String, String> hm = new HashMap<String, String>();
+                            hm.put("lat", Double.toString((list.get(l)).latitude));
+                            hm.put("lng", Double.toString(((LatLng) list.get(l)).longitude));
+                            path.add(hm);
+                        }
+                    }
+                    if (directions.size() > 0){
+                        //directionInstr.setVisibility(View.VISIBLE);
+                        //directionInstr.setVisibility();
+                        // Ugly
+                        directionInstr.setText(Html.fromHtml(directions.get(0)));
+                    }
+                    routes.add(path);
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+        }
+        return routes;
+    }
+
+    /**
+     * Method to decode polyline points. (Converting a string into LatLng points)
+     * Courtesy : jeffreysambells.com/2010/05/27/decoding-polylines-from-google-maps-direction-api-with-java
+     * https://developers.google.com/maps/documentation/utilities/polylinealgorithm
+     */
+    private static List<LatLng> decodePoly(String encoded) {
+
+        List<LatLng> poly = new ArrayList<LatLng>();
+        int index = 0, len = encoded.length();
+        int lat = 0, lng = 0;
+
+        while (index < len) {
+            int b, shift = 0, result = 0;
+            do {
+                b = encoded.charAt(index++) - 63;
+                result |= (b & 0x1f) << shift;
+                shift += 5;
+            } while (b >= 0x20);
+            int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+            lat += dlat;
+
+            shift = 0;
+            result = 0;
+            do {
+                b = encoded.charAt(index++) - 63;
+                result |= (b & 0x1f) << shift;
+                shift += 5;
+            } while (b >= 0x20);
+            int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+            lng += dlng;
+
+            LatLng p = new LatLng((((double) lat / 1E5)),
+                    (((double) lng / 1E5)));
+            poly.add(p);
+        }
+        return poly;
     }
 
 }
