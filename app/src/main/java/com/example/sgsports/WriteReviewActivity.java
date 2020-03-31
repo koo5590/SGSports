@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.AdapterView;
@@ -52,7 +53,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class WriteReviewActivity extends AppCompatActivity {
+public class WriteReviewActivity extends BaseActivity {
     private Spinner spinnerRating;
     int rating;
     List<Integer> reviewRating;
@@ -80,7 +81,8 @@ public class WriteReviewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_writereview);
+        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
+        getLayoutInflater().inflate(R.layout.activity_writereview, contentFrameLayout);
 
         Intent intent = getIntent();
         Facility curFac = (Facility)intent.getSerializableExtra("facility");
@@ -88,8 +90,7 @@ public class WriteReviewActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mDatabase  = FirebaseFirestore.getInstance();
 
-        currentUser = mAuth.getCurrentUser();
-        currentUserID = currentUser.getUid();
+        currentUserID = userName;
 
 
         facilityName = curFac.getName();
