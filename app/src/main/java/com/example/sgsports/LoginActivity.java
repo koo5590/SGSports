@@ -59,21 +59,22 @@ public class LoginActivity extends AppCompatActivity{
                 String email = emailText.getText().toString();
                 String pw = password.getText().toString();
 
-                mAuth.signInWithEmailAndPassword(email, pw)
-                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if(task.isSuccessful()){ //sign in successful
-                                    Toast.makeText(LoginActivity.this, "welcome", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                                    startActivity(intent);
-                                    finish();
+                if(!email.equals("") && !pw.equals("")) {
+                    mAuth.signInWithEmailAndPassword(email, pw)
+                            .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()) { //sign in successful
+                                        Toast.makeText(LoginActivity.this, "welcome", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    } else {    //sign in failed: show error message
+                                        Toast.makeText(LoginActivity.this, "Please check your email and password", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                                else{    //sign in failed: show error message
-                                    Toast.makeText(LoginActivity.this, "Please check your email and password", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+                            });
+                }
 
             }
         });
