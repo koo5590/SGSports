@@ -62,7 +62,7 @@ public class ViewReviewActivity extends BaseActivity{
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
-        userID = user.getUid();
+        userID = userName;
         database = FirebaseFirestore.getInstance();
 
         database.collection("Review")

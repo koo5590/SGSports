@@ -6,14 +6,12 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -175,7 +173,7 @@ public class SearchFacilitiesActivity extends BaseActivity {
                 Facility facility = resultFacilities.get(i);
 
                 //move to facility details page
-                Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MapSearchActivity.class);
                 intent.putExtra("facility", facility);
                 startActivity(intent);
 

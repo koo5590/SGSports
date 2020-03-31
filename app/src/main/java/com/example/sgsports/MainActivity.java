@@ -4,15 +4,9 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.core.view.GravityCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
@@ -23,8 +17,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.ArrayList;
 
 public class MainActivity extends BaseActivity {
 
@@ -75,6 +67,7 @@ public class MainActivity extends BaseActivity {
                 userNameTextView.setText(name);
                 if(name.equals("admin") && !items.contains("Add New Facility")) {
                     items.add("Add New Facility");
+                    items.add("Delete Facility");
                     adapter.notifyDataSetChanged();
                 }
             }

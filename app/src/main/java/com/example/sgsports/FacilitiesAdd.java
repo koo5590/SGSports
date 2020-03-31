@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,7 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 
-public class FacilitiesAdd extends AppCompatActivity {
+public class FacilitiesAdd extends BaseActivity {
     EditText name, latfac, longfac, facdescrip,address;
     String factype =" ";
     CheckBox swimming,field,basketball,hockey,tabletennis,tennis,badminton,stadium,gym,squash;
@@ -28,7 +29,9 @@ public class FacilitiesAdd extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_facilitiesadd);
+        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame);
+        getLayoutInflater().inflate(R.layout.activity_facilitiesadd, contentFrameLayout);
+
         name = findViewById(R.id.namefac);
         latfac = findViewById(R.id.latfac);
         longfac = findViewById(R.id.longfac);
