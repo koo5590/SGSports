@@ -220,23 +220,34 @@
             </LinearLayout>
 
             <!-- review layout -->
-            <ListView
-                android:id="@+id/reviewList"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            <LinearLayout
+                android:id="@+id/reviewlayout"
                 android:visibility="gone"
-                android:padding="10dp"
-                android:dividerHeight="2dp">
-            </ListView>
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <ListView
+                    android:id="@+id/reviewList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:dividerHeight="2dp">
+                </ListView>
+            </LinearLayout>
 
             <!-- directions layout -->
-            <TextView
-                android:id="@+id/locinfo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
+            <ScrollView
+                android:id="@+id/dirScroll"
                 android:visibility="gone"
-                android:text="Turn left or something" />
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/locinfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Turn left or something" />
+            </ScrollView>
 
         </LinearLayout>
     </LinearLayout>
