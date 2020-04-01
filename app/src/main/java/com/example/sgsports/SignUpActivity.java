@@ -146,7 +146,7 @@ public class SignUpActivity extends Activity {
         }
 
         //check if mobile number is valid
-        if(mobileNum.length()!=8 || mobileNum.matches("([^0-9])")){
+        if(mobileNum.length()!=8 || !mobileNum.matches("\\d+")){
             Toast.makeText(SignUpActivity.this, "Please check your mobile number again", Toast.LENGTH_SHORT).show();
             return;
         }
