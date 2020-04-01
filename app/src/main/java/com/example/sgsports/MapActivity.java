@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -79,6 +80,9 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     TextView namefac;
     TextView typefac;
     TextView address;
+
+    LinearLayout reviewL;
+    ScrollView dirScroll;
 
     ArrayList<ReviewData> reviews;
 
@@ -149,12 +153,15 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         reviewList = (ListView)findViewById(R.id.reviewList);
         directionInstr = findViewById(R.id.locinfo);
 
+        reviewL = (LinearLayout)findViewById(R.id.reviewlayout);
+        dirScroll = (ScrollView)findViewById(R.id.dirScroll);
+
         //information button
         findViewById(R.id.infoB).setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v){
                 infoL.setVisibility(View.VISIBLE);
-                reviewList.setVisibility(View.GONE);
-                directionInstr.setVisibility(View.GONE);
+                reviewL.setVisibility(View.GONE);
+                dirScroll.setVisibility(View.GONE);
             }
         });
 
@@ -162,8 +169,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         findViewById(R.id.reviewB).setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v){
                 infoL.setVisibility(View.GONE);
-                reviewList.setVisibility(View.VISIBLE);
-                directionInstr.setVisibility(View.GONE);
+                reviewL.setVisibility(View.VISIBLE);
+                dirScroll.setVisibility(View.GONE);
             }
         });
 
@@ -171,8 +178,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         findViewById(R.id.directionsB).setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v){
                 infoL.setVisibility(View.GONE);
-                reviewList.setVisibility(View.GONE);
-                directionInstr.setVisibility(View.VISIBLE);
+                reviewL.setVisibility(View.GONE);
+                dirScroll.setVisibility(View.VISIBLE);
             }
         });
 
@@ -261,7 +268,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
 
                 getReview(markertitle);
                 infoL.setVisibility(View.VISIBLE);
-                reviewList.setVisibility(View.GONE);
+                reviewL.setVisibility(View.GONE);
+                dirScroll.setVisibility(View.GONE);
 //
 //
                 return false;

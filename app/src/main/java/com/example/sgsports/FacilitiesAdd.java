@@ -122,7 +122,6 @@ public class FacilitiesAdd extends BaseActivity {
                     Double Lat = Double.parseDouble(Latitude);
                     facility.setLatitude(Lat);
                     facility.setLongitude(Long);
-
                     facility.setName(namefac);
                     facility.setDescription(description);
                     facility.setType(factype);

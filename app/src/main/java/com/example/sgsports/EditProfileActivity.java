@@ -70,9 +70,17 @@ public class EditProfileActivity extends BaseActivity {
                 mFirestore.collection("users").document(UserId).update("username", username);
 
                 String  age = t1Age.getText().toString().trim();
+                if(!age.matches("\\d+")){
+                    Toast.makeText(EditProfileActivity.this, "Please check the age again", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 mFirestore.collection("users").document(UserId).update("age", age);
 
                 String  mobile = t1Mobile.getText().toString().trim();
+                if(mobile.length()!=8 || !mobile.matches("\\d+")){
+                    Toast.makeText(EditProfileActivity.this, "Please check your mobile number again", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 mFirestore.collection("users").document(UserId).update("mobilenum", mobile);
 
                 Toast.makeText(EditProfileActivity.this, "Edited Successfully", Toast.LENGTH_SHORT).show();

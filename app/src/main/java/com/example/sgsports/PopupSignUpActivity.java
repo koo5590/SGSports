@@ -130,7 +130,7 @@ public class PopupSignUpActivity extends Activity {
     public void onClose(View v){
         mobileNum = mobileNumText.getText().toString().trim();
         //check if mobile number is valid
-        if(mobileNum.length()!=8 || mobileNum.matches("([^0-9])")){
+        if(mobileNum.length()!=8 || !mobileNum.matches("\\d+")){
             Toast.makeText(PopupSignUpActivity.this, "Please check your mobile number again", Toast.LENGTH_SHORT).show();
             return;
         }
