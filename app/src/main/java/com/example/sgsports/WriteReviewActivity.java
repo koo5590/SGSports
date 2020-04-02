@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -22,9 +23,9 @@ import java.util.List;
 
 
 public class WriteReviewActivity extends BaseActivity {
-    private Spinner spinnerRating;
+    RatingBar reviewRating;
+    float i;
     int rating;
-    List<Integer> reviewRating;
 
     private Spinner spinnerFacilityType;
     List<String> facilityType;
@@ -88,33 +89,8 @@ public class WriteReviewActivity extends BaseActivity {
             }
         });
 
-        reviewRating = new ArrayList<Integer>();
-        reviewRating.add(0);
-        reviewRating.add(1);
-        reviewRating.add(2);
-        reviewRating.add(3);
-        reviewRating.add(4);
-        reviewRating.add(5);
+        reviewRating = (RatingBar) findViewById(R.id.reviewRatingBar);
 
-        ArrayAdapter<Integer> spinnerArrayAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item, reviewRating);
-        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //default value is 0
-        rating = 0;
-
-        //set spinner
-        spinnerRating = (Spinner)findViewById(R.id.spinnerRating);
-        spinnerRating.setAdapter(spinnerArrayAdapter);
-        spinnerRating.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                rating = (Integer)adapterView.getItemAtPosition(i);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
 
         reviewDesc = (EditText)findViewById(R.id.reviewDesc);
 
@@ -122,6 +98,8 @@ public class WriteReviewActivity extends BaseActivity {
         submitReview.setOnClickListener(new Button.OnClickListener(){
             public void onClick (View V){
                 reviewText = reviewDesc.getText().toString();
+                i = reviewRating.getRating();
+                rating = Math.round(i);
                 createNewReview(currentUserID, facilityName, facTypeFinal, reviewText, rating);
                 Intent intent2 = new Intent(getApplicationContext(), MapSearchActivity.class);
                 intent2.putExtra("facility", curFac);

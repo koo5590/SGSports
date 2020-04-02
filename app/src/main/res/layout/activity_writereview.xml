@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/rating"
@@ -24,12 +24,15 @@
             android:textSize="22sp"
             android:text="Please give a rating: " />
 
-        <Spinner
-            android:id="@+id/spinnerRating"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"/>
+        <RatingBar
+            android:id="@+id/reviewRatingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:saveEnabled="true"
+            android:numStars="5"/>
 
     </LinearLayout>
+
 
     <!-- rating -->
     <LinearLayout
