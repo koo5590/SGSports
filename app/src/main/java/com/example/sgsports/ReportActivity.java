@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.text.DateFormat;
 import java.util.Collections;
+import java.util.Calendar;
 import java.util.Date;
 import java.lang.*;
 import android.content.Intent;
@@ -49,9 +50,10 @@ public class ReportActivity extends BaseActivity {
     private Spinner spinnerReport;
     int rating;
     List<String> week;
-    String weekZero, weekOne, weekTwo, weekThree, weekFour,weekFive,weekSix;
+    String weekZero, weekOne, weekTwo, weekThree, weekFour,weekFive,weekSix,weekSeven;
     String weekSelected, weekBefore, weekAfter;
     TextView TvWeekSelected , tvTotalHours, tvMoreThan, tvMostActiveDay,tvMostActivityHours;
+    TextView tvMoreInfo;
     Integer totalhours = 0 ,lastweekhours = 0 , morethanhours = 0, swimhours = 0, basketballhours = 0, gymhours = 0, runhours = 0, tennishours = 0;
     Integer monhrs = 0, tueshrs = 0, wedhrs = 0, thurshrs = 0, frihrs = 0;
     Integer mon = 0, tues = 0, wed = 0, thurs = 0, fri = 0;
@@ -84,11 +86,15 @@ public class ReportActivity extends BaseActivity {
 
         //initialise spinner items
         week = new ArrayList<String>();
-        week.add("Week 1 of Mar, 2020");
-        week.add("Week 2 of Mar, 2020");
-        week.add("Week 3 of Mar, 2020");
-        week.add("Week 4 of Mar, 2020");
+        week.add("Week 2 of Apr, 2020");
         week.add("Week 1 of Apr, 2020");
+        week.add("Week 4 of Mar, 2020");
+        week.add("Week 3 of Mar, 2020");
+        week.add("Week 2 of Mar, 2020");
+        week.add("Week 1 of Mar, 2020");
+
+
+
 
         weekZero = "22/02/2020";
         weekOne = "01/03/2020";
@@ -97,6 +103,7 @@ public class ReportActivity extends BaseActivity {
         weekFour = "23/03/2020";
         weekFive = "30/03/2020";
         weekSix = "7/04/2020";
+        weekSeven = "14/04/2020";
 
         //default, week is current week
        // weekSelected = weekOne;
@@ -112,34 +119,40 @@ public class ReportActivity extends BaseActivity {
                 String spinnerSelected = (String)adapterView.getItemAtPosition(i);
 
                 switch(i){
-                    case 0:
+                    case 5:
                         weekBefore = weekZero;
                         weekSelected = weekOne;
                         weekAfter = weekTwo;
                         showCurrentDateInfo(weekBefore, weekSelected, weekAfter);
                         break;
-                    case 1:
+                    case 4:
                         weekBefore = weekOne;
                         weekSelected = weekTwo;
                         weekAfter = weekThree;
                         showCurrentDateInfo(weekBefore, weekSelected, weekAfter);
                         break;
-                    case 2:
+                    case 3:
                         weekBefore = weekOne;
                         weekSelected = weekThree;
                         weekAfter = weekFour;
                         showCurrentDateInfo(weekBefore, weekSelected, weekAfter);
                         break;
-                    case 3:
+                    case 2:
                         weekBefore = weekThree;
                         weekSelected = weekFour;
                         weekAfter = weekFive;
                         showCurrentDateInfo(weekBefore, weekSelected, weekAfter);
                         break;
-                    case 4:
+                    case 1:
                         weekBefore = weekFour;
                         weekSelected = weekFive;
                         weekAfter = weekSix;
+                        showCurrentDateInfo(weekBefore, weekSelected, weekAfter);
+                        break;
+                    case 0:
+                        weekBefore = weekFive;
+                        weekSelected = weekSix;
+                        weekAfter = weekSeven;
                         showCurrentDateInfo(weekBefore, weekSelected, weekAfter);
                         break;
 
@@ -192,7 +205,7 @@ public class ReportActivity extends BaseActivity {
         //listreview.setAdapter(arrayAdapter);
 
 
-        database.collection("mockAppointment")
+        database.collection("Appointment")
                 .whereEqualTo("user", userID)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -202,9 +215,9 @@ public class ReportActivity extends BaseActivity {
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
                                 timeslot = document.getData().get("timeslot").toString();
-                                factype = document.getData().get("facType").toString();
+                                factype = document.getData().get("facilityType").toString();
                                 date = document.getData().get("date").toString();
-                                day = document.getData().get("Day").toString();
+                                //day = document.getData().get("Day").toString();
                                 apptInfo = timeslot + ", " + factype + '\n' + "Date: " + date + '\n';
                                 DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
                                 try {
@@ -213,6 +226,9 @@ public class ReportActivity extends BaseActivity {
                                     Date end_date= df.parse(weekAfter);
                                     Date appt_date = df.parse(date);
                                     Date prev_week = df.parse(weekBefore);
+                                    Calendar c = Calendar.getInstance();
+                                    c.setTime(appt_date);
+                                    int dayOfWeek = c.get(Calendar.DAY_OF_WEEK) - 1;
 
                                     //get most active activity
 
@@ -240,31 +256,31 @@ public class ReportActivity extends BaseActivity {
 
 
 
-                                    if (day.contentEquals("Monday")&& appt_date.before(end_date) && appt_date.after(start_date))
+                                    if (dayOfWeek == 1 && appt_date.before(end_date) && appt_date.after(start_date))
                                     {
                                         mon++;
                                         monhrs++;
                                     }
 
-                                    if (day.equals("Tuesday")&& appt_date.before(end_date) && appt_date.after(start_date))
+                                    if (dayOfWeek == 2 && appt_date.before(end_date) && appt_date.after(start_date))
                                     {
                                         tues++;
                                         tueshrs++;
                                     }
 
-                                    if (day.equals("Wednesday")&& appt_date.before(end_date) && appt_date.after(start_date))
+                                    if (dayOfWeek == 3 && appt_date.before(end_date) && appt_date.after(start_date))
                                     {
                                         wed++;
                                         wedhrs++;
                                     }
 
-                                    if (day.equals("Thursday")&& appt_date.before(end_date) && appt_date.after(start_date))
+                                    if (dayOfWeek == 4 && appt_date.before(end_date) && appt_date.after(start_date))
                                     {
                                         thurs++;
                                         thurshrs++;
                                     }
 
-                                    if (day.contentEquals("Friday") && appt_date.before(end_date) && appt_date.after(start_date))
+                                    if (dayOfWeek == 5 && appt_date.before(end_date) && appt_date.after(start_date))
                                     {
                                         fri++;
                                         frihrs++;
@@ -422,9 +438,6 @@ public class ReportActivity extends BaseActivity {
                                         // set the viewport wider than the data, to have a nice view
                                         sportchart.getViewport().setMinX(1d);
                                         sportchart.getViewport().setMaxX(5d);
-                                        //sportchart.getViewport().setScalable(true);  // activate horizontal zooming and scrolling
-                                        //sportchart.getViewport().setScrollable(true);  // activate horizontal scrolling
-                                        //sportchart.getViewport().setScalableY(true);
                                         sportchart.getViewport().setXAxisBoundsManual(true);
                                         // styling
                                         sportchat.setValueDependentColor(new ValueDependentColor<DataPoint>() {
