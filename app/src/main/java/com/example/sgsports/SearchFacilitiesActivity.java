@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -20,6 +21,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 /*** search facilities based on conditions set by user and name typed in by user ***/
@@ -31,12 +33,15 @@ public class SearchFacilitiesActivity extends BaseActivity {
     ArrayList<Facility> resultFacilities;    //search result
     ArrayList<Facility> filteredFacilities;  //list of facilities that satisfy filter options
     ArrayList<Facility> allFacilities;       //list of all facilities
+    HashMap<String, Integer> reviewsNum;     //HashMap<facilityName, # of reviews>
+    HashMap<String, Integer> rateSum;         //HashMap<facilityName, sum of ratings>
 
     //List view where the search result is shown
     ListView facilityListView;
 
     //database from where facility data is retrieved
     FirebaseFirestore mFireStore;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +63,7 @@ public class SearchFacilitiesActivity extends BaseActivity {
         //get facility data from database
         mFireStore = FirebaseFirestore.getInstance();
         getFacilities();
+        getReviews();
 
         //filter button
         findViewById(R.id.filterB).setOnClickListener(new Button.OnClickListener(){
@@ -165,6 +171,10 @@ public class SearchFacilitiesActivity extends BaseActivity {
         FacilityListAdapter adapter = new FacilityListAdapter(resultFacilities, getApplicationContext());
         facilityListView.setAdapter(adapter);
 
+        if(resultFacilities.isEmpty()){
+            Toast.makeText(SearchFacilitiesActivity.this, "No result found", Toast.LENGTH_SHORT).show();
+        }
+
         //clicking each list item
         facilityListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -194,9 +204,12 @@ public class SearchFacilitiesActivity extends BaseActivity {
             //get a facility
             Facility facility = iterator.next();
 
-            //Log.d("type", facility.getType());
+            //get facility name
+            String fname = facility.getName();
 
-            if(10>=rate){
+            //check if the facility satisfies min rating
+            if(reviewsNum.containsKey(fname) && rateSum.get(fname)/reviewsNum.get(fname)>=rate){
+                Log.d("rate", fname+": "+rateSum.get(fname)/reviewsNum.get(fname));
                 //check if the facility has certain types
                 for(int i=0; i<types.size(); i++){
                     if(!facility.getType().toLowerCase().contains(types.get(i).toLowerCase()))
@@ -223,6 +236,49 @@ public class SearchFacilitiesActivity extends BaseActivity {
                     showResult();
                 }
 
+            }
+        });
+    }
+
+    //get average rating of each facility
+    void getReviews(){
+        //initialize hash maps
+        reviewsNum = new HashMap<>();
+        rateSum = new HashMap<>();
+
+        //retrieve review data from db
+        mFireStore.collection("Review").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()){
+                    //for each review
+                    for(QueryDocumentSnapshot doc: task.getResult()){
+                        //get rate of the review
+                        int rate = Integer.parseInt(doc.getData().get("rating").toString());
+                        //get facility name of the review
+                        String facilityName = doc.getData().get("facilityName").toString();
+
+                        //if facility already exists in the hash maps
+                        if(reviewsNum.containsKey(facilityName)){
+                            //get total number of reviews of the facility found so far
+                            int num = reviewsNum.get(facilityName);
+                            //get average rating of the facility calculated so far
+                            int sum = rateSum.get(facilityName);
+                            //update # of reviews and average rating
+                            num++;
+                            sum += rate;
+
+                            //save the updated info into hash maps
+                            reviewsNum.put(facilityName, num);
+                            rateSum.put(facilityName, sum);
+                        }
+                        else{
+                            reviewsNum.put(facilityName, 1);
+                            rateSum.put(facilityName, rate);
+                        }
+
+                    }
+                }
             }
         });
     }

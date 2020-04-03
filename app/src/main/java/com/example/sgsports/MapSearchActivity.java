@@ -21,6 +21,7 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -167,6 +168,10 @@ public class MapSearchActivity extends BaseActivity implements OnMapReadyCallbac
         //review list button
         findViewById(R.id.reviewB).setOnClickListener(new Button.OnClickListener(){
             public void onClick(View v){
+                //if review is empty, inform user
+                if(reviews.isEmpty()){
+                    Toast.makeText(MapSearchActivity.this, "There is currently no review", Toast.LENGTH_SHORT).show();
+                }
                 infoL.setVisibility(View.GONE);
                 reviewL.setVisibility(View.VISIBLE);
                 dirScroll.setVisibility(View.GONE);
