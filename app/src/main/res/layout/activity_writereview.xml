@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="30dp"
@@ -52,7 +55,7 @@
 
         <Spinner
             android:id="@+id/spinnerFacilityType"
-            android:layout_width="250dp"
+            android:layout_width="270dp"
             android:layout_height="wrap_content"/>
 
     </LinearLayout>
@@ -76,11 +79,11 @@
         <EditText
             android:id="@+id/reviewDesc"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="270dp"
             android:layout_gravity="center"
-            android:padding="15dp"
             android:background="@drawable/round"
-            android:hint="Review:" />
+            android:hint="Review:"
+            android:padding="15dp" />
     </LinearLayout>
 
 
@@ -108,5 +111,5 @@
             android:text="Cancel"/>
 
     </LinearLayout>
-
 </LinearLayout>
+</ScrollView>
